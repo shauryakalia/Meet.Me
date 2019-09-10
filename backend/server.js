@@ -52,6 +52,8 @@ app.use(errorHandler);
 
 // Server Start
 const server = app.listen(port, (error) => {
-  if (error) logger.error('Error while Application startup', error);
-  else logger.info(`Application connected to ${env} environment at ${port} port`);
+  if (error)
+    logger.error('Error while Application startup', error);
+  else
+    logger.info(`Application connected to ${env} environment at ${port} port`);
 });
