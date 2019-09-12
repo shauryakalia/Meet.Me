@@ -1,0 +1,77 @@
+<div>
+  <div class="container" *ngIf="onLogin; else sugnUp">
+    <form class="form">
+      <div class="form-header">Login </div>
+      <div class="input">
+        <input type="text" name="name619" class=" form-control form-input " id="name619" placeholder="Practice Name"
+          required>
+      </div>
+      <div class="input">
+        <input type="password" name="password" class=" form-control form-input " id="password" placeholder="Password"
+          required>
+      </div>
+      <div>
+        <button class="btn btn-secondary"> Login </button>
+      </div>
+    </form>
+    <button class="btn btn-secondary" (click)="swithToSignup()"> Sign Up </button>
+  </div>
+
+  <ng-template #sugnUp>
+    <div class="container">
+      <form class="form">
+        <div class="form-header"> Create Account </div>
+        <div class="input">
+          <input type="text" name="name619" class=" form-control form-input " id="name619" placeholder="Practice Name"
+            required>
+        </div>
+
+        <div class="input">
+          <input type="email" name="email" class=" form-control form-input " id="email" placeholder="Email" required>
+        </div>
+
+        <div class="input">
+          <input type="password" name="password" class=" form-control form-input " id="password" placeholder="Password"
+            required>
+        </div>
+
+        <div class="input">
+          <input type="text" name="Address" class=" form-control form-input " id="Address" placeholder="Address"
+            required>
+        </div>
+        <div class=" row combine">
+          <div class="input">
+            <input type="text" name="city" class=" form-control form-input " id="city" placeholder="City" required>
+          </div>
+
+          <div class="input">
+            <input type="text" name="state" class=" form-control form-input " id="state" placeholder="State" required>
+          </div>
+        </div>
+
+        <div class=" row combine">
+          <div class="input">
+            <input type="text" name="country" class=" form-control form-input " id="country" placeholder="Country"
+              required>
+          </div>
+
+          <div class="input">
+            <input type="number" name="zipcode" class=" form-control form-input " id="zipcode" placeholder="Zipcode"
+              required>
+          </div>
+        </div>
+
+        <div class="input form-group row checkbox">
+          <label for="checkbox"> I agree to all statements in Terms of services </label>
+          <input type="checkbox" name="checkbox" class=" form-check-input form-input  " id="checkbox" value="checkbox">
+        </div>
+
+        <div>
+          <button class="btn btn-secondary signup-button"> Sign UP </button>
+        </div>
+        <hr>
+      </form>
+      Have an account already? <button (click)="switchToLogin()">Login</button>
+    </div>
+  </ng-template>
+</div>
