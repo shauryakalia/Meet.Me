@@ -11,6 +11,9 @@ module.exports = {
       serviceName: {
         type: Sequelize.STRING
       },
+      practiceId: {
+        type: Sequelize.INTEGER
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
