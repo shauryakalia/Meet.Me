@@ -6,7 +6,8 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: true,
       primaryKey: true,
     },
-    serviceName: DataTypes.STRING
+    serviceName: DataTypes.STRING,
+    practiceId:  DataTypes.INTEGER
   }, {});
   Service.associate = function(models) {
     // associations can be defined here
