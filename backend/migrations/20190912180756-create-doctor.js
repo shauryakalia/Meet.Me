@@ -14,6 +14,9 @@ module.exports = {
       lastName: {
         type: Sequelize.STRING
       },
+      practiceId: {
+        type: Sequelize.INTEGER
+      },
       serviceId: {
         type: Sequelize.ARRAY(Sequelize.INTEGER)
       },
