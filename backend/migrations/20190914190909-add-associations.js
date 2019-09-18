@@ -81,7 +81,52 @@ module.exports = {
           onDelete: 'SET NULL',
         }
       );
-    });
+    })
+    .then(() => {
+      return queryInterface.addColumn(
+        'Prices', // name of Source model
+        'practiceId', // name of the key we're adding 
+        {
+          type: Sequelize.INTEGER,
+          references: {
+            model: 'Users', // name of Target model
+            key: 'practiceId', // key in Target model that we're referencing
+          },
+          onUpdate: 'CASCADE',
+          onDelete: 'SET NULL',
+        }
+      );
+    })
+    .then(() => {
+      return queryInterface.addColumn(
+        'Slots', // name of Source model
+        'practiceId', // name of the key we're adding 
+        {
+          type: Sequelize.INTEGER,
+          references: {
+            model: 'Users', // name of Target model
+            key: 'practiceId', // key in Target model that we're referencing
+          },
+          onUpdate: 'CASCADE',
+          onDelete: 'SET NULL',
+        }
+      );
+    })
+    .then(() => {
+      return queryInterface.addColumn(
+        'Slots', // name of Source model
+        'doctorId', // name of the key we're adding 
+        {
+          type: Sequelize.INTEGER,
+          references: {
+            model: 'Doctors', // name of Target model
+            key: 'doctorId', // key in Target model that we're referencing
+          },
+          onUpdate: 'CASCADE',
+          onDelete: 'SET NULL',
+        }
+      );
+    })
   },
 
   down: (queryInterface, Sequelize) => {
@@ -118,6 +163,24 @@ module.exports = {
       return queryInterface.removeColumn(
         'Bookings', // name of Source model
         'doctorId' // key we want to remove
+      );
+    })
+    .then(() => {
+      return queryInterface.removeColumn(
+        'Prices', // name of Source model
+        'practiceId' // key we want to remove
+      );
+    })
+    .then(() => {
+      return queryInterface.removeColumn(
+        'Slots', // name of Source model
+        'doctorId' // key we want to remove
+      );
+    })
+    .then(() => {
+      return queryInterface.removeColumn(
+        'Slots', // name of Source model
+        'practiceId' // key we want to remove
       );
     });
   }

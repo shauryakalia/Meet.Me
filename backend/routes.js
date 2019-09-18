@@ -2,7 +2,7 @@
 
 /* ********************************* Import Local Modules ********************************* */
 const {
-  
+    userController
 } = require('./controllers');
 const { validator, authenticator } = require('./middlewares');
 const { logger } = require('./utils');
@@ -14,8 +14,15 @@ module.exports = (app) => {
         logger.info('csrf token recieved');
       });
 
-      // staff apis
-      app.post('/login', validator, userController.login);
+      // user apis
+      app.post('/registerPractice', validator, userController.registerPractice);
       
-      //patient apis
+      app.post('/login', validator, userController.login);
+
+      // staff-practice apis
+      app.post('/practice/:id/registerService',authenticator, validator, userController.registerService);
+      
+      app.post('/practice/:id/registerDoctors', authenticator, validator, userController.registerDoctors);
+
+      // patient apis
 }
