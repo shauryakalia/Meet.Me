@@ -20,9 +20,7 @@ module.exports = (app) => {
       app.post('/login', validator, userController.login);
 
       // staff-practice apis
-      app.post('/practice/:id/registerService',authenticator, validator, userController.registerService);
+      app.post('/practice/:id/addServiceDoctor',authenticator, validator, userController.addServiceDoctor);
       
-      app.post('/practice/:id/registerDoctors', authenticator, validator, userController.registerDoctors);
-
       // patient apis
 }
