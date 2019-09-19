@@ -9,15 +9,15 @@ module.exports = (sequelize, DataTypes) => {
     firstName: DataTypes.STRING,
     email: DataTypes.STRING,
     mobileNumber: DataTypes.INTEGER,
-    serviceId : DataTypes.STRING,
-    additionalNotes : DataTypes.STRING,
-    doctorId : DataTypes.INTEGER,
-    fromTime : DataTypes.BIGINT
+    serviceId: DataTypes.INTEGER,
+    practiceId: DataTypes.INTEGER,
+    additionalNotes: DataTypes.STRING,
+    fromTime: DataTypes.BIGINT
   }, {});
   Booking.associate = function(models) {
     // associations can be defined here
-    Booking.belongsTo(models.Practice);
-    Booking.belongsTo(models.Doctor);
+    Booking.belongsTo(models.User);
+    Booking.belongsTo(models.Service);
   };
   return Booking;
 };

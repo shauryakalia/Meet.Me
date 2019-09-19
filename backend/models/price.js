@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: true,
       primaryKey: true,
     },
-    serviceName: DataTypes.STRING,
+    service: DataTypes.STRING,
     practiceId: DataTypes.INTEGER,
     price: DataTypes.FLOAT
   }, {});

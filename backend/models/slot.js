@@ -8,12 +8,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     fromTime: DataTypes.BIGINT,
     practiceId: DataTypes.INTEGER,
-    doctorId: DataTypes.INTEGER
+    serviceId: DataTypes.INTEGER
   }, {});
   Slot.associate = function(models) {
     // associations can be defined heres
-    Slot.belongsTo(models.Practice);
-    Slot.belongsTo(models.Doctor);
+    Slot.belongsTo(models.User);
+    Slot.belongsTo(models.Service);
   };
   return Slot;
 };

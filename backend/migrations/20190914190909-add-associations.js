@@ -10,7 +10,7 @@ module.exports = {
       return queryInterface.createTable('users', { id: Sequelize.INTEGER });
     */
     return queryInterface.addColumn(
-      'Doctors', // name of Source model
+      'Bookings', // name of Source model
       'serviceId', // name of the key we're adding 
       {
         type: Sequelize.INTEGER,
@@ -24,7 +24,7 @@ module.exports = {
     )
     .then(() => {
       return queryInterface.addColumn(
-        'Doctors', // name of Source model
+        'Bookings', // name of Source model
         'practiceId', // name of the key we're adding 
         {
           type: Sequelize.INTEGER,
@@ -39,7 +39,52 @@ module.exports = {
     })
     .then(() => {
       return queryInterface.addColumn(
-        'Bookings', // name of Source model
+        'Services', // name of Source model
+        'practiceId', // name of the key we're adding 
+        {
+          type: Sequelize.INTEGER,
+          references: {
+            model: 'Users', // name of Target model
+            key: 'practiceId', // key in Target model that we're referencing
+          },
+          onUpdate: 'CASCADE',
+          onDelete: 'SET NULL',
+        }
+      );
+    })
+    .then(() => {
+      return queryInterface.addColumn(
+        'Prices', // name of Source model
+        'practiceId', // name of the key we're adding 
+        {
+          type: Sequelize.INTEGER,
+          references: {
+            model: 'Users', // name of Target model
+            key: 'practiceId', // key in Target model that we're referencing
+          },
+          onUpdate: 'CASCADE',
+          onDelete: 'SET NULL',
+        }
+      );
+    })
+    .then(() => {
+      return queryInterface.addColumn(
+        'Slots', // name of Source model
+        'practiceId', // name of the key we're adding 
+        {
+          type: Sequelize.INTEGER,
+          references: {
+            model: 'Users', // name of Target model
+            key: 'practiceId', // key in Target model that we're referencing
+          },
+          onUpdate: 'CASCADE',
+          onDelete: 'SET NULL',
+        }
+      );
+    })
+    .then(() => {
+      return queryInterface.addColumn(
+        'Slots', // name of Source model
         'serviceId', // name of the key we're adding 
         {
           type: Sequelize.INTEGER,
@@ -54,22 +99,7 @@ module.exports = {
     })
     .then(() => {
       return queryInterface.addColumn(
-        'Bookings', // name of Source model
-        'doctorId', // name of the key we're adding 
-        {
-          type: Sequelize.INTEGER,
-          references: {
-            model: 'Doctors', // name of Target model
-            key: 'doctorId', // key in Target model that we're referencing
-          },
-          onUpdate: 'CASCADE',
-          onDelete: 'SET NULL',
-        }
-      );
-    })
-    .then(() => {
-      return queryInterface.addColumn(
-        'Services', // name of Source model
+        'Timings', // name of Source model
         'practiceId', // name of the key we're adding 
         {
           type: Sequelize.INTEGER,
@@ -81,52 +111,7 @@ module.exports = {
           onDelete: 'SET NULL',
         }
       );
-    })
-    .then(() => {
-      return queryInterface.addColumn(
-        'Prices', // name of Source model
-        'practiceId', // name of the key we're adding 
-        {
-          type: Sequelize.INTEGER,
-          references: {
-            model: 'Users', // name of Target model
-            key: 'practiceId', // key in Target model that we're referencing
-          },
-          onUpdate: 'CASCADE',
-          onDelete: 'SET NULL',
-        }
-      );
-    })
-    .then(() => {
-      return queryInterface.addColumn(
-        'Slots', // name of Source model
-        'practiceId', // name of the key we're adding 
-        {
-          type: Sequelize.INTEGER,
-          references: {
-            model: 'Users', // name of Target model
-            key: 'practiceId', // key in Target model that we're referencing
-          },
-          onUpdate: 'CASCADE',
-          onDelete: 'SET NULL',
-        }
-      );
-    })
-    .then(() => {
-      return queryInterface.addColumn(
-        'Slots', // name of Source model
-        'doctorId', // name of the key we're adding 
-        {
-          type: Sequelize.INTEGER,
-          references: {
-            model: 'Doctors', // name of Target model
-            key: 'doctorId', // key in Target model that we're referencing
-          },
-          onUpdate: 'CASCADE',
-          onDelete: 'SET NULL',
-        }
-      );
-    })
+    });
   },
 
   down: (queryInterface, Sequelize) => {
@@ -138,21 +123,9 @@ module.exports = {
       return queryInterface.dropTable('users');
     */
     return queryInterface.removeColumn(
-      'Doctors', // name of Source model
-      'serviceId' // key we want to remove
+      'Services', // name of Source model
+      'practiceId' // key we want to remove
     )
-    .then(() => {
-      return queryInterface.removeColumn(
-        'Doctors', // name of Source model
-        'practiceId' // key we want to remove
-      );
-    })
-    .then(() => {
-      return queryInterface.removeColumn(
-        'Services', // name of Source model
-        'practiceId' // key we want to remove
-      );
-    })
     .then(() => {
       return queryInterface.removeColumn(
         'Bookings', // name of Source model
@@ -162,7 +135,13 @@ module.exports = {
     .then(() => {
       return queryInterface.removeColumn(
         'Bookings', // name of Source model
-        'doctorId' // key we want to remove
+        'practiceId' // key we want to remove
+      );
+    })
+    .then(() => {
+      return queryInterface.removeColumn(
+        'Services', // name of Source model
+        'practiceId' // key we want to remove
       );
     })
     .then(() => {
@@ -180,6 +159,12 @@ module.exports = {
     .then(() => {
       return queryInterface.removeColumn(
         'Slots', // name of Source model
+        'practiceId' // key we want to remove
+      );
+    })
+    .then(() => {
+      return queryInterface.removeColumn(
+        'Timings', // name of Source model
         'practiceId' // key we want to remove
       );
     });

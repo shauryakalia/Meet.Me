@@ -14,7 +14,7 @@ module.exports = {
       practiceId: {
         type: Sequelize.INTEGER
       },
-      doctorId: {
+      serviceId: {
         type: Sequelize.INTEGER
       },
       createdAt: {

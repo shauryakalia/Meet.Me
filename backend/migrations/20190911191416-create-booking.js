@@ -20,15 +20,15 @@ module.exports = {
       serviceId: {
         type: Sequelize.INTEGER
       },
+      practiceId: {
+        type: Sequelize.INTEGER
+      },
       additionalNotes: {
         type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
-      },
-      doctorId: {
-        type: Sequelize.INTEGER
       },
       fromTime: {
         type: Sequelize.BIGINT
