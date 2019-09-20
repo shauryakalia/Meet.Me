@@ -12,7 +12,7 @@ const { userService } = require('../services');
 const { db } = require('../dbconnection');
 
 module.exports = {
-    registerPractice: async () => {
+    registerPractice: async (req,res,next) => {
         try {
             logger.info('Register Practice Request: ', req.body);
             const registerPracticeResult = await userService.registerPractice(req.body);
@@ -25,4 +25,10 @@ module.exports = {
             next(Boom.conflict('Something went wrong'));
         }
     },
+    registerPrices : async () => {
+        try{} catch(e){
+            logger.error(err);
+            next(Boom.conflict('Something went wrong'));
+        }
+    }
 }

@@ -19,6 +19,6 @@ db
     logger.error('Unable to connect to the database:', err);
   });
 
-  module.exports = {
+module.exports = {
     db
-  }
+}
