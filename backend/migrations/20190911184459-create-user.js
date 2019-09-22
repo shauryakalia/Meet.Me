@@ -27,7 +27,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       practiceZipcode: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       practicePhoneNumber: {
         type: Sequelize.INTEGER

@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     yourName : DataTypes.STRING,
     yourRole : DataTypes.STRING,
     practiceAddress : DataTypes.STRING,
-    practiceZipcode : DataTypes.INTEGER,
+    practiceZipcode : DataTypes.STRING,
     practicePhoneNumber : DataTypes.INTEGER
   }, {});
   User.associate = function(models) {

@@ -1,0 +1,443 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "MEET ME",
+        "description": "Swagger UI for Meet.Me",
+        "termsOfService": "http://swagger.io/terms/"
+    },
+    "host": "127.0.0.1:5000",
+    "basePath": "/api",
+    "tags": [
+        {
+            "name": "User",
+            "description": "API for User"
+        },
+        {
+            "name": "Practice",
+            "description": "API for Practice"
+        },
+        {
+            "name": "Patient",
+            "description": "API for Patient"
+        }
+    ],
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/login": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "description": "User Login",
+                "operationId": "",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "User Login Request",
+                        "schema": {
+                            "$ref": "#/definitions/LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User login success response",
+                        "schema": {
+                            "$ref": "#/definitions/SuccessResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "User does not exists",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Something went wrong",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Empty field in request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Error response from DB",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/registerPractice": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "description": "Register Practice",
+                "operationId": "",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Add User Request",
+                        "schema": {
+                            "$ref": "#/definitions/registerPracticeRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Add User success response",
+                        "schema": {
+                            "$ref": "#/definitions/SuccessResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Something went wrong",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Empty field in request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Error response from DB",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "practice/{id}/registerServices": {
+            "post": {
+                "tags": [
+                    "Practice"
+                ],
+                "description": "Register Service",
+                "operationId": "",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "register services Request",
+                        "schema": {
+                            "$ref": "#/definitions/registerServicesRequest"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "practice id",
+                        "schema": {
+                            "$ref": "#/definitions/GetPractice"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Register Service success response",
+                        "schema": {
+                            "$ref": "#/definitions/SuccessResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Something went wrong",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Empty field in request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Error response from DB",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "practice/{id}/registerPrices": {
+            "post": {
+                "tags": [
+                    "Practice"
+                ],
+                "description": "Register Prices",
+                "operationId": "",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "register prices Request",
+                        "schema": {
+                            "$ref": "#/definitions/registerPricesRequest"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "practice id",
+                        "schema": {
+                            "$ref": "#/definitions/GetPractice"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Register prices success response",
+                        "schema": {
+                            "$ref": "#/definitions/SuccessResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Something went wrong",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Empty field in request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Error response from DB",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "practice/{id}/registerTimings": {
+            "post": {
+                "tags": [
+                    "Practice"
+                ],
+                "description": "Register timings",
+                "operationId": "",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "register timings Request",
+                        "schema": {
+                            "$ref": "#/definitions/registerTimingsRequest"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "practice id",
+                        "schema": {
+                            "$ref": "#/definitions/GetPractice"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Register timings success response",
+                        "schema": {
+                            "$ref": "#/definitions/SuccessResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Something went wrong",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Empty field in request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Error response from DB",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "LoginRequest": {
+            "properties": {
+                "email": {
+                    "required": true,
+                    "type": "string",
+                    "example": "admin@meetme.com"
+                },
+                "password": {
+                    "required": true,
+                    "type": "string",
+                    "example": "User@123"
+                }
+            }
+        },
+        "registerPracticeRequest" : {
+            "properties": {
+                "practiceEmail": {
+                    "required": true,
+                    "type": "string",
+                    "example": "nimisha@broadwaydentalstudio.co.uk"
+                },
+                "password": {
+                    "required": true,
+                    "type": "string",
+                    "example": "Broadway2019"
+                },
+                "practiceName": {
+                    "required": true,
+                    "type": "string",
+                    "example": "Broadway Dental Studio"
+                },
+                "practiceAddress": {
+                    "required": true,
+                    "type": "string",
+                    "example": "Flat 1 Broadway House, 36-38 The Broadway"
+                },
+                "practiceZipcode": {
+                    "required": true,
+                    "type": "string",
+                    "example": "NW7 3LJ"
+                },
+                "yourName": {
+                    "required": true,
+                    "type": "string",
+                    "example": "Nimisha"
+                },
+                "yourRole": {
+                    "required": true,
+                    "type": "string",
+                    "example": "Dentist"
+                },
+                "practicePhoneNumber": {
+                    "required": true,
+                    "type": "number",
+                    "example": " 02089592497"
+                }
+            }
+        },
+        "registerServicesRequest":{
+            "properties": {
+                "serviceName": {
+                    "required": true,
+                    "type": "string",
+                    "example": "Initial Dental Examination"
+                }
+            }
+        },
+        "registerPricesRequest": {
+            "properties": {
+                "service": {
+                    "required": true,
+                    "type": "string",
+                    "example": "New Patient Dental Check Up"
+                },
+                "price": {
+                    "required": true,
+                    "type": "number",
+                    "example": "7.50"
+                }
+            }
+        },
+        "registerTimingsRequest": {
+            "properties": {
+                "day": {
+                    "required": true,
+                    "type": "string",
+                    "example": "Monday"
+                },
+                "from": {
+                    "required": true,
+                    "type": "number",
+                    "example": "1569227400000"
+                },
+                "to": {
+                    "required": true,
+                    "type": "number",
+                    "example": "1569268800000"
+                },
+                "open": {
+                    "required": true,
+                    "type": "string",
+                    "example": "1"
+                }
+            }
+        },
+        "GetPractice": {
+            "properties": {
+                "id": {
+                    "example": 1,
+                    "type": "number"
+                }
+            }
+        },
+        "SuccessResponse": {
+            "properties": {
+                "message": {
+                    "example": "Success message!"
+                },
+                "success": {
+                    "type": "bool",
+                    "example": true
+                }
+            }
+        },
+        "ErrorResponse": {
+            "properties": {
+                "error": {
+                    "example": "contains error object or message"
+                },
+                "success": {
+                    "type": "bool",
+                    "example": false
+                }
+            }
+        }
+    }
+}
