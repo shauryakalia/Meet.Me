@@ -1,6 +1,12 @@
 const config = require('config');
 
 const Sequelize = require('sequelize');
+const userModel = require('./models/user');
+const serviceModel = require('./models/service');
+const priceModel = require('./models/price');
+const timingModel = require('./models/timing');
+const bookingModel = require('./models/booking');
+const slotModel = require('./models/slot');
 
 const dbConfig = config.get('dbConfig');
 const db = new Sequelize(
@@ -9,6 +15,13 @@ const db = new Sequelize(
     logging: false,
   },
 );
+
+const User = userModel(db, Sequelize);
+const Service = serviceModel(db, Sequelize);
+const Price = priceModel(db, Sequelize);
+const Timing = timingModel(db, Sequelize);
+const Booking = bookingModel(db, Sequelize);
+const Slot = slotModel(db, Sequelize);
 
 db
   .authenticate()
@@ -20,5 +33,11 @@ db
   });
 
 module.exports = {
-    db
+    db,
+    User,
+    Service,
+    Price,
+    Timing,
+    Booking,
+    Slot
 }
