@@ -16,11 +16,11 @@ module.exports = (app) => {
       // user apis
       app.post('/registerPractice', validator, userController.registerPractice);
       
-      //app.post('/login', validator, userController.login);
+      app.post('/login', validator, userController.login);
 
       // staff-practice apis
       app.post('/practice/:id/registerServices',authenticator, validator, practiceController.registerServices);
-      app.post('/practice/:id/registerPrices', authenticator, valdiator, practiceController.registerPrices);
+      app.post('/practice/:id/registerPrices', authenticator, validator, practiceController.registerPrices);
       app.post('/practice/:id/registerTimings', authenticator, validator, practiceController.registerTimings);
       // patient apis
 }

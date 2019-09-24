@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     yourRole : DataTypes.STRING,
     practiceAddress : DataTypes.STRING,
     practiceZipcode : DataTypes.STRING,
-    practicePhoneNumber : DataTypes.INTEGER
+    practicePhoneNumber : DataTypes.STRING
   }, {});
   User.associate = function(models) {
     // associations can be defined here

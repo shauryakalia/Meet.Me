@@ -8,6 +8,8 @@ const timingModel = require('./models/timing');
 const bookingModel = require('./models/booking');
 const slotModel = require('./models/slot');
 
+const { logger } = require('./utils');
+
 const dbConfig = config.get('dbConfig');
 const db = new Sequelize(
   `${dbConfig.dialect}://${dbConfig.username}:${dbConfig.password

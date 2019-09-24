@@ -25,8 +25,14 @@ module.exports = {
             next(Boom.conflict('Something went wrong'));
         }
     },
-    registerPrices : async () => {
-        try{} catch(e){
+    login: async (req,res,next) => {
+        try {
+            logger.info('Login Request: ', req.body);
+            const loginResult = await userService.login();
+            if(loginResult) {
+                
+            }
+        } catch (err) {
             logger.error(err);
             next(Boom.conflict('Something went wrong'));
         }

@@ -46,7 +46,7 @@
                     {
                         "name": "body",
                         "in": "body",
-                        "description": "User Login Request",
+                        "description": "Practice Login Request",
                         "schema": {
                             "$ref": "#/definitions/LoginRequest"
                         }
@@ -309,12 +309,12 @@
                 "email": {
                     "required": true,
                     "type": "string",
-                    "example": "admin@meetme.com"
+                    "example": "nimisha@broadwaydentalstudio.co.uk"
                 },
                 "password": {
                     "required": true,
                     "type": "string",
-                    "example": "User@123"
+                    "example": "Broadway2019"
                 }
             }
         },
@@ -357,8 +357,8 @@
                 },
                 "practicePhoneNumber": {
                     "required": true,
-                    "type": "number",
-                    "example": " 02089592497"
+                    "type": "string",
+                    "example": "02089592497"
                 }
             }
         },
@@ -381,7 +381,7 @@
                 "price": {
                     "required": true,
                     "type": "number",
-                    "example": "7.50"
+                    "example": 7.50
                 }
             }
         },
@@ -395,12 +395,12 @@
                 "from": {
                     "required": true,
                     "type": "number",
-                    "example": "1569227400000"
+                    "example": 1569227400000
                 },
                 "to": {
                     "required": true,
                     "type": "number",
-                    "example": "1569268800000"
+                    "example": 1569268800000
                 },
                 "open": {
                     "required": true,
