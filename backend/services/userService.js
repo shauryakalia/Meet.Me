@@ -42,7 +42,7 @@ module.exports = {
           };
           const result = await User.build(practiceData).save();
           if(result){
-            return { practiceId: result.get('practiceId'), password };
+            return { practiceId: result.get('practiceId')};
           }
           throw new Error('Error while registering practice');
     },
