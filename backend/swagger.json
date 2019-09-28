@@ -306,7 +306,7 @@
     "definitions": {
         "LoginRequest": {
             "properties": {
-                "email": {
+                "practiceEmail": {
                     "required": true,
                     "type": "string",
                     "example": "nimisha@broadwaydentalstudio.co.uk"

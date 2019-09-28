@@ -17,7 +17,7 @@ const { secretKey } = config.get('General');
 */
 async function createToken(user) {
   const token = await jsonwebtoken.sign({
-    user: { email: user.email, userId: user.userId, userRole: user.role },
+    user: { email: user.practiceEmail, userId: user.practiceId},
   }, secretKey, {
     expiresIn: '30 days',
   });

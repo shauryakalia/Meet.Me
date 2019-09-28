@@ -1,25 +1,31 @@
 
 /* ********************************* Import Node Modules ********************************* */
-const Sequelize = require('sequelize');
+const sequelize = require('sequelize');
 
 /* ********************************* Import Local Modules ********************************* */
 const {
-    User
+    db,User
   } = require('../dbconnection');
 const { encryption } = require('../helpers');
 
 /* ********************************* Variable Listing ********************************* */
 const checkPassword = async (data) => {
   const password = data.oldPassword || data.password;
-  const result = await User.findOne({
-    attributes: ['practiceId', 'password'],
-    where: {
-          email:
-          {
-            $eq: data.email,
-          }
-        }
-  });
+  // const result = await User.findOne({
+  //   attributes: ['practiceId', 'password'],
+  //   where: {
+  //         practiceEmail:
+  //         {
+  //           $eq: data.practiceEmail,
+  //         }
+  //       }
+  // });
+  const query = `SELECT "practiceId","password" FROM "Users" WHERE "practiceEmail"='${data.practiceEmail}'`;
+  const res = await db.query(query, { type: sequelize.QueryTypes.SELECT });
+  const result = {
+    practiceId : res[0].practiceId,
+    password : res[0].password
+  };
   if (result) {
     const validPassword = encryption.comparePassword(password, result);
     return validPassword;
