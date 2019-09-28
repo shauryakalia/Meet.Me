@@ -146,6 +146,12 @@
                 ],
                 "parameters": [
                     {
+                        "name": "x-access-token",
+                        "in": "header",
+                        "description": "an authorization header",
+                        "required": true
+                    },
+                    {
                         "name": "body",
                         "in": "body",
                         "description": "register services Request",
@@ -202,6 +208,12 @@
                 ],
                 "parameters": [
                     {
+                        "name": "x-access-token",
+                        "in": "header",
+                        "description": "an authorization header",
+                        "required": true
+                    },
+                    {
                         "name": "body",
                         "in": "body",
                         "description": "register prices Request",
@@ -257,6 +269,12 @@
                     "application/json"
                 ],
                 "parameters": [
+                    {
+                        "name": "x-access-token",
+                        "in": "header",
+                        "description": "an authorization header",
+                        "required": true
+                    },
                     {
                         "name": "body",
                         "in": "body",
