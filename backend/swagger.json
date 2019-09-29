@@ -134,7 +134,7 @@
                 }
             }
         },
-        "practice/{id}/registerServices": {
+        "/practice/{id}/registerServices": {
             "post": {
                 "tags": [
                     "Practice"
@@ -196,7 +196,7 @@
                 }
             }
         },
-        "practice/{id}/registerPrices": {
+        "/practice/{id}/registerPrices": {
             "post": {
                 "tags": [
                     "Practice"
@@ -258,7 +258,7 @@
                 }
             }
         },
-        "practice/{id}/registerTimings": {
+        "/practice/{id}/registerTimings": {
             "post": {
                 "tags": [
                     "Practice"

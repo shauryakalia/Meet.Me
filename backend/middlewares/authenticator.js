@@ -12,7 +12,6 @@ module.exports = (req, res, next) => {
     authentication.authenticateUser(token)
       .then((decode) => {
         if (decode.user.userId === id) {
-          req.body.userRole = decode.user.userRole;
           next();
         } else {
           next(Boom.unauthorized('invalid user'));

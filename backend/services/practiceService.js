@@ -10,13 +10,12 @@ const {
 module.exports = {
     registerServices: async (data) => {
       let result;
-      for(var service in data){
-        const serviceData = {
-          serviceName : service.serviceName,
-          practiceId : service.practiceId
-        }
-        result = await Service.build(serviceData).save();
+      const serviceData = {
+          serviceName : data.serviceName,
+          practiceId : data.practiceId
       }
+      result = await Service.build(serviceData).save();
+      
       if(result){
           return { serviceId: result.get('serviceId') };
       }
@@ -24,14 +23,12 @@ module.exports = {
     },
     registerPrices: async (data) => {
       let result;
-      for(var p in data){
         const priceData = {
-          service : p.service,
-          practiceId : p.practiceId,
-          price : p.price
+          service : data.service,
+          practiceId : data.practiceId,
+          price : data.price
         }
         result = await Price.build(priceData).save();
-      }
       if(result){
           return { priceId: result.get('priceId') };
       }
@@ -39,19 +36,21 @@ module.exports = {
     },
     registerTimings: async (data) => {
       let result;
-      for(var timings in data){
         const timingsData = {
-          day : timings.day,
-          from : timings.from,
-          to : timings.to,
-          open : timings.open,
-          practiceId : timings.practiceId
+          day : data.day,
+          from : data.from,
+          to : data.to,
+          open : data.open,
+          practiceId : data.practiceId
         }
         result = await Timing.build(timingsData).save();
-      }
       if(result){
           return { timingId: result.get('timingId') };
       }
       throw new Error('Error while registering service');
+    },
+    addSlot: async (data) => {
+      let result;
+      
     }
 } 
