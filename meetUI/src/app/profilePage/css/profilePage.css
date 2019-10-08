@@ -1,0 +1,111 @@
+body{
+    background-image: url('background1.jpg');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+.main{
+    margin-left: 15%;
+    margin-top: 3%;
+}
+.main > div{
+    border: .5px solid white;
+    border-radius: 10px;
+    width: 35%;
+    height: 40%;
+    float: left;
+    margin-left:   4%;
+    margin-bottom: 4%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 700;
+    font-size: 40px;
+    background-color: rgba(255, 255, 255, .2);
+    transition: .2s;
+}
+.main > div:hover{
+   font-size: 50px;
+   background-color: rgba(255, 255, 255, .4);
+
+}
+
+.grid_container{
+    display:grid;
+    grid-template-columns: auto auto auto auto;
+    
+}
+
+.grid_item{
+    padding: 2%;
+}
+
+.gap{
+    padding: 1%;
+    margin-top: 4%; 
+}
+.save_timing{
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 6.6%;
+}
+.time_save{
+    width: 76%;
+}
+.modal_heading{
+    border: .5px solid gray;
+    border-radius: 4px;
+    background-color: gray;
+    color: white; 
+    height: 60px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.heading{
+    font-size: 24px;
+    font-weight: 600;
+    color: #272626;
+}
+.form-control1{
+    width:24%;
+    margin-right: 2%;
+}
+.form-input{
+    padding: 1.5%;
+    margin-top: 1%; 
+}
+
+input{
+    outline: none;
+}
+
+.edit_remove{
+    margin-right: 50px;
+    margin-top: 10px;
+
+}
+
+.list_content{
+    display: flex;
+    padding: 2%;
+
+}
+.text_content{
+   flex-grow: 1; 
+   font-size: 18px;
+   padding-top: 3%;
+   border-bottom: .5px solid gray;
+}
+
+.edit_content{
+    width: 55%;
+    padding:2%;
+    display: contents;
+}
+
+.editted_save_button{
+    margin-right: 1%;
+}
