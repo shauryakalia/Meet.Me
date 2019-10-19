@@ -10,7 +10,7 @@ body{
 }
 .main > div{
     border: .5px solid white;
-    border-radius: 10px;
+    border-radius: 70px;
     width: 35%;
     height: 40%;
     float: left;

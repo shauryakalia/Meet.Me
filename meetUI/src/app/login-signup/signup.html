@@ -1,30 +1,11 @@
-<div>
-  
-  <div class="container" *ngIf="onLogin; else sugnUp">
-    <form class="form login-form">
-      <div class="form-header">Login </div>
-      <div class="input">
-        <input type="text" name="name619" class=" form-control form-input " id="name619" placeholder="Practice Name"
-          required>
-      </div>
-      <div class="input">
-        <input type="password" name="password" class=" form-control form-input " id="password" placeholder="Password"
-          required>
-      </div>
-      <div>
-        <button class="btn btn-secondary login-button"> Login </button>
-      </div>
-      <hr>
-      <div>
-        don't have an account? click here to 
-        <button class="btn btn-secondary" (click)="swithToSignup()"> Sign Up </button>
-      </div>
-    </form>
-  </div>
-  
-
-  <ng-template #sugnUp>
-   
+<html>
+<head>
+    <title> Signup </title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">        
+        <link rel="stylesheet" href="./login-signup.css">
+    </head>
+<body>
+    
     <div class="container">
         <form class="form">
             <div class="form-header"> Create Account </div>
@@ -35,7 +16,6 @@
               <input type="text" name="practiceName619" class=" form-control form-input " id="practiceName619" placeholder="Practice Name" required>
             </div>
 
-          
             <div class="input">
               <input type="email" name="email" class=" form-control form-input " id="email" placeholder="Practice Email" required>
             </div>
@@ -76,13 +56,13 @@
             </div>
 
             <div>
-                <button class="btn btn-secondary signup-button"> Sign UP </button>
-                <button (click)="switchToLogin()" class="btn btn-default login-secondary ">Login</button>
+                <button class="btn btn-secondary signup-button" type="submit"> Sign UP </button>
+                <button class="btn login-secondary " onClick="location.href='login.html'">Login</button>
 
             </div>
       </form>
       
     </div>
-  
-  </ng-template>
-</div>
+ 
+</body>
+</html>
