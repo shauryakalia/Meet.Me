@@ -1,0 +1,201 @@
+<html>
+    <head>
+        <title> Profile Page </title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">        
+        <link rel="stylesheet" href="./css/profilePage.css">
+        <link rel="stylesheet" href="./css/mdoal.css">
+    </head>
+
+    <body>
+        <div class="main">
+            <div class="div1"> Practice Details </div>    
+            <div class="div2"> Services </div>    
+            <div class="div3"> Prices </div>    
+            <div class="div4"> Timing </div>                    
+        </div>
+
+        <div class="contents"> 
+
+        <div class="div_modal div1_modal">
+            <div class="div_modal_contents">
+
+                    <form class="actual_form">
+                      <h2 class="modal_heading"> Practice Details <i class=" close fa fa-times " aria-hidden="true"></i> </h2>  
+                        <div class=" input">
+                          <input type="text" name="name619" class=" form-control form-input  " id="name619" placeholder="Your Name" required>
+                        </div>
+                        <div class=" input">
+                          <input type="text" name="practiceName619" class=" form-control form-input " id="practiceName619" placeholder="Practice Name" required>
+                        </div> 
+                            
+                         <div class="input">
+                           <input type="text" name="number" class=" form-control form-input " id="number" placeholder="Practice Phone Number" required>
+                         </div>
+                
+                        <div class="input">
+                          <input type="text" name="Address" class=" form-control form-input " id="Address" placeholder="Practice Address" required>
+                        </div>
+                        <div class="input input-small">
+                          <input type="text" name="city" class=" form-control form-input  " id="city" placeholder="City" required>
+                        </div>
+                
+                        <div class="input input-small">
+                          <input type="text" name="state" class=" form-control form-input  " id="state" placeholder="State" required>
+                        </div>
+                
+                        <div class="input input-small">
+                          <input type="text" name="country" class=" form-control form-input  " id="country" placeholder="Country" required>
+                        </div>
+                
+                        <div class="input input-small">
+                          <input type="number" name="zipcode" class=" form-control form-input  " id="zipcode" placeholder="Zipcode" required>
+                        </div>
+                
+                        <div>
+                            <button class="btn btn-secondary  ">Save</button>
+                        </div>
+                    </form>
+            </div>
+        </div>
+
+        <div class="div_modal  div2_modal">
+            <div class="div_modal_contents">
+
+                <h2 class="modal_heading"> Services <i class=" close close2 fa fa-times" aria-hidden="true"></i> </h2>
+                
+                <div class="gap">
+                    <span class="heading"> Name</span>
+                    <input type="text" class="form-control1" name="service" id="service">
+                    <button class="btn btn-default" onclick="add()" id="add"> Add </button>
+                    <h3 class="gap"> Services </h3>
+                    <ol class="service_list">
+                        <!-- <div class="edit_content"> 
+                          <input type="text" name="editted" class="editted">
+                          <button class="btn btn-secondary editted_save_button" > Save </button>
+                        </div> -->
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <div class=" div_modal  div3_modal">
+            <div class="div_modal_contents">
+                
+                <div>
+                  <h2 class="modal_heading"> Services and Prices <i class=" close close3 fa fa-times " aria-hidden="true"></i> </h2>
+
+                  <div class="gap">
+                    <span class=" heading">Service Name</span>
+                    <input type="text" class="form-control1" name="service" id="service2">
+                    
+                    <span class=" heading">Price</span>
+                    <input type="text" class="form-control1" name="price" id="price">
+
+                    <button class="btn btn-default" onclick="add_price()" id="add_price"> Add </button>
+                  </div>
+
+                  <div class="gap">  
+                    <h3> Price List </h3>
+                    <ol class="price_list">
+
+                    </ol>
+                  </div>
+              </div>
+            </div>
+        </div>
+
+        <div class="div_modal  div4_modal">
+            <div class="div_modal_contents">
+                <div> <i class=" close close4 fa fa-times fa-2x" aria-hidden="true"></i>  </div>
+                <div>
+                  <h2 class="modal_heading"> Timings </h2>
+                  <div class="grid_container gap">
+
+                    <div class="grid_item">  </div>
+                    <div class="grid_item heading"> Start </div>
+                    <div class="grid_item heading"> End </div>
+                    <div class="grid_item heading"> Status </div>
+
+                    <div class="grid_item heading"> Monday </div>
+                    <div class="grid_item"> <input type="text" name="mon_start"> </div>
+                    <div class="grid_item"> <input type="text" name="mon_end"> </div>
+                    <div class="grid_item"> 
+                      <select> 
+                        <option value="open">Open</option> 
+                        <option value="close">Close</option> 
+                      </select>
+                    </div>
+
+                    <div class="grid_item heading"> Tuesday </div>
+                    <div class="grid_item"> <input type="text" name="tue_start"> </div>
+                    <div class="grid_item"> <input type="text" name="tue_end"> </div>
+                    <div class="grid_item"> 
+                      <select> 
+                        <option value="open">Open</option> 
+                        <option value="close">Close</option> 
+                      </select>
+                    </div>
+
+                    <div class="grid_item heading"> Wednsday </div>
+                    <div class="grid_item"> <input type="text" name="wed_start"> </div>
+                    <div class="grid_item"> <input type="text" name="wed_end"> </div>
+                    <div class="grid_item"> 
+                      <select> 
+                        <option value="open">Open</option> 
+                        <option value="close">Close</option> 
+                      </select>
+                    </div>
+
+                    <div class="grid_item heading"> Thursday </div>
+                    <div class="grid_item"> <input type="text" name="thu_start"> </div>
+                    <div class="grid_item"> <input type="text" name="thu_end"> </div>
+                    <div class="grid_item"> 
+                      <select> 
+                        <option value="open">Open</option> 
+                        <option value="close">Close</option> 
+                      </select>
+                    </div>
+
+                    <div class="grid_item heading"> Friday </div>
+                    <div class="grid_item"> <input type="text" name="fri_start"> </div>
+                    <div class="grid_item"> <input type="text" name="fri_end"> </div>
+                    <div class="grid_item"> 
+                      <select> 
+                        <option value="open">Open</option> 
+                        <option value="close">Close</option> 
+                      </select>
+                    </div>
+
+                    <div class="grid_item heading"> Saturday </div>
+                    <div class="grid_item"> <input type="text" name="sat_start"> </div>
+                    <div class="grid_item"> <input type="text" name="sat_end"> </div>
+                    <div class="grid_item"> 
+                      <select> 
+                        <option value="open">Open</option> 
+                        <option value="close">Close</option> 
+                      </select>
+                    </div>
+
+                    <div class="grid_item heading"> Sunday </div>
+                    <div class="grid_item"> <input type="text" name="sun_start"> </div>
+                    <div class="grid_item"> <input type="text" name="sun_end"> </div>
+                    <div class="grid_item"> 
+                      <select> 
+                        <option value="open">Open</option> 
+                        <option value="close">Close</option> 
+                      </select>
+                    </div>
+                  </div>
+                  <div class="save_timing">
+                    <button class="btn btn-secondary time_save"> Save </button>
+                  </div>
+                </div>
+            </div>
+          </div>
+    </div>
+    <script src="./js/jquery-2.1.4.min.js"></script>
+    <script src="./js/profilePage.js"></script>
+    <script src="https://use.fontawesome.com/80b7f5fe41.js"></script>
+    </body>
+
+</html>
