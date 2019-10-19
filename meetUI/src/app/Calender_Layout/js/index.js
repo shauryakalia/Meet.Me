@@ -12,3 +12,15 @@ function openTab(evt, cityName) {
     document.getElementById(cityName).style.display = "block";
     evt.currentTarget.className += " active";
   }
+ var set=0
+  document.querySelector('.arrow').addEventListener('click', () => {
+    if (set==0){
+      document.querySelector('.accountSettings').style.display= 'block'
+      set=1
+    }
+    else {
+      document.querySelector('.accountSettings').style.display= 'none'
+      set=0
+    }
+
+  })
