@@ -14,6 +14,7 @@ const routers = require('./routes');
 const dbconnection = require('./dbconnection');
 const swaggerDocument = require('./swagger.json');
 const { errorHandler, responseHandler } = require('./middlewares');
+const { logger } = require('./utils')
 
 /** ********************** Varaiable Listing ********************* */
 const app = express();
@@ -28,9 +29,9 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use(session({
-  secret: csrfKey,
-}));
+// app.use(session({
+//   secret: csrfKey,
+// }));
 
 app.use('/api', router);
 

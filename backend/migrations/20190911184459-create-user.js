@@ -2,19 +2,34 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('Users', {
-      id: {
+      practiceId: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      firstName: {
+      practiceName: {
         type: Sequelize.STRING
       },
-      lastName: {
+      password: {
         type: Sequelize.STRING
       },
-      email: {
+      practiceEmail: {
+        type: Sequelize.STRING
+      },
+      yourName: {
+        type: Sequelize.STRING
+      },
+      yourRole: {
+        type: Sequelize.STRING
+      },
+      practiceAddress: {
+        type: Sequelize.STRING
+      },
+      practiceZipcode: {
+        type: Sequelize.STRING
+      },
+      practicePhoneNumber: {
         type: Sequelize.STRING
       },
       createdAt: {

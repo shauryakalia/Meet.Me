@@ -1,5 +1,9 @@
 {
     "General": {
-      
+      "port": 5000,
+      "csrfKey": "meetme",
+      "secretKey": "meetme123",
+      "email": "meetme@gmail.com",
+      "apiKey": "apikey"
     }
   }
