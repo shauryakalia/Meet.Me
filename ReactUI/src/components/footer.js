@@ -4,18 +4,22 @@ import { Grid, Divider, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
     root: {
-        marginTop: theme.spacing.unit * 8,
-        backgroundColor: theme.palette.background.default,
+        marginTop: theme.spacing.unit * 66,
+        backgroundColor: '#3f51b5',
         textAlign: "center",
+        height:'112px',
     },
     footer: {
         paddingTop: theme.spacing.unit * 2,
         paddingBottom: theme.spacing.unit * 2,
     },
     text: {
-        color: theme.palette.common.grey,
+        color: theme.palette.common.white,
         paddingLeft: theme.spacing.unit * 2,
         paddingRight: theme.spacing.unit * 2,
+        fontSize: '20px',
+
+
     }
 }));
 
@@ -30,6 +34,7 @@ export default function Footer() {
                 direction="row"
                 justify="center"
                 alignItems="center"
+                alignContent='space-around'
                 className={classes.footer}
             >
                 <Typography variant="caption" className={classes.text}>
@@ -37,15 +42,6 @@ export default function Footer() {
                 </Typography>
                 <Typography variant="caption" className={classes.text}>
                     Status
-                </Typography>
-                <Typography variant="caption" className={classes.text}>
-                    Writers
-                </Typography>
-                <Typography variant="caption" className={classes.text}>
-                    Blog
-                </Typography>
-                <Typography variant="caption" className={classes.text}>
-                    Careers
                 </Typography>
                 <Typography variant="caption" className={classes.text}>
                     Privacy

@@ -16,6 +16,7 @@ const useStyles = theme => ({
     [theme.breakpoints.up('sm')]: {
       display: 'block',
     },
+    
   },
   search: {
     position: 'relative',
@@ -56,7 +57,8 @@ const useStyles = theme => ({
   },
   button: {
     margin: theme.spacing(1),
-    textTransform: "initial"
+    textTransform: "initial",
+    color: 'white'
   },
   paper: {
     position: 'fixed',
@@ -162,10 +164,10 @@ class Header extends React.Component {
     
     return (
       <div className={classes.root}>
-        <AppBar position="static" color="default">
+        <AppBar position="static" color="primary">
           <Toolbar>
-            <Typography className={classes.title} variant="h6" color="secondary" noWrap>
-              TEST
+            <Typography className={classes.title} variant="h6" color="default" noWrap>
+              Meet Me
           </Typography>
             <div className={classes.search}>
               <div className={classes.Search}>
@@ -181,8 +183,11 @@ class Header extends React.Component {
               />
             </div>
             <div>
-              <Button type="button" variant="outlined" size="small" color="secondary" className={classes.button}>
+              <Button type="button" variant="outlined" size="small" color="inherit" className={classes.button}>
                 Login
+            </Button>
+              <Button type="button" variant="outlined" size="small" color="inherit" className={classes.button}>
+                Sign Up
             </Button>
             </div>
           </Toolbar>
