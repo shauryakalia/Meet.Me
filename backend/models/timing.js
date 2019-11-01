@@ -7,8 +7,8 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
     },
     day: DataTypes.STRING,
-    from: DataTypes.BIGINT,
-    to: DataTypes.BIGINT,
+    from: DataTypes.STRING,
+    to: DataTypes.STRING,
     open: DataTypes.INTEGER,
     practiceId: DataTypes.INTEGER
   }, {});

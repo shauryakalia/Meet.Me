@@ -12,10 +12,10 @@ module.exports = {
         type: Sequelize.STRING
       },
       from: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       to: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       open: {
         type: Sequelize.INTEGER
