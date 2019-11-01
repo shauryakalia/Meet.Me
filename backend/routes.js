@@ -25,7 +25,7 @@ module.exports = (app) => {
       
       app.post('/practice/:id/registerTimings', authenticator, validator, practiceController.registerTimings);
 
-      app.post('/pratice/:id/addSlot', authenticator, validator, practiceController.addSlot );
+      app.post('/practice/:id/addSlot', authenticator, validator, practiceController.addSlot );
       
       // patient apis
 }

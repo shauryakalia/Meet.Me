@@ -18,7 +18,7 @@ module.exports = {
             req.body.practiceId= parseInt(req.params.id,10);
             const registerServicesResult = await practiceService.registerServices(req.body);
             if (!registerServicesResult) {
-            next(Boom.conflict('Error while registering services'));
+                next(Boom.conflict('Error while registering services'));
             }
             res.message = `Succesfully registered service`;
             next();
@@ -33,7 +33,7 @@ module.exports = {
             req.body.practiceId= parseInt(req.params.id,10);
             const registerPricesResult = await practiceService.registerPrices(req.body);
             if (!registerPricesResult) {
-            next(Boom.conflict('Error while registering prices'));
+                next(Boom.conflict('Error while registering prices'));
             }
             res.message = `Succesfully registered Price`;
             next();
@@ -48,7 +48,7 @@ module.exports = {
             req.body.practiceId=parseInt(req.params.id,10);
             const registerTimingsResult = await practiceService.registerTimings(req.body);
             if (!registerTimingsResult) {
-            next(Boom.conflict('Error while registering timings'));
+                next(Boom.conflict('Error while registering timings'));
             }
             res.message = `Succesfully registered Timing`;
             next();
@@ -63,8 +63,9 @@ module.exports = {
             req.body.practiceId=parseInt(req.params.id,10);
             const addSlotResult = await practiceService.addSlot(req.body);
             if (!addSlotResult) {
-            next(Boom.conflict('Error while adding slot'));
+                next(Boom.conflict('Error while adding slot'));
             }
+            res.message = 'slot added';
             next();
         } catch (err) {
             logger.error(err);

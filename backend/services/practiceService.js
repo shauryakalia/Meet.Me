@@ -4,7 +4,7 @@ const Sequelize = require('sequelize');
 
 /* ********************************* Import Local Modules ********************************* */
 const {
-    User, Service, Price, Timing
+    User, Service, Price, Timing, Slot, db
   } = require('../dbconnection');
 
 module.exports = {
@@ -43,7 +43,7 @@ module.exports = {
           open : data.open,
           practiceId : data.practiceId
         }
-        result = await Timing.build(timingsData).save();
+      result = await Timing.build(timingsData).save();
       if(result){
           return { timingId: result.get('timingId') };
       }
@@ -51,16 +51,19 @@ module.exports = {
     },
     addSlot: async (data) => {
       let result;
-      const slotData = {
-        fromTime : data.fromTime,
-        serviceId : data.serviceId,
-        practiceId : data.practiceId
-      }
-      result = await Slot.build(slotData).save();
-      if(result){
-        return { slotId: result.get('slotId') };
-      }
-      throw new Error('Error while adding slot');
+      const query = `SELECT "slotId" FROM "Slots" WHERE "practiceId"='${data.practiceId}' AND "serviceId"='${data.serviceId}' AND "fromTime"='${data.fromTime}'`;
+      const res = await db.query(query, { type: Sequelize.QueryTypes.SELECT });
+      if(!res[0]) {
+        const slotData = {
+          fromTime : data.fromTime,
+          serviceId : data.serviceId,
+          practiceId : data.practiceId
+        }
+        result = await Slot.build(slotData).save();
+        if(result){
+          return { slotId: result.get('slotId') };    
+        }
+      } 
+      throw new Error('Slot for this practice mentioned service already exists for this time');
     }
-
 } 
