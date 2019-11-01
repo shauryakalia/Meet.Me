@@ -20,6 +20,7 @@ module.exports = {
             if (!registerServicesResult) {
             next(Boom.conflict('Error while registering services'));
             }
+            res.message = `Succesfully registered service`;
             next();
         }catch(err){
             logger.error(err);
@@ -34,6 +35,7 @@ module.exports = {
             if (!registerPricesResult) {
             next(Boom.conflict('Error while registering prices'));
             }
+            res.message = `Succesfully registered Price`;
             next();
         } catch (err) {
             logger.error(err);
@@ -48,6 +50,7 @@ module.exports = {
             if (!registerTimingsResult) {
             next(Boom.conflict('Error while registering timings'));
             }
+            res.message = `Succesfully registered Timing`;
             next();
         } catch (err) {
             logger.error(err);
@@ -60,7 +63,7 @@ module.exports = {
             req.body.practiceId=parseInt(req.params.id,10);
             const addSlotResult = await practiceService.addSlot(req.body);
             if (!addSlotResult) {
-            next(Boom.conflict('Error while registering timings'));
+            next(Boom.conflict('Error while adding slot'));
             }
             next();
         } catch (err) {

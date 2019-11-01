@@ -51,14 +51,24 @@ const schema = {
     body: JOI.object().keys(
       {
         day: JOI.string().required(),
-        from: JOI.number().required(),
-        to: JOI.number().required(),
+        from: JOI.string().required(),
+        to: JOI.string().required(),
         open: JOI.number().required()
       }),
       params: JOI.object().keys({
         id: JOI.number().required(),
       }),
-  }
+  },
+  '/practice/:id/addSlot' : {
+    body: JOI.object().keys(
+      {
+        serviceId: JOI.number().required(),
+        fromTime: JOI.number().required()
+      }),
+      params: JOI.object().keys({
+        id: JOI.number().required(),
+      }),
+  },
 };
 
 module.exports = async (req, res, next) => {

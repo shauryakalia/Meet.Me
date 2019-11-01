@@ -32,7 +32,7 @@ module.exports = {
       if(result){
           return { priceId: result.get('priceId') };
       }
-      throw new Error('Error while registering service'); 
+      throw new Error('Error while registering price'); 
     },
     registerTimings: async (data) => {
       let result;
@@ -47,10 +47,20 @@ module.exports = {
       if(result){
           return { timingId: result.get('timingId') };
       }
-      throw new Error('Error while registering service');
+      throw new Error('Error while registering timing');
     },
     addSlot: async (data) => {
       let result;
-      
+      const slotData = {
+        fromTime : data.fromTime,
+        serviceId : data.serviceId,
+        practiceId : data.practiceId
+      }
+      result = await Slot.build(slotData).save();
+      if(result){
+        return { slotId: result.get('slotId') };
+      }
+      throw new Error('Error while adding slot');
     }
+
 } 

@@ -319,6 +319,68 @@
                     }
                 }
             }
+        },
+        "/practice/{id}/addSlot": {
+            "post": {
+                "tags": [
+                    "Practice"
+                ],
+                "description": "Add Slot",
+                "operationId": "",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "x-access-token",
+                        "in": "header",
+                        "description": "an authorization header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "add slot Request",
+                        "schema": {
+                            "$ref": "#/definitions/addSlotRequest"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "practice id",
+                        "schema": {
+                            "$ref": "#/definitions/GetPractice"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Register timings success response",
+                        "schema": {
+                            "$ref": "#/definitions/SuccessResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Something went wrong",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Empty field in request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Error response from DB",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -327,7 +389,7 @@
                 "practiceEmail": {
                     "required": true,
                     "type": "string",
-                    "example": "nimisha@broadwaydentalstudio.co.uk"
+                    "example": "contact@broadwaydentalstudio.co.uk"
                 },
                 "password": {
                     "required": true,
@@ -341,7 +403,7 @@
                 "practiceEmail": {
                     "required": true,
                     "type": "string",
-                    "example": "nimisha@broadwaydentalstudio.co.uk"
+                    "example": "contact@broadwaydentalstudio.co.uk"
                 },
                 "password": {
                     "required": true,
@@ -412,18 +474,32 @@
                 },
                 "from": {
                     "required": true,
-                    "type": "number",
-                    "example": 1569227400000
+                    "type": "string",
+                    "example": "8:30"
                 },
                 "to": {
                     "required": true,
                     "type": "number",
-                    "example": 1569268800000
+                    "example": "18:30"
                 },
                 "open": {
                     "required": true,
                     "type": "string",
                     "example": "1"
+                }
+            }
+        },
+        "addSlotRequest" :{
+            "properties": {
+                "serviceId": {
+                    "required": true,
+                    "type": "number",
+                    "example": 1
+                },
+                "fromTime": {
+                    "required": true,
+                    "type": "number",
+                    "example": 1569227400000
                 }
             }
         },
