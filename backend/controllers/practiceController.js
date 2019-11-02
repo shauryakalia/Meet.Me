@@ -65,7 +65,23 @@ module.exports = {
             if (!addSlotResult) {
                 next(Boom.conflict('Error while adding slot'));
             }
-            res.message = 'slot added';
+            res.message = 'slot added succesfully';
+            next();
+        } catch (err) {
+            logger.error(err);
+            next(Boom.conflict('Something went wrong'));
+        }
+    },
+    deleteSlot: async(req,res,next) => {
+        try {
+            logger.info('Delete Slot Request: ', req.body);
+            req.body.practiceId=parseInt(req.params.id,10);
+            req.body.slotId=parseInt(req.params.slotId,10);
+            const deleteSlotResult = await practiceService.deleteSlot(req.body);
+            if (!deleteSlotResult) {
+                next(Boom.conflict('Error while adding slot'));
+            }
+            res.message = 'slot deleted succesfully';
             next();
         } catch (err) {
             logger.error(err);

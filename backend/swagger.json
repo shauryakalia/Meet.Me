@@ -381,6 +381,76 @@
                     }
                 }
             }
+        },
+        "/practice/{id}/deleteSlot/{slotId}": {
+            "post": {
+                "tags": [
+                    "Practice"
+                ],
+                "description": "Delete Slot",
+                "operationId": "",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "x-access-token",
+                        "in": "header",
+                        "description": "an authorization header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "delete slot Request",
+                        "schema": {
+                            "$ref": "#/definitions/deleteSlotRequest"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "practice id",
+                        "schema": {
+                            "$ref": "#/definitions/GetPractice"
+                        }
+                    },
+                    {
+                        "name": "slotId",
+                        "in": "path",
+                        "description": "slot id",
+                        "schema": {
+                            "$ref": "#/definitions/SlotId"
+                        }
+                    }                   
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Register timings success response",
+                        "schema": {
+                            "$ref": "#/definitions/SuccessResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Something went wrong",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Empty field in request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Error response from DB",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -503,9 +573,26 @@
                 }
             }
         },
+        "deleteSlotRequest" : {
+            "properties": {
+                "fromTime": {
+                    "required": true,
+                    "type": "number",
+                    "example": 1569227400000
+                }
+            }
+        },
         "GetPractice": {
             "properties": {
                 "id": {
+                    "example": 1,
+                    "type": "number"
+                }
+            }
+        },
+        "SlotId": {
+            "properties": {
+                "slotId": {
                     "example": 1,
                     "type": "number"
                 }

@@ -65,5 +65,19 @@ module.exports = {
         }
       } 
       throw new Error('Slot for this practice mentioned service already exists for this time');
+    },
+    deleteSlot: async (data) => {
+      let result;
+      result = await Slot.destroy({
+        where: {
+          slotId: `${data.slotId}`,
+          practiceId: `${data.practiceId}`,
+          fromTime: `${data.fromTime}`
+        }
+      });
+      if(result){
+        return result;    
+      }
+      throw new Error('Slot not found');
     }
 } 
