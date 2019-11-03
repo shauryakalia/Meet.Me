@@ -74,6 +74,18 @@ const schema = {
       slotId: JOI.number().required(),
     }),
   },
+  '/booking' : {
+    body: JOI.object().keys({
+      firstName: JOI.string().required(),
+      email: JOI.string().required(),
+      mobileNumber: JOI.number().required(),
+      serviceId: JOI.number().required(),
+      practiceId: JOI.number().required(),
+      additionalNotes: JOI.string().required(),
+      fromTime: JOI.number().required()
+    }),
+    params: null,
+  },
 };
 
 module.exports = async (req, res, next) => {

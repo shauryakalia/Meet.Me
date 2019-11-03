@@ -2,7 +2,7 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('Bookings', {
-      BookingId: {
+      bookingId: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -15,7 +15,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       mobileNumber: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       serviceId: {
         type: Sequelize.INTEGER

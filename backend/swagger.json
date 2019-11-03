@@ -451,6 +451,54 @@
                     }
                 }
             }
+        },
+        "/booking": {
+            "post": {
+                "tags": [
+                    "Open API"
+                ],
+                "description": "Add Booking",
+                "operationId": "",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Add Booking Request",
+                        "schema": {
+                            "$ref": "#/definitions/addBookingRequest"
+                        }
+                    }                 
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Register timings success response",
+                        "schema": {
+                            "$ref": "#/definitions/SuccessResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Something went wrong",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Empty field in request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Error response from DB",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -579,6 +627,44 @@
                     "required": true,
                     "type": "number",
                     "example": 1569227400000
+                }
+            }
+        },
+        "addBookingRequest" : {
+            "properties": {
+                "firstName" : {
+                    "required": true,
+                    "example": "Shaurya",
+                    "type": "string"
+                },
+                "email" : {
+                    "required": true,
+                    "example": "shauryakalia@gmail.com",
+                    "type": "string"
+                },
+                "mobileNumber": {
+                    "required": true,
+                    "example": "9999999999",
+                    "type": "string"
+                },
+                "serviceId": {
+                    "required": true,
+                    "example": 1,
+                    "type": "number"
+                },
+                "practiceId": {
+                    "required": true,
+                    "example": 1,
+                    "type": "number"
+                },
+                "additionalNotes": {
+                    "example": "NA",
+                    "type": "string"
+                },
+                "fromTime": {
+                    "required": true,
+                    "example": 1569227400000,
+                    "type": "number"
                 }
             }
         },

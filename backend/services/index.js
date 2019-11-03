@@ -1,9 +1,9 @@
 const userService = require('./userService');
-const patientService = require('./patientService');
+const openApiService = require('./openApiService');
 const practiceService = require('./practiceService');
 
 module.exports = {
     userService,
-    patientService,
+    openApiService,
     practiceService
 }

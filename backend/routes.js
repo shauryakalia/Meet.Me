@@ -2,7 +2,7 @@
 
 /* ********************************* Import Local Modules ********************************* */
 const {
-    userController, practiceController, patientController
+    userController, practiceController, openApiController
 } = require('./controllers');
 const { validator, authenticator } = require('./middlewares');
 const { logger } = require('./utils');
@@ -28,5 +28,9 @@ module.exports = (app) => {
       app.post('/practice/:id/addSlot', authenticator, validator, practiceController.addSlot );
       
       app.post('/practice/:id/deleteSlot/:slotId', authenticator, validator, practiceController.deleteSlot);
-      // patient apis
+      
+     // app.post('/practice/:id/cancelBooking/:bookingId', authenticator, validator, practiceController.cancelBooking);
+
+      // open apis
+      app.post('/booking', validator, openApiController.booking);
 }
