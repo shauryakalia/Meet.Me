@@ -8,7 +8,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     fromTime: DataTypes.BIGINT,
     practiceId: DataTypes.INTEGER,
-    serviceId: DataTypes.INTEGER
+    serviceId: DataTypes.INTEGER,
+    status: DataTypes.STRING
   }, {});
   Slot.associate = function(models) {
     // associations can be defined heres

@@ -382,7 +382,7 @@
                 }
             }
         },
-        "/practice/{id}/deleteSlot/{slotId}": {
+        "/practice/{id}/deleteSlot": {
             "post": {
                 "tags": [
                     "Practice"
@@ -414,15 +414,69 @@
                         "schema": {
                             "$ref": "#/definitions/GetPractice"
                         }
+                    }                
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Register timings success response",
+                        "schema": {
+                            "$ref": "#/definitions/SuccessResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Something went wrong",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Empty field in request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Error response from DB",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/practice/{id}/cancelBooking": {
+            "post": {
+                "tags": [
+                    "Practice"
+                ],
+                "description": "Cancel Booking",
+                "operationId": "",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "x-access-token",
+                        "in": "header",
+                        "description": "an authorization header",
+                        "required": true
                     },
                     {
-                        "name": "slotId",
-                        "in": "path",
-                        "description": "slot id",
+                        "name": "body",
+                        "in": "body",
+                        "description": "delete slot Request",
                         "schema": {
-                            "$ref": "#/definitions/SlotId"
+                            "$ref": "#/definitions/cancelBookingRequest"
                         }
-                    }                   
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "practice id",
+                        "schema": {
+                            "$ref": "#/definitions/GetPractice"
+                        }
+                    }                 
                 ],
                 "responses": {
                     "200": {
@@ -627,6 +681,10 @@
                     "required": true,
                     "type": "number",
                     "example": 1569227400000
+                },
+                "slotId": {
+                    "example": 1,
+                    "type": "number"
                 }
             }
         },
@@ -665,20 +723,28 @@
                     "required": true,
                     "example": 1569227400000,
                     "type": "number"
+                },
+                "slotId": {
+                    "example": 1,
+                    "type": "number"
+                }
+            }
+        },
+        "cancelBookingRequest": {
+            "properties": {
+                "bookingId": {
+                    "example": 1,
+                    "type": "number"
+                },
+                "slotId": {
+                    "example": 1,
+                    "type": "number"
                 }
             }
         },
         "GetPractice": {
             "properties": {
                 "id": {
-                    "example": 1,
-                    "type": "number"
-                }
-            }
-        },
-        "SlotId": {
-            "properties": {
-                "slotId": {
                     "example": 1,
                     "type": "number"
                 }

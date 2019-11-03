@@ -76,12 +76,26 @@ module.exports = {
         try {
             logger.info('Delete Slot Request: ', req.body);
             req.body.practiceId=parseInt(req.params.id,10);
-            req.body.slotId=parseInt(req.params.slotId,10);
             const deleteSlotResult = await practiceService.deleteSlot(req.body);
             if (!deleteSlotResult) {
                 next(Boom.conflict('Error while adding slot'));
             }
             res.message = 'slot deleted succesfully';
+            next();
+        } catch (err) {
+            logger.error(err);
+            next(Boom.conflict('Something went wrong'));
+        }
+    },
+    cancelBooking: async(req,res,next) => {
+        try {
+            logger.info('Cancel Booking Request ', req.body);
+            req.body.practiceId=parseInt(req.params.id,10);
+            const cancelBookingResult = await practiceService.cancelBooking(req.body);
+            if (!cancelBookingResult) {
+                next(Boom.conflict('Error while adding slot'));
+            }
+            res.message = 'booking has been cancelled succesfully';
             next();
         } catch (err) {
             logger.error(err);

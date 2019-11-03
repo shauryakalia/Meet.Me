@@ -65,13 +65,22 @@ const schema = {
       id: JOI.number().required(),
     }),
   },
-  '/practice/:id/deleteSlot/:slotId': {
+  '/practice/:id/deleteSlot': {
     body: JOI.object().keys({
       fromTime: JOI.number().required(),
+      slotId: JOI.number().required(),
     }),
     params: JOI.object().keys({
       id: JOI.number().required(),
-      slotId: JOI.number().required(),
+    }),
+  },
+  '/practice/:id/cancelBooking' : {
+    body: JOI.object().keys({
+      bookingId: JOI.number().required(),
+      slotId: JOI.number().required()
+    }),
+    params: JOI.object().keys({
+      id: JOI.number().required(),
     }),
   },
   '/booking' : {
@@ -82,7 +91,9 @@ const schema = {
       serviceId: JOI.number().required(),
       practiceId: JOI.number().required(),
       additionalNotes: JOI.string().required(),
-      fromTime: JOI.number().required()
+      fromTime: JOI.number().required(),
+      status: JOI.string().valid('active','cancelled'),
+      slotId: JOI.number().required()
     }),
     params: null,
   },

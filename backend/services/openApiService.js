@@ -17,11 +17,17 @@ module.exports = {
             serviceId: data.serviceId,
             practiceId: data.practiceId,
             additionalNotes: data.additionalNotes,
-            fromTime: data.fromTime
+            fromTime: data.fromTime,
+            status : 'active',
+            slotId : data.slotId
         }
         result = await Booking.build(bookingData).save();
         if (result) {
-            return { bookingId: result.get('bookingId') };
+            let updateSlotQuery = `UPDATE "Slots" SET "status"='booked' WHERE "slotId"=${data.slotId}`;
+            const updateResult = await db.query(updateSlotQuery, { type: Sequelize.QueryTypes.UPDATE });
+            if(updateResult) {
+                return { bookingId: result.get('bookingId') };
+            }
         }
         throw new Error('Error while adding booking');
     },

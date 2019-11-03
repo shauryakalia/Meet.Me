@@ -23,15 +23,21 @@ module.exports = {
       practiceId: {
         type: Sequelize.INTEGER
       },
+      slotId : {
+        type: Sequelize.INTEGER
+      },
       additionalNotes: {
+        type: Sequelize.STRING
+      },
+      fromTime: {
+        type: Sequelize.BIGINT
+      },
+      status: {
         type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
-      },
-      fromTime: {
-        type: Sequelize.BIGINT
       },
       updatedAt: {
         allowNull: false,
