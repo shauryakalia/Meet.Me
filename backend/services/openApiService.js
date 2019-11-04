@@ -18,17 +18,24 @@ module.exports = {
             practiceId: data.practiceId,
             additionalNotes: data.additionalNotes,
             fromTime: data.fromTime,
-            status : 'active',
-            slotId : data.slotId
+            status: 'active',
+            slotId: data.slotId
         }
         result = await Booking.build(bookingData).save();
         if (result) {
             let updateSlotQuery = `UPDATE "Slots" SET "status"='booked' WHERE "slotId"=${data.slotId}`;
             const updateResult = await db.query(updateSlotQuery, { type: Sequelize.QueryTypes.UPDATE });
-            if(updateResult) {
+            if (updateResult) {
                 return { bookingId: result.get('bookingId') };
             }
         }
         throw new Error('Error while adding booking');
     },
+    getPrices: async (data) => {
+        const result = await Price.findAll({ where: { practiceId: data }, attributes: ['priceId', 'service', 'price'] });
+        if(result) {
+            return result;
+        }
+        throw new Error('Error while getting prices');
+    }
 }

@@ -506,6 +506,130 @@
                 }
             }
         },
+        "/practice/{id}/updatePrice": {
+            "post": {
+                "tags": [
+                    "Practice"
+                ],
+                "description": "Update Price",
+                "operationId": "",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "x-access-token",
+                        "in": "header",
+                        "description": "an authorization header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "delete slot Request",
+                        "schema": {
+                            "$ref": "#/definitions/updatePriceRequest"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "practice id",
+                        "schema": {
+                            "$ref": "#/definitions/GetPractice"
+                        }
+                    }                 
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Register timings success response",
+                        "schema": {
+                            "$ref": "#/definitions/SuccessResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Something went wrong",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Empty field in request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Error response from DB",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/practice/{id}/deletePrice": {
+            "post": {
+                "tags": [
+                    "Practice"
+                ],
+                "description": "Delete Price",
+                "operationId": "",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "x-access-token",
+                        "in": "header",
+                        "description": "an authorization header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "delete slot Request",
+                        "schema": {
+                            "$ref": "#/definitions/deletePriceRequest"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "practice id",
+                        "schema": {
+                            "$ref": "#/definitions/GetPractice"
+                        }
+                    }                 
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Register timings success response",
+                        "schema": {
+                            "$ref": "#/definitions/SuccessResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Something went wrong",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Empty field in request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Error response from DB",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/booking": {
             "post": {
                 "tags": [
@@ -525,6 +649,54 @@
                             "$ref": "#/definitions/addBookingRequest"
                         }
                     }                 
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Register timings success response",
+                        "schema": {
+                            "$ref": "#/definitions/SuccessResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Something went wrong",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Empty field in request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Error response from DB",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/getPrices/{id}": {
+            "get": {
+                "tags": [
+                    "Open API"
+                ],
+                "description": "Get Prices",
+                "operationId": "",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "practice id",
+                        "schema": {
+                            "$ref": "#/definitions/GetPractice"
+                        }
+                    }                  
                 ],
                 "responses": {
                     "200": {
@@ -742,9 +914,41 @@
                 }
             }
         },
+        "updatePriceRequest": {
+            "properties": {
+                "priceId": {
+                    "example": 1,
+                    "type": "number"
+                },
+                "price": {
+                    "example": 52,
+                    "type": "number"
+                },
+                "service": {
+                    "example": "new service",
+                    "type": "string"
+                }
+            }
+        },
+        "deletePriceRequest" : {
+            "properties": {
+                "priceId": {
+                    "example": 1,
+                    "type": "number"
+                }
+            }
+        },
         "GetPractice": {
             "properties": {
                 "id": {
+                    "example": 1,
+                    "type": "number"
+                }
+            }
+        },
+        "getPricesRequest": {
+            "properties": {
+                "practiceId": {
                     "example": 1,
                     "type": "number"
                 }

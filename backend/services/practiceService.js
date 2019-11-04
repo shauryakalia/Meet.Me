@@ -93,5 +93,36 @@ module.exports = {
       }
     }
     throw new Error('Booking not found');
+  },
+  updatePrice: async (data) => {
+    let result;
+    let query = ``;
+    if (data.price && data.service) {
+      query = `UPDATE "Prices" SET "service"='${data.service}' , "price"=${data.price} WHERE "practiceId"=${data.practiceId} AND "priceId"=${data.priceId}`;
+    }
+    else if (data.service) {
+      query = `UPDATE "Prices" SET "service"='${data.service}' WHERE "practiceId"=${data.practiceId} AND "priceId"=${data.priceId}`;
+    }
+    else if (data.price) {
+      query = `UPDATE "Prices" SET "price"=${data.price} WHERE "practiceId"=${data.practiceId} AND "priceId"=${data.priceId}`;
+    }
+    result = await db.query(query, { type: Sequelize.QueryTypes.UPDATE });
+    if (result) {
+      return result;
+    }
+    throw new Error('Price not found');
+  },
+  deletePrice: async (data) => {
+    let result;
+    result = await Price.destroy({
+      where: {
+        priceId: `${data.priceId}`,
+        practiceId: `${data.practiceId}`
+      }
+    });
+    if (result) {
+      return result;
+    }
+    throw new Error('Price not found');
   }
 } 

@@ -83,6 +83,24 @@ const schema = {
       id: JOI.number().required(),
     }),
   },
+  '/practice/:id/updatePrice' : {
+    body: JOI.object().keys({
+      price: JOI.number(),
+      service: JOI.string(),
+      priceId: JOI.number().required()
+    }),
+    params: JOI.object().keys({
+      id: JOI.number().required(),
+    }),
+  },
+  '/practice/:id/deletePrice' : {
+    body: JOI.object().keys({
+      priceId: JOI.number().required()
+    }),
+    params: JOI.object().keys({
+      id: JOI.number().required(),
+    }),
+  },
   '/booking' : {
     body: JOI.object().keys({
       firstName: JOI.string().required(),
@@ -97,6 +115,12 @@ const schema = {
     }),
     params: null,
   },
+  '/getPrices/:id' : {
+    body: null,
+    params: JOI.object().keys({
+      id: JOI.number().required(),
+    }),
+  }
 };
 
 module.exports = async (req, res, next) => {

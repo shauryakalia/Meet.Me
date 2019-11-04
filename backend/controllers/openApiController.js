@@ -26,4 +26,18 @@ module.exports = {
             next(Boom.conflict('Something went wrong'));
         }
     },
+    getPrices: async(req,res,next) => {
+        try {
+            logger.info('Get Prcies Request: ', req.body);
+            const getPricesResult = await openApiService.getPrices(req.params.id);
+            if (!getPricesResult) {
+                next(Boom.conflict('Error while getting prices'));
+            }
+            res.data = getPricesResult;
+            next();
+        } catch (err) {
+            logger.error(err);
+            next(Boom.conflict('Something went wrong'));
+        }
+    }
 }

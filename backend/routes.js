@@ -31,6 +31,14 @@ module.exports = (app) => {
 
     app.post('/practice/:id/cancelBooking', authenticator, validator, practiceController.cancelBooking);
 
+    app.post('/practice/:id/updatePrice', authenticator, validator, practiceController.updatePrice);
+
+    app.post('/practice/:id/deletePrice', authenticator, validator, practiceController.deletePrice);
+    
     // open apis
     app.post('/booking', validator, openApiController.booking);
+
+    app.get('/getPrices/:id', validator, openApiController.getPrices);
+
+    //app.get('/getSlots', validator, openApiController.getAllSlots);
 }

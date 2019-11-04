@@ -101,5 +101,35 @@ module.exports = {
             logger.error(err);
             next(Boom.conflict('Something went wrong'));
         }
+    },
+    updatePrice: async(req,res,next) => {
+        try {
+            logger.info('Update Price Request', req.body);
+            req.body.practiceId=parseInt(req.params.id,10);
+            const updatePriceResult = await practiceService.updatePrice(req.body);
+            if (!updatePriceResult) {
+                next(Boom.conflict('Error while updating price'));
+            }
+            res.message = 'Price updated succesfully';
+            next();
+        } catch (err) {
+            logger.error(err);
+            next(Boom.conflict('Something went wrong'));
+        }
+    },
+    deletePrice: async(req,res,next) => {
+        try {
+            logger.info('Delete Price Request', req.body);
+            req.body.practiceId=parseInt(req.params.id,10);
+            const deletePriceResult = await practiceService.deletePrice(req.body);
+            if (!deletePriceResult) {
+                next(Boom.conflict('Error while deleting price'));
+            }
+            res.message = 'Price deleted succesfully';
+            next();
+        } catch (err) {
+            logger.error(err);
+            next(Boom.conflict('Something went wrong'));
+        }
     }
 }
