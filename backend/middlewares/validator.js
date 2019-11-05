@@ -120,6 +120,12 @@ const schema = {
     params: JOI.object().keys({
       id: JOI.number().required(),
     }),
+  },
+  '/getServices/:id' : {
+	body: null,
+    params: JOI.object().keys({
+      id: JOI.number().required(),
+    }),
   }
 };
 

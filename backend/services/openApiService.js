@@ -37,5 +37,12 @@ module.exports = {
             return result;
         }
         throw new Error('Error while getting prices');
-    }
+	},
+	getServices: async (data) => {
+		const result = await Service.findAll({ where: { practiceId: data }, attributes: ['serviceId', 'serviceName'] });
+        if(result) {
+            return result;
+        }
+        throw new Error('Error while getting services');
+	}
 }

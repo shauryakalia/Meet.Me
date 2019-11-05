@@ -725,6 +725,54 @@
                     }
                 }
             }
+		},
+		"/getServices/{id}": {
+            "get": {
+                "tags": [
+                    "Open API"
+                ],
+                "description": "Get Services",
+                "operationId": "",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "practice id",
+                        "schema": {
+                            "$ref": "#/definitions/GetPractice"
+                        }
+                    }                  
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Register timings success response",
+                        "schema": {
+                            "$ref": "#/definitions/SuccessResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Something went wrong",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Empty field in request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Error response from DB",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
