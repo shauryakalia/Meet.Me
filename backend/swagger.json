@@ -629,6 +629,130 @@
                     }
                 }
             }
+		},
+		"/practice/{id}/updateService": {
+            "post": {
+                "tags": [
+                    "Practice"
+                ],
+                "description": "Update Service",
+                "operationId": "",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "x-access-token",
+                        "in": "header",
+                        "description": "an authorization header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "delete slot Request",
+                        "schema": {
+                            "$ref": "#/definitions/updateServiceRequest"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "practice id",
+                        "schema": {
+                            "$ref": "#/definitions/GetPractice"
+                        }
+                    }                 
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Register timings success response",
+                        "schema": {
+                            "$ref": "#/definitions/SuccessResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Something went wrong",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Empty field in request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Error response from DB",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/practice/{id}/deleteService": {
+            "post": {
+                "tags": [
+                    "Practice"
+                ],
+                "description": "Delete Service",
+                "operationId": "",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "x-access-token",
+                        "in": "header",
+                        "description": "an authorization header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "delete service Request",
+                        "schema": {
+                            "$ref": "#/definitions/deleteServiceRequest"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "practice id",
+                        "schema": {
+                            "$ref": "#/definitions/GetPractice"
+                        }
+                    }                 
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Register timings success response",
+                        "schema": {
+                            "$ref": "#/definitions/SuccessResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Something went wrong",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Empty field in request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Error response from DB",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
         },
         "/booking": {
             "post": {
@@ -981,6 +1105,26 @@
         "deletePriceRequest" : {
             "properties": {
                 "priceId": {
+                    "example": 1,
+                    "type": "number"
+                }
+            }
+		},
+		"updateServiceRequest": {
+            "properties": {
+                "serviceId": {
+                    "example": 1,
+                    "type": "number"
+                },
+                "serviceName": {
+                    "example": "new service",
+                    "type": "string"
+                }
+            }
+        },
+        "deleteServiceRequest" : {
+            "properties": {
+                "serviceId": {
                     "example": 1,
                     "type": "number"
                 }

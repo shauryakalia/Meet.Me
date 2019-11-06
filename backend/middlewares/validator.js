@@ -101,6 +101,23 @@ const schema = {
       id: JOI.number().required(),
     }),
   },
+  '/practice/:id/updateService' : {
+    body: JOI.object().keys({
+      serviceName: JOI.string().required(),
+      serviceId: JOI.number().required()
+    }),
+    params: JOI.object().keys({
+      id: JOI.number().required(),
+    }),
+  },
+  '/practice/:id/deleteService' : {
+    body: JOI.object().keys({
+      serviceId: JOI.number().required()
+    }),
+    params: JOI.object().keys({
+      id: JOI.number().required(),
+    }),
+  },
   '/booking' : {
     body: JOI.object().keys({
       firstName: JOI.string().required(),

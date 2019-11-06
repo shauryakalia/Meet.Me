@@ -34,6 +34,10 @@ module.exports = (app) => {
     app.post('/practice/:id/updatePrice', authenticator, validator, practiceController.updatePrice);
 
 	app.post('/practice/:id/deletePrice', authenticator, validator, practiceController.deletePrice);
+
+	app.post('/practice/:id/updateService', authenticator, validator, practiceController.updateService);
+
+	app.post('/practice/:id/deleteService', authenticator, validator, practiceController.deleteService);
 	  
     // open apis
     app.post('/booking', validator, openApiController.booking);
