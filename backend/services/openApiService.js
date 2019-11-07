@@ -44,5 +44,12 @@ module.exports = {
             return result;
         }
         throw new Error('Error while getting services');
+	},
+	getTimings: async (data) => {
+		const result = await Timing.findAll({ where: { practiceId: data }, attributes: ['timingId', 'day', 'from', 'to', 'open']});
+		if(result) {
+            return result;
+        }
+        throw new Error('Error while getting timings');
 	}
 }

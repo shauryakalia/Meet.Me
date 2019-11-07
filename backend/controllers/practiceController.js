@@ -162,4 +162,34 @@ module.exports = {
             next(Boom.conflict('Something went wrong'));
         }
 	},
+	updateTiming: async(req,res,next) => {
+		try {
+			logger.info('Update Timings Request', req.body);
+            req.body.practiceId=parseInt(req.params.id,10);
+            const updateTimingsResult = await practiceService.updateTiming(req.body);
+            if (!updateTimingsResult) {
+                next(Boom.conflict('Error while updating timing'));
+            }
+            res.message = 'Timing updated succesfully';
+            next();
+		} catch (err) {
+            logger.error(err);
+            next(Boom.conflict('Something went wrong'));
+		}
+	},
+	deleteTiming: async(req,res,next) => {
+        try {
+            logger.info('Delete Timing Request', req.body);
+            req.body.practiceId=parseInt(req.params.id,10);
+            const deleteTimingResult = await practiceService.deleteTiming(req.body);
+            if (!deleteTimingResult) {
+                next(Boom.conflict('Error while deleting Timing'));
+            }
+            res.message = 'Timing deleted succesfully';
+            next();
+        } catch (err) {
+            logger.error(err);
+            next(Boom.conflict('Something went wrong'));
+        }
+	},
 }

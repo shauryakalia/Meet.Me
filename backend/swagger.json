@@ -754,6 +754,130 @@
                 }
             }
         },
+		"/practice/{id}/updateTiming": {
+            "post": {
+                "tags": [
+                    "Practice"
+                ],
+                "description": "Update Timing",
+                "operationId": "",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "x-access-token",
+                        "in": "header",
+                        "description": "an authorization header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "delete slot Request",
+                        "schema": {
+                            "$ref": "#/definitions/updateTimingRequest"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "practice id",
+                        "schema": {
+                            "$ref": "#/definitions/GetPractice"
+                        }
+                    }                 
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Register timings success response",
+                        "schema": {
+                            "$ref": "#/definitions/SuccessResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Something went wrong",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Empty field in request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Error response from DB",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/practice/{id}/deleteTiming": {
+            "post": {
+                "tags": [
+                    "Practice"
+                ],
+                "description": "Delete Timing",
+                "operationId": "",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "x-access-token",
+                        "in": "header",
+                        "description": "an authorization header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "delete service Request",
+                        "schema": {
+                            "$ref": "#/definitions/deleteTimingRequest"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "practice id",
+                        "schema": {
+                            "$ref": "#/definitions/GetPractice"
+                        }
+                    }                 
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Register timings success response",
+                        "schema": {
+                            "$ref": "#/definitions/SuccessResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Something went wrong",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Empty field in request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Error response from DB",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/booking": {
             "post": {
                 "tags": [
@@ -856,6 +980,54 @@
                     "Open API"
                 ],
                 "description": "Get Services",
+                "operationId": "",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "practice id",
+                        "schema": {
+                            "$ref": "#/definitions/GetPractice"
+                        }
+                    }                  
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Register timings success response",
+                        "schema": {
+                            "$ref": "#/definitions/SuccessResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Something went wrong",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Empty field in request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Error response from DB",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+		},
+		"/getTimings/{id}": {
+            "get": {
+                "tags": [
+                    "Open API"
+                ],
+                "description": "Get Timings",
                 "operationId": "",
                 "produces": [
                     "application/json"
@@ -1129,7 +1301,35 @@
                     "type": "number"
                 }
             }
-        },
+		},
+		"updateTimingRequest" : {
+			"properties": {
+				"timingId": {
+                    "example": 1,
+                    "type": "number"
+				},
+				"open": {
+                    "example": 1,
+                    "type": "number"
+				},
+				"from": {
+					"example": "9:00",
+					"type": "string"
+				},
+				"to": {
+					"example": "20:00",
+					"type": "string"
+				}	
+			}
+		},
+		"deleteTimingRequest" : {
+			"properties": {
+                "timingId": {
+                    "example": 1,
+                    "type": "number"
+                }
+            }
+		},
         "GetPractice": {
             "properties": {
                 "id": {

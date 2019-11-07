@@ -38,6 +38,10 @@ module.exports = (app) => {
 	app.post('/practice/:id/updateService', authenticator, validator, practiceController.updateService);
 
 	app.post('/practice/:id/deleteService', authenticator, validator, practiceController.deleteService);
+
+	app.post('/practice/:id/updateTiming', authenticator, validator, practiceController.updateTiming);
+
+	app.post('/practice/:id/deleteTiming', authenticator, validator, practiceController.deleteTiming);
 	  
     // open apis
     app.post('/booking', validator, openApiController.booking);
@@ -45,6 +49,8 @@ module.exports = (app) => {
 	app.get('/getPrices/:id', validator, openApiController.getPrices);
 	
 	app.get('/getServices/:id', validator, openApiController.getServices);
+
+	app.get('/getTimings/:id', validator, openApiController.getTimings);
 
     //app.get('/getSlots', validator, openApiController.getAllSlots);
 }

@@ -135,8 +135,7 @@ module.exports = {
     throw new Error('Service not found');
   },
   deleteService: async (data) => {
-    let result;
-    result = await Service.destroy({
+    let result = await Service.destroy({
       where: {
         serviceId: `${data.serviceId}`,
         practiceId: `${data.practiceId}`
@@ -147,4 +146,38 @@ module.exports = {
     }
     throw new Error('Service not found');
   },
+  updateTiming: async(data) => {
+	let result;
+	let query = ``;
+	if (data.open) {
+		query = `UPDATE "Timing" SET "open"='${data.open}' WHERE "practiceId"='${data.practiceId}' AND "timingId"=${data.timingId}`;
+	} else {
+		if (data.from && data.to) {
+			query = `UPDATE "Timing" SET "from"='${data.from}' WHERE "practiceId"='${data.practiceId}' AND "timingId"=${data.timingId}`;
+		}
+		else if (data.from && !data.to) {
+			query = `UPDATE "Timing" SET "to"='${data.to}' WHERE "practiceId"='${data.practiceId}' AND "timingId"=${data.timingId}`;
+		}
+		else if (data.to && !data.from) {
+			query = `UPDATE "Timing" SET "to"='${data.to}', "from"='${data.from}' WHERE "practiceId"='${data.practiceId}' AND "timingId"=${data.timingId}`;
+		}
+	}
+	result = await db.query(query, { type: Sequelize.QueryTypes.UPDATE });
+	if (result) {
+	return result;
+	}
+	throw new Error('Timing not found');
+  },
+  deleteTiming: async (data) => {
+	  let result = await Timing.destroy({
+		where: {
+		  timingId: `${data.timingId}`,
+		  practiceId: `${data.practiceId}`
+		}
+	  });
+	  if (result) {
+		return result;
+	  }
+	  throw new Error('Timing not found');s
+  }
 } 

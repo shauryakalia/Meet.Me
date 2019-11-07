@@ -118,6 +118,25 @@ const schema = {
       id: JOI.number().required(),
     }),
   },
+  '/practice/:id/updateTiming' : {
+    body: JOI.object().keys({
+      from: JOI.string(),
+	  to: JOI.string(),
+	  open: JOI.number(),
+      timingId: JOI.number().required()
+    }),
+    params: JOI.object().keys({
+      id: JOI.number().required(),
+    }),
+  },
+  '/practice/:id/deleteTiming' : {
+    body: JOI.object().keys({
+    	timingId: JOI.number().required()
+    }),
+    params: JOI.object().keys({
+      id: JOI.number().required(),
+    }),
+  },
   '/booking' : {
     body: JOI.object().keys({
       firstName: JOI.string().required(),
@@ -139,6 +158,12 @@ const schema = {
     }),
   },
   '/getServices/:id' : {
+	body: null,
+    params: JOI.object().keys({
+      id: JOI.number().required(),
+    }),
+  },
+  '/getTimings/:id' : {
 	body: null,
     params: JOI.object().keys({
       id: JOI.number().required(),

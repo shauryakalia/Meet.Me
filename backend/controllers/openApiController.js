@@ -53,5 +53,19 @@ module.exports = {
             logger.error(err);
             next(Boom.conflict('Something went wrong'));
 		}
+	},
+	getTimings: async(req,res,next) => {
+		try {
+			logger.info('Get Timings Request: ', req.params);
+            const getTimingsResult = await openApiService.getTimings(req.params.id);
+            if (!getTimingsResult) {
+                next(Boom.conflict('Error while getting timings'));
+            }
+            res.data = getTimingsResult;
+            next();
+		} catch (err) {
+            logger.error(err);
+            next(Boom.conflict('Something went wrong'));
+		}
 	}
 }
