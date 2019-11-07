@@ -4,7 +4,6 @@ import { Grid, Divider, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
     root: {
-        marginTop: theme.spacing.unit * 8,
         backgroundColor: theme.palette.background.default,
         textAlign: "center",
     },
