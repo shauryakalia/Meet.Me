@@ -124,5 +124,27 @@ module.exports = {
       return result;
     }
     throw new Error('Price not found');
-  }
+  },
+  updateService: async (data) => {
+    let result;
+    let query = `UPDATE "Services" SET "serviceName"='${data.serviceName}' WHERE "practiceId"=${data.practiceId} AND "serviceId"=${data.serviceId}`;
+    result = await db.query(query, { type: Sequelize.QueryTypes.UPDATE });
+    if (result) {
+      return result;
+    }
+    throw new Error('Service not found');
+  },
+  deleteService: async (data) => {
+    let result;
+    result = await Service.destroy({
+      where: {
+        serviceId: `${data.serviceId}`,
+        practiceId: `${data.practiceId}`
+      }
+    });
+    if (result) {
+      return result;
+    }
+    throw new Error('Service not found');
+  },
 } 

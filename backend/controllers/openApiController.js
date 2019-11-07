@@ -28,7 +28,7 @@ module.exports = {
     },
     getPrices: async(req,res,next) => {
         try {
-            logger.info('Get Prcies Request: ', req.body);
+            logger.info('Get Prices Request: ', req.params);
             const getPricesResult = await openApiService.getPrices(req.params.id);
             if (!getPricesResult) {
                 next(Boom.conflict('Error while getting prices'));
@@ -39,5 +39,19 @@ module.exports = {
             logger.error(err);
             next(Boom.conflict('Something went wrong'));
         }
-    }
+	},
+	getServices: async(req,res,next) => {
+		try {
+			logger.info('Get Services Request: ', req.params);
+            const getServicesResult = await openApiService.getServices(req.params.id);
+            if (!getServicesResult) {
+                next(Boom.conflict('Error while getting services'));
+            }
+            res.data = getServicesResult;
+            next();
+		} catch (err) {
+            logger.error(err);
+            next(Boom.conflict('Something went wrong'));
+		}
+	}
 }
