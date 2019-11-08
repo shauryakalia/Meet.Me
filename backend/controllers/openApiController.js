@@ -67,5 +67,19 @@ module.exports = {
             logger.error(err);
             next(Boom.conflict('Something went wrong'));
 		}
-	}
+    },
+    getPracticeDetails: async(req,res,next) => {
+        try {
+			logger.info('Get Practice Details Request: ', req.params);
+            const getPracticeDetailsResult = await openApiService.getPracticeDetails(req.params.id);
+            if (!getPracticeDetailsResult) {
+                next(Boom.conflict('Error while getting practice details'));
+            }
+            res.data = getPracticeDetailsResult;
+            next();
+		} catch (err) {
+            logger.error(err);
+            next(Boom.conflict('Something went wrong'));
+        }
+    }
 }

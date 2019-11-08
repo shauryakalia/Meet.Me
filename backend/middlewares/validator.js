@@ -74,7 +74,7 @@ const schema = {
       id: JOI.number().required(),
     }),
   },
-  '/practice/:id/cancelBooking' : {
+  '/practice/:id/cancelBooking': {
     body: JOI.object().keys({
       bookingId: JOI.number().required(),
       slotId: JOI.number().required()
@@ -83,7 +83,7 @@ const schema = {
       id: JOI.number().required(),
     }),
   },
-  '/practice/:id/updatePrice' : {
+  '/practice/:id/updatePrice': {
     body: JOI.object().keys({
       price: JOI.number(),
       service: JOI.string(),
@@ -93,7 +93,7 @@ const schema = {
       id: JOI.number().required(),
     }),
   },
-  '/practice/:id/deletePrice' : {
+  '/practice/:id/deletePrice': {
     body: JOI.object().keys({
       priceId: JOI.number().required()
     }),
@@ -101,7 +101,7 @@ const schema = {
       id: JOI.number().required(),
     }),
   },
-  '/practice/:id/updateService' : {
+  '/practice/:id/updateService': {
     body: JOI.object().keys({
       serviceName: JOI.string().required(),
       serviceId: JOI.number().required()
@@ -110,7 +110,7 @@ const schema = {
       id: JOI.number().required(),
     }),
   },
-  '/practice/:id/deleteService' : {
+  '/practice/:id/deleteService': {
     body: JOI.object().keys({
       serviceId: JOI.number().required()
     }),
@@ -118,26 +118,26 @@ const schema = {
       id: JOI.number().required(),
     }),
   },
-  '/practice/:id/updateTiming' : {
+  '/practice/:id/updateTiming': {
     body: JOI.object().keys({
       from: JOI.string(),
-	  to: JOI.string(),
-	  open: JOI.number(),
+      to: JOI.string(),
+      open: JOI.number(),
       timingId: JOI.number().required()
     }),
     params: JOI.object().keys({
       id: JOI.number().required(),
     }),
   },
-  '/practice/:id/deleteTiming' : {
+  '/practice/:id/deleteTiming': {
     body: JOI.object().keys({
-    	timingId: JOI.number().required()
+      timingId: JOI.number().required()
     }),
     params: JOI.object().keys({
       id: JOI.number().required(),
     }),
   },
-  '/booking' : {
+  '/booking': {
     body: JOI.object().keys({
       firstName: JOI.string().required(),
       email: JOI.string().required(),
@@ -146,25 +146,31 @@ const schema = {
       practiceId: JOI.number().required(),
       additionalNotes: JOI.string().required(),
       fromTime: JOI.number().required(),
-      status: JOI.string().valid('active','cancelled'),
+      status: JOI.string().valid('active', 'cancelled'),
       slotId: JOI.number().required()
     }),
     params: null,
   },
-  '/getPrices/:id' : {
+  '/getPrices/:id': {
     body: null,
     params: JOI.object().keys({
       id: JOI.number().required(),
     }),
   },
-  '/getServices/:id' : {
-	body: null,
+  '/getServices/:id': {
+    body: null,
     params: JOI.object().keys({
       id: JOI.number().required(),
     }),
   },
-  '/getTimings/:id' : {
-	body: null,
+  '/getTimings/:id': {
+    body: null,
+    params: JOI.object().keys({
+      id: JOI.number().required(),
+    }),
+  },
+  '/getPracticeDetails/:id': {
+    body: null,
     params: JOI.object().keys({
       id: JOI.number().required(),
     }),

@@ -51,5 +51,12 @@ module.exports = {
             return result;
         }
         throw new Error('Error while getting timings');
-	}
+    },
+    getPracticeDetails: async (data) => {
+        const result = await User.findAll({ where: { practiceId: data }, attributes: ['practiceId', 'practiceEmail', 'practiceAddress', 'practiceZipcode', 'practicePhoneNumber']});
+		if(result) {
+            return result;
+        }
+        throw new Error('Error while getting practice details');
+    }
 }

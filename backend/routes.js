@@ -50,7 +50,9 @@ module.exports = (app) => {
 	
 	app.get('/getServices/:id', validator, openApiController.getServices);
 
-	app.get('/getTimings/:id', validator, openApiController.getTimings);
+    app.get('/getTimings/:id', validator, openApiController.getTimings);
+    
+    app.get('/getPracticeDetails/:id', validator ,openApiController.getPracticeDetails);
 
     //app.get('/getSlots', validator, openApiController.getAllSlots);
 }
