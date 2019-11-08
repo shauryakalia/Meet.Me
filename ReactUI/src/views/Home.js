@@ -20,7 +20,7 @@ import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
-import { Calender } from '../components';
+import { Calender, Bookings } from '../components';
 import { mainListItems, secondaryListItems } from '../components/listItems';
 
 
@@ -239,7 +239,7 @@ export default function Home() {
                             <Calender />
                         </TabPanel>
                         <TabPanel value={value} index={1}>
-                            Page Two
+                            <Bookings />
                         </TabPanel>
                     </Paper>
                 </Container>
