@@ -46,7 +46,9 @@ module.exports = (app) => {
     app.get('/practice/:id/getBookingHistory/service/:serviceId', authenticator, validator, practiceController.getBookingHistory);
 
     app.get('/practice/:id/getCalendarSlots/:serviceId', authenticator, validator, practiceController.getCalendarSlots);
-	  
+    
+    app.get('/practice/:id/getCalendarBookings/:serviceId', authenticator, validator, practiceController.getCalendarBookings);
+	
     // open apis
     app.post('/booking', validator, openApiController.booking);
 

@@ -219,5 +219,19 @@ module.exports = {
             logger.error(err);
             next(Boom.conflict('Something went wrong'));
         }
+    },
+    getCalendarBookings: async (req, res, next) => {
+        try {
+            logger.info('Get Calendar Bookings Request', req.params);
+            const getCalendarBookingsResult = await practiceService.getCalendarBookings(req.params);
+            if (!getCalendarBookingsResult) {
+                next(Boom.conflict('Error while getting calendar bookings'));
+            }
+            res.data = getCalendarBookingsResult;
+            next();
+        } catch (err) {
+            logger.error(err);
+            next(Boom.conflict('Something went wrong'));
+        }
     }
 }

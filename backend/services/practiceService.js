@@ -193,5 +193,12 @@ module.exports = {
       return result;
     }
     throw new Error('Error while getting calendar slots');
+  },
+  getCalendarBookings: async (data) => {
+    const result = await Booking.findAll({ where: { practiceId: data.id, serviceId: data.serviceId, status:'active' }, attributes: ['bookingId', 'firstName', 'email', 'mobileNumber', 'additionalNotes', 'fromTime'] });
+    if (result) {
+      return result;
+    }
+    throw new Error('Error while getting calendar bookings');
   }
 } 
