@@ -144,14 +144,14 @@ const schema = {
       serviceId: JOI.number().required(),
     }),
   },
-  '/practice/:id/getCalendarSlots/:serviceId' : {
+  '/practice/:id/getCalendarSlots/service/:serviceId' : {
     body: null,
     params: JOI.object().keys({
       id: JOI.number().required(),
       serviceId: JOI.number().required(),
     }),
   },
-  '/practice/:id/getCalendarBookings/:serviceId' : {
+  '/practice/:id/getCalendarBookings/service/:serviceId' : {
     body: null,
     params: JOI.object().keys({
       id: JOI.number().required(),
@@ -195,7 +195,14 @@ const schema = {
     params: JOI.object().keys({
       id: JOI.number().required(),
     }),
-  }
+  },
+  '/getSlots/:id/service/:serviceId' : {
+    body: null,
+    params: JOI.object().keys({
+      id: JOI.number().required(),
+      serviceId: JOI.number().required(),
+    }),
+  },
 };
 
 module.exports = async (req, res, next) => {

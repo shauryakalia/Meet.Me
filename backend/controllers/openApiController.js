@@ -9,11 +9,11 @@ const sequelize = require('sequelize');
 const { logger } = require('../utils');
 const { mailer } = require('../helpers');
 const { openApiService } = require('../services');
-const { db } = require('../dbconnection'); 
+const { db } = require('../dbconnection');
 
 module.exports = {
-    booking: async(req,res,next) => {
-        try{
+    booking: async (req, res, next) => {
+        try {
             logger.info('Add Booking Request: ', req.body);
             const addBookingResult = await openApiService.booking(req.body);
             if (!addBookingResult) {
@@ -21,12 +21,12 @@ module.exports = {
             }
             res.message = `Succesfully booked`;
             next();
-        }catch(err){
+        } catch (err) {
             logger.error(err);
             next(Boom.conflict('Something went wrong'));
         }
     },
-    getPrices: async(req,res,next) => {
+    getPrices: async (req, res, next) => {
         try {
             logger.info('Get Prices Request: ', req.params);
             const getPricesResult = await openApiService.getPrices(req.params.id);
@@ -39,47 +39,61 @@ module.exports = {
             logger.error(err);
             next(Boom.conflict('Something went wrong'));
         }
-	},
-	getServices: async(req,res,next) => {
-		try {
-			logger.info('Get Services Request: ', req.params);
+    },
+    getServices: async (req, res, next) => {
+        try {
+            logger.info('Get Services Request: ', req.params);
             const getServicesResult = await openApiService.getServices(req.params.id);
             if (!getServicesResult) {
                 next(Boom.conflict('Error while getting services'));
             }
             res.data = getServicesResult;
             next();
-		} catch (err) {
+        } catch (err) {
             logger.error(err);
             next(Boom.conflict('Something went wrong'));
-		}
-	},
-	getTimings: async(req,res,next) => {
-		try {
-			logger.info('Get Timings Request: ', req.params);
+        }
+    },
+    getTimings: async (req, res, next) => {
+        try {
+            logger.info('Get Timings Request: ', req.params);
             const getTimingsResult = await openApiService.getTimings(req.params.id);
             if (!getTimingsResult) {
                 next(Boom.conflict('Error while getting timings'));
             }
             res.data = getTimingsResult;
             next();
-		} catch (err) {
+        } catch (err) {
             logger.error(err);
             next(Boom.conflict('Something went wrong'));
-		}
+        }
     },
-    getPracticeDetails: async(req,res,next) => {
+    getPracticeDetails: async (req, res, next) => {
         try {
-			logger.info('Get Practice Details Request: ', req.params);
+            logger.info('Get Practice Details Request: ', req.params);
             const getPracticeDetailsResult = await openApiService.getPracticeDetails(req.params.id);
             if (!getPracticeDetailsResult) {
                 next(Boom.conflict('Error while getting practice details'));
             }
             res.data = getPracticeDetailsResult;
             next();
-		} catch (err) {
+        } catch (err) {
             logger.error(err);
             next(Boom.conflict('Something went wrong'));
         }
+    },
+    getSlots: async (req, res, next) => { 
+        try {
+            logger.info('Get Slots Request: ', req.params);
+            const getSlotsResult = await openApiService.getSlots(req.params);
+            if (!getSlotsResult) {
+                next(Boom.conflict('Error while getting slots'));
+            }
+            res.data = getSlotsResult;
+            next();
+        } catch (err) {
+            logger.error(err);
+            next(Boom.conflict('Something went wrong'));
+        } 
     }
 }
