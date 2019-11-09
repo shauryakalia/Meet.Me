@@ -205,5 +205,19 @@ module.exports = {
             logger.error(err);
             next(Boom.conflict('Something went wrong'));
         }
+    },
+    getCalendarSlots: async (req, res, next) => {
+        try {
+            logger.info('Get Calendar Slots Request', req.params);
+            const getCalendarSlotsResult = await practiceService.getCalendarSlots(req.params);
+            if (!getCalendarSlotsResult) {
+                next(Boom.conflict('Error while getting calendar slots'));
+            }
+            res.data = getCalendarSlotsResult;
+            next();
+        } catch (err) {
+            logger.error(err);
+            next(Boom.conflict('Something went wrong'));
+        }
     }
 }

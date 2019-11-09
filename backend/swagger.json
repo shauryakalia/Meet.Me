@@ -940,6 +940,68 @@
                 }
             }
         },
+        "/practice/{id}/getCalendarSlots/service/{serviceId}": {
+            "get": {
+                "tags": [
+                    "Practice"
+                ],
+                "description": "Get Calendar Slots",
+                "operationId": "",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "x-access-token",
+                        "in": "header",
+                        "description": "an authorization header",
+                        "required": true
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "practice id",
+                        "schema": {
+                            "$ref": "#/definitions/GetPractice"
+                        }
+                    },
+                    {
+                        "name": "serviceId",
+                        "in": "path",
+                        "description": "service id",
+                        "schema": {
+                            "$ref": "#/definitions/GetPractice"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Register timings success response",
+                        "schema": {
+                            "$ref": "#/definitions/SuccessResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Something went wrong",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Empty field in request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Error response from DB",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/booking": {
             "post": {
                 "tags": [

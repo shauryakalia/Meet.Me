@@ -186,5 +186,12 @@ module.exports = {
       return result;
     }
     throw new Error('Error while getting booking history');
+  },
+  getCalendarSlots: async (data) => {
+    const result = await Slot.findAll({ where: { practiceId: data.id, serviceId: data.serviceId, status:'open' }, attributes: ['slotId', 'fromTime'] });
+    if (result) {
+      return result;
+    }
+    throw new Error('Error while getting calendar slots');
   }
 } 
