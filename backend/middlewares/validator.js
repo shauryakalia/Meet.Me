@@ -137,6 +137,13 @@ const schema = {
       id: JOI.number().required(),
     }),
   },
+  '/practice/:id/getBookingHistory/service/:serviceId' : {
+    body: null,
+    params: JOI.object().keys({
+      id: JOI.number().required(),
+      serviceId: JOI.number().required(),
+    }),
+  },
   '/booking': {
     body: JOI.object().keys({
       firstName: JOI.string().required(),

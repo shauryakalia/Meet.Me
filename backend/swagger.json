@@ -414,7 +414,7 @@
                         "schema": {
                             "$ref": "#/definitions/GetPractice"
                         }
-                    }                
+                    }
                 ],
                 "responses": {
                     "200": {
@@ -476,7 +476,7 @@
                         "schema": {
                             "$ref": "#/definitions/GetPractice"
                         }
-                    }                 
+                    }
                 ],
                 "responses": {
                     "200": {
@@ -538,7 +538,7 @@
                         "schema": {
                             "$ref": "#/definitions/GetPractice"
                         }
-                    }                 
+                    }
                 ],
                 "responses": {
                     "200": {
@@ -600,7 +600,7 @@
                         "schema": {
                             "$ref": "#/definitions/GetPractice"
                         }
-                    }                 
+                    }
                 ],
                 "responses": {
                     "200": {
@@ -629,8 +629,8 @@
                     }
                 }
             }
-		},
-		"/practice/{id}/updateService": {
+        },
+        "/practice/{id}/updateService": {
             "post": {
                 "tags": [
                     "Practice"
@@ -662,7 +662,7 @@
                         "schema": {
                             "$ref": "#/definitions/GetPractice"
                         }
-                    }                 
+                    }
                 ],
                 "responses": {
                     "200": {
@@ -724,7 +724,7 @@
                         "schema": {
                             "$ref": "#/definitions/GetPractice"
                         }
-                    }                 
+                    }
                 ],
                 "responses": {
                     "200": {
@@ -754,7 +754,7 @@
                 }
             }
         },
-		"/practice/{id}/updateTiming": {
+        "/practice/{id}/updateTiming": {
             "post": {
                 "tags": [
                     "Practice"
@@ -786,7 +786,7 @@
                         "schema": {
                             "$ref": "#/definitions/GetPractice"
                         }
-                    }                 
+                    }
                 ],
                 "responses": {
                     "200": {
@@ -848,7 +848,69 @@
                         "schema": {
                             "$ref": "#/definitions/GetPractice"
                         }
-                    }                 
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Register timings success response",
+                        "schema": {
+                            "$ref": "#/definitions/SuccessResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Something went wrong",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Empty field in request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Error response from DB",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/practice/{id}/getBookingHistory/service/{serviceId}": {
+            "get": {
+                "tags": [
+                    "Practice"
+                ],
+                "description": "Get Booking History",
+                "operationId": "",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "x-access-token",
+                        "in": "header",
+                        "description": "an authorization header",
+                        "required": true
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "practice id",
+                        "schema": {
+                            "$ref": "#/definitions/GetPractice"
+                        }
+                    },
+                    {
+                        "name": "serviceId",
+                        "in": "path",
+                        "description": "service id",
+                        "schema": {
+                            "$ref": "#/definitions/GetPractice"
+                        }
+                    }
                 ],
                 "responses": {
                     "200": {
@@ -896,7 +958,7 @@
                         "schema": {
                             "$ref": "#/definitions/addBookingRequest"
                         }
-                    }                 
+                    }
                 ],
                 "responses": {
                     "200": {
@@ -944,7 +1006,7 @@
                         "schema": {
                             "$ref": "#/definitions/GetPractice"
                         }
-                    }                  
+                    }
                 ],
                 "responses": {
                     "200": {
@@ -973,8 +1035,8 @@
                     }
                 }
             }
-		},
-		"/getServices/{id}": {
+        },
+        "/getServices/{id}": {
             "get": {
                 "tags": [
                     "Open API"
@@ -992,7 +1054,7 @@
                         "schema": {
                             "$ref": "#/definitions/GetPractice"
                         }
-                    }                  
+                    }
                 ],
                 "responses": {
                     "200": {
@@ -1021,8 +1083,8 @@
                     }
                 }
             }
-		},
-		"/getTimings/{id}": {
+        },
+        "/getTimings/{id}": {
             "get": {
                 "tags": [
                     "Open API"
@@ -1040,7 +1102,7 @@
                         "schema": {
                             "$ref": "#/definitions/GetPractice"
                         }
-                    }                  
+                    }
                 ],
                 "responses": {
                     "200": {
@@ -1088,7 +1150,7 @@
                         "schema": {
                             "$ref": "#/definitions/GetPractice"
                         }
-                    }                  
+                    }
                 ],
                 "responses": {
                     "200": {
@@ -1134,7 +1196,7 @@
                 }
             }
         },
-        "registerPracticeRequest" : {
+        "registerPracticeRequest": {
             "properties": {
                 "practiceEmail": {
                     "required": true,
@@ -1178,7 +1240,7 @@
                 }
             }
         },
-        "registerServicesRequest":{
+        "registerServicesRequest": {
             "properties": {
                 "serviceName": {
                     "required": true,
@@ -1225,7 +1287,7 @@
                 }
             }
         },
-        "addSlotRequest" :{
+        "addSlotRequest": {
             "properties": {
                 "serviceId": {
                     "required": true,
@@ -1239,7 +1301,7 @@
                 }
             }
         },
-        "deleteSlotRequest" : {
+        "deleteSlotRequest": {
             "properties": {
                 "fromTime": {
                     "required": true,
@@ -1252,14 +1314,14 @@
                 }
             }
         },
-        "addBookingRequest" : {
+        "addBookingRequest": {
             "properties": {
-                "firstName" : {
+                "firstName": {
                     "required": true,
                     "example": "Shaurya",
                     "type": "string"
                 },
-                "email" : {
+                "email": {
                     "required": true,
                     "example": "shauryakalia@gmail.com",
                     "type": "string"
@@ -1322,15 +1384,15 @@
                 }
             }
         },
-        "deletePriceRequest" : {
+        "deletePriceRequest": {
             "properties": {
                 "priceId": {
                     "example": 1,
                     "type": "number"
                 }
             }
-		},
-		"updateServiceRequest": {
+        },
+        "updateServiceRequest": {
             "properties": {
                 "serviceId": {
                     "example": 1,
@@ -1342,42 +1404,42 @@
                 }
             }
         },
-        "deleteServiceRequest" : {
+        "deleteServiceRequest": {
             "properties": {
                 "serviceId": {
                     "example": 1,
                     "type": "number"
                 }
             }
-		},
-		"updateTimingRequest" : {
-			"properties": {
-				"timingId": {
+        },
+        "updateTimingRequest": {
+            "properties": {
+                "timingId": {
                     "example": 1,
                     "type": "number"
-				},
-				"open": {
+                },
+                "open": {
                     "example": 1,
                     "type": "number"
-				},
-				"from": {
-					"example": "9:00",
-					"type": "string"
-				},
-				"to": {
-					"example": "20:00",
-					"type": "string"
-				}	
-			}
-		},
-		"deleteTimingRequest" : {
-			"properties": {
+                },
+                "from": {
+                    "example": "9:00",
+                    "type": "string"
+                },
+                "to": {
+                    "example": "20:00",
+                    "type": "string"
+                }
+            }
+        },
+        "deleteTimingRequest": {
+            "properties": {
                 "timingId": {
                     "example": 1,
                     "type": "number"
                 }
             }
-		},
+        },
         "GetPractice": {
             "properties": {
                 "id": {

@@ -4,7 +4,7 @@ const Sequelize = require('sequelize');
 
 /* ********************************* Import Local Modules ********************************* */
 const {
-  User, Service, Price, Timing, Slot, db
+  User, Service, Price, Timing, Slot, db, Booking
 } = require('../dbconnection');
 
 module.exports = {
@@ -146,38 +146,45 @@ module.exports = {
     }
     throw new Error('Service not found');
   },
-  updateTiming: async(data) => {
-	let result;
-	let query = ``;
-	if (data.open) {
-		query = `UPDATE "Timing" SET "open"='${data.open}' WHERE "practiceId"='${data.practiceId}' AND "timingId"=${data.timingId}`;
-	} else {
-		if (data.from && data.to) {
-			query = `UPDATE "Timing" SET "from"='${data.from}' WHERE "practiceId"='${data.practiceId}' AND "timingId"=${data.timingId}`;
-		}
-		else if (data.from && !data.to) {
-			query = `UPDATE "Timing" SET "to"='${data.to}' WHERE "practiceId"='${data.practiceId}' AND "timingId"=${data.timingId}`;
-		}
-		else if (data.to && !data.from) {
-			query = `UPDATE "Timing" SET "to"='${data.to}', "from"='${data.from}' WHERE "practiceId"='${data.practiceId}' AND "timingId"=${data.timingId}`;
-		}
-	}
-	result = await db.query(query, { type: Sequelize.QueryTypes.UPDATE });
-	if (result) {
-	return result;
-	}
-	throw new Error('Timing not found');
+  updateTiming: async (data) => {
+    let result;
+    let query = ``;
+    if (data.open) {
+      query = `UPDATE "Timing" SET "open"='${data.open}' WHERE "practiceId"='${data.practiceId}' AND "timingId"=${data.timingId}`;
+    } else {
+      if (data.from && data.to) {
+        query = `UPDATE "Timing" SET "from"='${data.from}' WHERE "practiceId"='${data.practiceId}' AND "timingId"=${data.timingId}`;
+      }
+      else if (data.from && !data.to) {
+        query = `UPDATE "Timing" SET "to"='${data.to}' WHERE "practiceId"='${data.practiceId}' AND "timingId"=${data.timingId}`;
+      }
+      else if (data.to && !data.from) {
+        query = `UPDATE "Timing" SET "to"='${data.to}', "from"='${data.from}' WHERE "practiceId"='${data.practiceId}' AND "timingId"=${data.timingId}`;
+      }
+    }
+    result = await db.query(query, { type: Sequelize.QueryTypes.UPDATE });
+    if (result) {
+      return result;
+    }
+    throw new Error('Timing not found');
   },
   deleteTiming: async (data) => {
-	  let result = await Timing.destroy({
-		where: {
-		  timingId: `${data.timingId}`,
-		  practiceId: `${data.practiceId}`
-		}
-	  });
-	  if (result) {
-		return result;
-	  }
-	  throw new Error('Timing not found');s
+    let result = await Timing.destroy({
+      where: {
+        timingId: `${data.timingId}`,
+        practiceId: `${data.practiceId}`
+      }
+    });
+    if (result) {
+      return result;
+    }
+    throw new Error('Timing not found'); s
+  },
+  getBookingHistory: async (data) => {
+    const result = await Booking.findAll({ where: { practiceId: data.id, serviceId: data.serviceId }, attributes: ['bookingId', 'firstName', 'email', 'mobileNumber', 'fromTime', 'status'] });
+    if (result) {
+      return result;
+    }
+    throw new Error('Error while getting booking history');
   }
 } 
