@@ -8,8 +8,6 @@ These instructions will get you a copy of the project up and running on your loc
 
 * [Node.js 10.X](https://nodejs.org/en/download/)
 * [PostgreSql](https://www.postgresql.org/download/)
-** not required for development.
-** Developers may choose to do this for convenience only.
 
 ## Database Setup
 
