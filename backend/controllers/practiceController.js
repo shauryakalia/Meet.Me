@@ -217,6 +217,8 @@ module.exports = {
     getBookingHistory: async (req, res, next) => {
         try {
             logger.info('Get Booking History Request', req.params);
+            req.params.page = req.query.page;
+            req.params.limit = req.query.limit;
             const getBookingHistoryResult = await practiceService.getBookingHistory(req.params);
             if (!getBookingHistoryResult) {
                 next(Boom.conflict('Error while getting booking history'));

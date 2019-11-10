@@ -910,6 +910,22 @@
                         "schema": {
                             "$ref": "#/definitions/GetPractice"
                         }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "page",
+                        "schema": {
+                            "$ref": "#/definitions/GetPractice"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "limit",
+                        "schema": {
+                            "$ref": "#/definitions/GetPractice"
+                        }
                     }
                 ],
                 "responses": {
