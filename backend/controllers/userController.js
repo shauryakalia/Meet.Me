@@ -7,7 +7,7 @@ const sequelize = require('sequelize');
 
 /* ********************************* Import Local Modules ********************************* */
 const { logger } = require('../utils');
-const { authentication,mailer } = require('../helpers');
+const { authentication, mailer } = require('../helpers');
 const { userService } = require('../services');
 const { db } = require('../dbconnection');
 
@@ -23,7 +23,11 @@ module.exports = {
             next();
         } catch (err) {
             logger.error(err);
-            next(Boom.conflict('Something went wrong'));
+            if (err.message === 'User with this email exists') {
+                next(Boom.conflict('User with this email exists'));
+            } else {
+                next(Boom.conflict('Something went wrong'));
+            }
         }
     },
     login: async (req, res, next) => {
