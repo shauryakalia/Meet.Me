@@ -7,6 +7,9 @@ const {
   User, Service, Price, Timing, Slot, db, Booking
 } = require('../dbconnection');
 
+const min = new Date().setHours(0, 0, 0, 0);
+const max = min + 2592000000;
+
 module.exports = {
   registerServices: async (data) => {
     let result;
@@ -150,16 +153,16 @@ module.exports = {
     let result;
     let query = ``;
     if (data.open) {
-      query = `UPDATE "Timing" SET "open"='${data.open}' WHERE "practiceId"='${data.practiceId}' AND "timingId"=${data.timingId}`;
+      query = `UPDATE "Timings" SET "open"='${data.open}' WHERE "practiceId"='${data.practiceId}' AND "timingId"=${data.timingId}`;
     } else {
       if (data.from && data.to) {
-        query = `UPDATE "Timing" SET "from"='${data.from}' WHERE "practiceId"='${data.practiceId}' AND "timingId"=${data.timingId}`;
+        query = `UPDATE "Timings" SET "from"='${data.from}' WHERE "practiceId"='${data.practiceId}' AND "timingId"=${data.timingId}`;
       }
       else if (data.from && !data.to) {
-        query = `UPDATE "Timing" SET "to"='${data.to}' WHERE "practiceId"='${data.practiceId}' AND "timingId"=${data.timingId}`;
+        query = `UPDATE "Timings" SET "to"='${data.to}' WHERE "practiceId"='${data.practiceId}' AND "timingId"=${data.timingId}`;
       }
       else if (data.to && !data.from) {
-        query = `UPDATE "Timing" SET "to"='${data.to}', "from"='${data.from}' WHERE "practiceId"='${data.practiceId}' AND "timingId"=${data.timingId}`;
+        query = `UPDATE "Timings" SET "to"='${data.to}', "from"='${data.from}' WHERE "practiceId"='${data.practiceId}' AND "timingId"=${data.timingId}`;
       }
     }
     result = await db.query(query, { type: Sequelize.QueryTypes.UPDATE });
@@ -181,16 +184,16 @@ module.exports = {
     throw new Error('Timing not found'); s
   },
   getBookingHistory: async (data) => {
-    const {page , limit} = data;
+    const { page, limit } = data;
     const offset = limit * (page - 1);
-    const bookingData = await Booking.findAndCountAll({ where : {practiceId: data.id, serviceId: data.serviceId}})
+    const bookingData = await Booking.findAndCountAll({ where: { practiceId: data.id, serviceId: data.serviceId } })
     const pages = Math.ceil(bookingData.count / limit);
     const result = await Booking.findAll({
       limit,
       offset,
-      raw: true, 
-      where: { practiceId: data.id, serviceId: data.serviceId }, 
-      attributes: ['bookingId', 'firstName', 'email', 'mobileNumber', 'fromTime', 'status'] 
+      raw: true,
+      where: { practiceId: data.id, serviceId: data.serviceId },
+      attributes: ['bookingId', 'firstName', 'email', 'mobileNumber', 'fromTime', 'status']
     });
     if (result) {
       const res = {
@@ -200,20 +203,24 @@ module.exports = {
         order: [
           ['bookingId', 'DESC'],
         ],
-      }; 
+      };
       return res;
     }
     throw new Error('Error while getting booking history');
   },
   getCalendarSlots: async (data) => {
-    const result = await Slot.findAll({ where: { practiceId: data.id, serviceId: data.serviceId, status:'open' }, attributes: ['slotId', 'fromTime'] });
+    const query = `SELECT "slotId", "fromTime" from "Slots"
+    WHERE "practiceId"=${data.id} AND "serviceId"=${data.serviceId} AND "status"='open' AND "fromTime" BETWEEN ${min} AND ${max}`;
+    const result = await db.query(query, { type: Sequelize.QueryTypes.SELECT });
     if (result) {
       return result;
     }
     throw new Error('Error while getting calendar slots');
   },
   getCalendarBookings: async (data) => {
-    const result = await Booking.findAll({ where: { practiceId: data.id, serviceId: data.serviceId, status:'active' }, attributes: ['bookingId', 'firstName', 'email', 'mobileNumber', 'additionalNotes', 'fromTime'] });
+    const query = `SELECT "bookingId", "firstName", "email", "mobileNumber", "additionalNotes", "fromTime" from "Bookings"
+    WHERE "practiceId"=${data.id} AND "serviceId"=${data.serviceId} AND "status"='active' AND "fromTime" BETWEEN ${min} AND ${max}`;
+    const result = await db.query(query, { type: Sequelize.QueryTypes.SELECT });
     if (result) {
       return result;
     }
