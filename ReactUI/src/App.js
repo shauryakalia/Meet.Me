@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Router } from 'react-router';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from './theme';
@@ -39,13 +39,12 @@ class App extends Component {
               <Route exact path="/signin" component={SignIn} />
               <Route exact path="/signup" component={SignUp} />
               <Route exact path="/home" component={Home} />
-              <Redirect from="/" to="/signin" />
-              {/* {this.state.authenticated &&
+              {localStorage.getItem('userId') &&
                 <Route exact path="/" component={Home} />
               }
-              {!this.state.authenticated &&
+              {!localStorage.getItem('userId') &&
                 <Route exact path="/" component={SignIn} />
-              } */}
+              }
             </Switch>
           </Router>
           <Footer />

@@ -1,10 +1,9 @@
 import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
+import Snackbar from '@material-ui/core/Snackbar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -12,6 +11,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import image from '../images/signin.jpg';
+import BackendServices from '../services/backendServices';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -53,10 +53,66 @@ const useStyles = makeStyles(theme => ({
 
 export default function SignIn() {
     const classes = useStyles();
+    const [values, setValues] = React.useState({
+        email: '',
+        password: ''
+    });
+
+    const [state, setState] = React.useState({
+        open: false,
+        message: '',
+        vertical: 'top',
+        horizontal: 'right',
+    });
+
+    const { vertical, horizontal, open, message } = state;
+
+    const handleClose = () => {
+        setState({ ...state, open: false });
+    };
+
+    const handleChange = prop => event => {
+        setValues({ ...values, [prop]: event.target.value });
+    };
+
+    const login = async () => {
+        try {
+            let response = await BackendServices.login({
+                practiceEmail: values.email,
+                password: values.password
+            });
+            if (response.data.status) {
+                setState({ ...state, open: true, message: 'Login Successfully!' });
+                localStorage.setItem('email', response.data.data.email);
+                localStorage.setItem('userId', response.data.data.userId);
+                localStorage.setItem('token', response.data.data.token);
+                window.location.pathname = '/home';
+            } else {
+                setState({ ...state, open: true, message: 'Invalid Data!' });
+            }
+        } catch (error) {
+            if (new Error(error).message === 'Error: Request failed with status code 422')
+                setState({ ...state, open: true, message: 'Invalid Data!' });
+            else
+                setState({ ...state, open: true, message: new Error(error).message });
+        }
+    }
+
+
 
     return (
         <Grid container component="main" className={classes.root}>
             <CssBaseline />
+            <Snackbar
+                anchorOrigin={{ vertical, horizontal }}
+                key={`${vertical},${horizontal}`}
+                open={open}
+                onClose={handleClose}
+                ContentProps={{
+                    'aria-describedby': 'message-id',
+                }}
+                message={<span id="message-id">{message}</span>}
+            />
             <Grid item xs={false} sm={4} md={7} className={classes.imageDiv} >
                 <Typography component="h1" variant="h4" className={classes.title}>
                     Test
@@ -70,7 +126,7 @@ export default function SignIn() {
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        Sign in
+                        Sign In
                     </Typography>
                     <form className={classes.form} noValidate>
                         <TextField
@@ -81,7 +137,12 @@ export default function SignIn() {
                             id="email"
                             label="Email Address"
                             name="email"
+                            value={values.email}
+                            onChange={handleChange('email')}
                             autoComplete="email"
+                            inputProps={{
+                                'aria-label': 'email',
+                            }}
                             autoFocus
                         />
                         <TextField
@@ -93,27 +154,24 @@ export default function SignIn() {
                             label="Password"
                             type="password"
                             id="password"
+                            value={values.password}
+                            onChange={handleChange('password')}
+                            inputProps={{
+                                'aria-label': 'password',
+                            }}
                             autoComplete="current-password"
                         />
-                        <FormControlLabel
-                            control={<Checkbox value="remember" color="primary" />}
-                            label="Remember me"
-                        />
                         <Button
-                            type="submit"
+                            type="button"
                             fullWidth
                             variant="contained"
                             color="primary"
                             className={classes.submit}
+                            onClick={login}
                         >
                             Sign In
                         </Button>
                         <Grid container>
-                            <Grid item xs>
-                                <Link href="#" variant="body2">
-                                    Forgot password?
-                                </Link>
-                            </Grid>
                             <Grid item>
                                 <Link href="/signup" variant="body2">
                                     {"Don't have an account? Sign Up"}

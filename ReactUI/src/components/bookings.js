@@ -60,9 +60,20 @@ export default function Bookings() {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [filter, setFilter] = React.useState('');
+    // let startDate, endDate;
 
     const handleChange = event => {
         setFilter(event.target.value);
+        // if(event.target.value === 'Today'){
+        //     startDate = new Date(new Date().toDateString());
+        //     endDate = new Date(new Date().toDateString());
+        // } else if (event.target.value === 'Tomorrow') {
+        //     startDate = new Date(new Date().toDateString());
+        //     endDate = new Date(new Date().toDateString());
+        // } else {
+        //     startDate = '';
+        //     endDate = '';
+        // }
     };
 
     const handleChangePage = (event, newPage) => {
@@ -85,15 +96,15 @@ export default function Bookings() {
                 >
                     <option value="" />
                     <option value={'All'}>All</option>
-                    <option value={10}>Today</option>
-                    <option value={20}>Tomorrow</option>
-                    <option value={30}>This Week</option>
-                    <option value={10}>Yesterday</option>
-                    <option value={20}>Last 7 Days</option>
-                    <option value={30}>Last 30 Days</option>
-                    <option value={10}>This Month</option>
-                    <option value={20}>Last Month</option>
-                    <option value={30}>Custom Days</option>
+                    <option value={'Today'}>Today</option>
+                    <option value={'Tomorrow'}>Tomorrow</option>
+                    <option value={'This Week'}>This Week</option>
+                    <option value={'Yesterday'}>Yesterday</option>
+                    <option value={'Last 7 Days'}>Last 7 Days</option>
+                    <option value={'Last 30 Days'}>Last 30 Days</option>
+                    <option value={'This Month'}>This Month</option>
+                    <option value={'Last Month'}>Last Month</option>
+                    <option value={'Custom Days'}>Custom Days</option>
                 </Select>
             </FormControl>
             <div className={classes.tableWrapper}>

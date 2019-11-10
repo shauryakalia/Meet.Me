@@ -171,6 +171,13 @@ export default function Home() {
         setOpen(false);
     };
 
+    const logout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('email');
+        localStorage.removeItem('userId');
+        window.location.pathname = '/signin'
+    };
+
     return (
         <div className={classes.root}>
             <CssBaseline />
@@ -199,7 +206,7 @@ export default function Home() {
                         onClose={handleClose}
                     >
                         <MenuItem onClick={handleClose}>Profile</MenuItem>
-                        <MenuItem onClick={handleClose}>Logout</MenuItem>
+                        <MenuItem onClick={logout}>Logout</MenuItem>
                     </Menu>
 
                 </Toolbar>
