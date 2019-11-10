@@ -4,12 +4,21 @@ const fs = require('fs');
 const Path = require('path');
 const _ = require('lodash');
 const sequelize = require('sequelize');
+const mustache = require('mustache');
 
 /* ********************************* Import Local Modules ********************************* */
 const { logger } = require('../utils');
 const { mailer } = require('../helpers');
 const { practiceService } = require('../services');
-const { db } = require('../dbconnection');
+const { db, User, Service, Booking } = require('../dbconnection');
+
+let cancelBookingPracticeTemplate;
+
+fs.readFile(`${__dirname}/../templates/cancelBookingPractice.html`, 'utf8', (err, fileData) => {
+    if (err) cancelBookingPracticeTemplate = '';
+    else cancelBookingPracticeTemplate = fileData;
+    mustache.parse(cancelBookingPracticeTemplate);
+});
 
 module.exports = {
     registerServices: async (req, res, next) => {
@@ -92,11 +101,24 @@ module.exports = {
             logger.info('Cancel Booking Request ', req.body);
             req.body.practiceId = parseInt(req.params.id, 10);
             const cancelBookingResult = await practiceService.cancelBooking(req.body);
+            const booking = await Booking.findOne({ attributes: ['firstName', 'fromTime', 'serviceId'], where: { practiceId: req.body.practiceId, bookingId: req.body.bookingId } });
+            const service = await Service.findOne({ attributes: ['serviceName'], where: { practiceId: req.body.practiceId, serviceId: booking.serviceId } });
+            const practice = await User.findOne({ attributes: ['practiceEmail'], where: { practiceId: req.body.practiceId} });
             if (!cancelBookingResult) {
                 next(Boom.conflict('Error while adding slot'));
+            } else {
+                mailer.sendMail({
+                    email: practice.practiceEmail,
+                    subject: 'Appointment Cancellation',
+                    template: mustache.render(cancelBookingPracticeTemplate, {
+                        firstName: booking.firstName, 
+                        fromTime: new Date(booking.fromTime),
+                        serviceName : service.serviceName
+                    }),
+                });
+                res.message = 'booking has been cancelled succesfully';
+                next();
             }
-            res.message = 'booking has been cancelled succesfully';
-            next();
         } catch (err) {
             logger.error(err);
             next(Boom.conflict('Something went wrong'));

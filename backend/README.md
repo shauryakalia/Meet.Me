@@ -34,6 +34,11 @@ Go to backend folder and Run database migrations:
 Go to backend folder and populate database seeds:
 `npm run run-seeds`
 
+## Mailer env setup
+`echo "export SENDGRID_API_KEY='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'" > sendgrid.env`
+`echo "sendgrid.env" >> .gitignore`
+`source ./sendgrid.env`
+
 
 ## Start Server
 

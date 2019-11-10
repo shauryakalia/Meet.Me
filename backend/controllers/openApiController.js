@@ -2,25 +2,65 @@
 const Boom = require('boom');
 const fs = require('fs');
 const Path = require('path');
-const _ = require('lodash');
+const mustache = require('mustache');
 const sequelize = require('sequelize');
 
 /* ********************************* Import Local Modules ********************************* */
 const { logger } = require('../utils');
 const { mailer } = require('../helpers');
 const { openApiService } = require('../services');
-const { db } = require('../dbconnection');
+const { db, User, Service, Booking } = require('../dbconnection');
+
+let newBookingPatientTemplate;
+let newBookingPracticeTemplate;
+
+fs.readFile(`${__dirname}/../templates/newBookingPatient.html`, 'utf8', (err, fileData) => {
+    if (err) newBookingPatientTemplate = '';
+    else newBookingPatientTemplate = fileData;
+    mustache.parse(newBookingPatientTemplate);
+});
+
+fs.readFile(`${__dirname}/../templates/newBookingPractice.html`, 'utf8', (err, fileData) => {
+    if (err) newBookingPracticeTemplate = '';
+    else newBookingPracticeTemplate = fileData;
+    mustache.parse(newBookingPracticeTemplate);
+});
 
 module.exports = {
     booking: async (req, res, next) => {
         try {
             logger.info('Add Booking Request: ', req.body);
             const addBookingResult = await openApiService.booking(req.body);
+            const service = await Service.findOne({ attributes: ['serviceName'], where: { practiceId: req.body.practiceId, serviceId: req.body.serviceId } });
+            const practice = await User.findOne({ attributes: ['practiceEmail', 'practiceName', 'practiceAddress'], where: { practiceId: req.body.practiceId} });
             if (!addBookingResult) {
                 next(Boom.conflict('Error while booking'));
+            } else {
+                mailer.sendMail({
+                    email: req.body.email,
+                    subject: 'Appointment Confirmed',
+                    template: mustache.render(newBookingPatientTemplate, {
+                        firstName: req.body.firstName, 
+                        fromTime: new Date(req.body.fromTime),
+                        serviceName : service.serviceName,
+                        practiceName : practice.practiceName,
+                        practiceAddress : practice.practiceAddress
+                    }),
+                });
+                mailer.sendMail({
+                    email: practice.practiceEmail,
+                    subject: 'New Appointment',
+                    template: mustache.render(newBookingPracticeTemplate, {
+                        firstName: req.body.firstName, 
+                        fromTime: new Date(req.body.fromTime),
+                        email: req.body.email,
+                        serviceName : service.serviceName,
+                        mobileNumber: req.body.mobileNumber
+                    }),
+                });
+                res.message = `Succesfully booked`;
+                next();
             }
-            res.message = `Succesfully booked`;
-            next();
         } catch (err) {
             logger.error(err);
             next(Boom.conflict('Something went wrong'));
@@ -82,7 +122,7 @@ module.exports = {
             next(Boom.conflict('Something went wrong'));
         }
     },
-    getSlots: async (req, res, next) => { 
+    getSlots: async (req, res, next) => {
         try {
             logger.info('Get Slots Request: ', req.params);
             const getSlotsResult = await openApiService.getSlots(req.params);
@@ -94,6 +134,6 @@ module.exports = {
         } catch (err) {
             logger.error(err);
             next(Boom.conflict('Something went wrong'));
-        } 
+        }
     }
 }

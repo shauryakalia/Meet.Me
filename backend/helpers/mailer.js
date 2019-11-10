@@ -2,33 +2,23 @@
 /** ********************** Require node modules ************************ */
 const nodemailer = require('nodemailer');
 const config = require('config');
+const sgMail = require('@sendgrid/mail');
 
 
 /** ********************** Require local modules ************************ */
 const { apiKey, email, password } = config.get('General');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const { logger } = require('../utils');
 
 async function sendMail(details) {
   try {
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.sendgrid.net',
-      port: 587,
-      secure: false, // true for 465, false for other ports
-      tls: true,
-      auth: {
-        user: apiKey,
-        pass: password,
-      },
-    });
-    const mailOptions = {
-      from: email,
+    const msg = {
       to: details.email,
+      from: 'contact.app.meetme@gmail.com',
       subject: details.subject,
-      html: details.template,
-    };
-
-    const result = await transporter.sendMail(mailOptions);
-    return result;
+      html: details.template
+    }
+    sgMail.send(msg);
   } catch (error) {
     logger.error('Send mail failed: ', error);
     return error;

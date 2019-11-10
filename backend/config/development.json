@@ -1,17 +1,18 @@
 {
-    "General" : {
+    "General": {
         "port": 5000,
         "csrfKey": "meetme",
         "secretKey": "meetme123",
-        "email": "meetme@gmail.com",
-        "apiKey": "apikey"
+        "email": "contact.app.meetme@gmail.com",
+        "apiKey": "meetme.app",
+        "password": "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"
     },
     "dbConfig": {
-      "username": "meetme",
-      "password": "meetme123",
-      "name": "meetme",
-      "host": "127.0.0.1",
-      "port": 5432,
-      "dialect": "postgres"
+        "username": "meetme",
+        "password": "meetme123",
+        "name": "meetme",
+        "host": "127.0.0.1",
+        "port": 5432,
+        "dialect": "postgres"
     }
 }

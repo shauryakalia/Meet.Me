@@ -26,7 +26,7 @@ module.exports = {
             let updateSlotQuery = `UPDATE "Slots" SET "status"='booked' WHERE "slotId"=${data.slotId}`;
             const updateResult = await db.query(updateSlotQuery, { type: Sequelize.QueryTypes.UPDATE });
             if (updateResult) {
-                return { bookingId: result.get('bookingId') };
+                return result;
             }
         }
         throw new Error('Error while adding booking');

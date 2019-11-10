@@ -12,6 +12,7 @@
   "author": "Shaurya",
   "license": "ISC",
   "dependencies": {
+    "@sendgrid/mail": "^6.4.0",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.19.0",
     "boom": "^7.3.0",
