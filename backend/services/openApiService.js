@@ -7,6 +7,9 @@ const {
     User, Service, Price, Timing, Slot, db, Booking
 } = require('../dbconnection');
 
+const min = new Date().setHours(0, 0, 0, 0);
+const max = min + 2592000000;
+
 module.exports = {
     booking: async (data) => {
         let result;
@@ -33,35 +36,37 @@ module.exports = {
     },
     getPrices: async (data) => {
         const result = await Price.findAll({ where: { practiceId: data }, attributes: ['priceId', 'service', 'price'] });
-        if(result) {
+        if (result) {
             return result;
         }
         throw new Error('Error while getting prices');
-	},
-	getServices: async (data) => {
-		const result = await Service.findAll({ where: { practiceId: data }, attributes: ['serviceId', 'serviceName'] });
-        if(result) {
+    },
+    getServices: async (data) => {
+        const result = await Service.findAll({ where: { practiceId: data }, attributes: ['serviceId', 'serviceName'] });
+        if (result) {
             return result;
         }
         throw new Error('Error while getting services');
-	},
-	getTimings: async (data) => {
-		const result = await Timing.findAll({ where: { practiceId: data }, attributes: ['timingId', 'day', 'from', 'to', 'open']});
-		if(result) {
+    },
+    getTimings: async (data) => {
+        const result = await Timing.findAll({ where: { practiceId: data }, attributes: ['timingId', 'day', 'from', 'to', 'open'] });
+        if (result) {
             return result;
         }
         throw new Error('Error while getting timings');
     },
     getPracticeDetails: async (data) => {
-        const result = await User.findAll({ where: { practiceId: data }, attributes: ['practiceId', 'practiceEmail', 'practiceAddress', 'practiceZipcode', 'practicePhoneNumber']});
-		if(result) {
+        const result = await User.findAll({ where: { practiceId: data }, attributes: ['practiceId', 'practiceEmail', 'practiceAddress', 'practiceZipcode', 'practicePhoneNumber'] });
+        if (result) {
             return result;
         }
         throw new Error('Error while getting practice details');
     },
     getSlots: async (data) => {
-        const result = await Slot.findAll({ where: { practiceId: data.id, serviceId: data.serviceId , status: 'open'}, attributes: ['slotId', 'fromTime']});
-		if(result) {
+        const query = `SELECT "slotId", "fromTime" from "Slots"
+        WHERE "practiceId"=${data.id} AND "serviceId"=${data.serviceId} AND "status"='open' AND "fromTime" BETWEEN ${min} AND ${max}`;
+        const result = await db.query(query, { type: Sequelize.QueryTypes.SELECT });
+        if (result) {
             return result;
         }
         throw new Error('Error while getting slots');
