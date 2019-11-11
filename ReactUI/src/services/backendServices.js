@@ -3,6 +3,11 @@ import axios from 'axios';
 // Custom Imports
 import Constant from '../constant';
 
+function getToken() {
+  let token = localStorage.getItem('token');
+  return token;
+}
+
 // Function to request login
 function registerPractice(user) {
   return axios({
@@ -20,37 +25,51 @@ function login(user) {
   });
 }
 
-// //Function to create Post
-// function createPost(user) {
-//     return axios({
-//         headers: {
-//             'x-access-token': getToken(),
-//             contentType: 'application/x-www-form-urlencoded',
-//         },
-//         data: {
-//             email: user.email,
-//             id: user.id,
+function getPrices(practiceId) {
+  return axios({
+    method: 'GET',
+    url: `${Constant.API_URL}/getPrices/${practiceId}`,
+  });
+}
 
-//         },
-//         method: 'POST',
-//         url: `${API_URL}/user/post`,
-//     });
-// }
-// function getProfile(userid){
-//   return axios({
-//     headers: {
-//         'x-access-token': getToken(),
-//         contentType: 'application/x-www-form-urlencoded',
-//     },
-//     method: 'GET',
-//     url: `${API_URL}/user/${userid}/profile`,
-// });
-// }
+function registerPrice(data) {
+  return axios({
+    data: {
+      service: data.service,
+      price: data.price
+    },
+    headers: {
+      'x-access-token': getToken(),
+      contentType: 'application/json',
+    },
+    method: 'POST',
+    url: `${Constant.API_URL}/practice/${data.practiceId}/registerPrices`,
+  });
+}
+
+function updatePrice(data) {
+  return axios({
+    data: {
+      priceId: data.priceId,
+      service: data.service,
+      price: data.price
+    },
+    headers: {
+      'x-access-token': getToken(),
+      contentType: 'application/json',
+    },
+    method: 'POST',
+    url: `${Constant.API_URL}/practice/${data.practiceId}/updatePrice`,
+  });
+}
 
 export default {
 
   registerPractice,
   login,
+  getPrices,
+  registerPrice,
+  updatePrice,
   // getProfile
 
 };

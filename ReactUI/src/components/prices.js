@@ -1,61 +1,115 @@
 import React from 'react';
+import { withStyles } from '@material-ui/styles';
 import MaterialTable from 'material-table';
+import BackendService from '../services/backendServices';
 
-export default function Prices() {
-  const [state, setState] = React.useState({
-    columns: [
-      { title: 'Name', field: 'name' },
-      { title: 'Price', field: 'price' },
-    ],
-    data: [
-      { name: 'New patient Dental Check Up', price: '$265' },
-      { name: 'Hygienist appointment', price: '$265' },
-    ],
-  });
+class Prices extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      columns: [
+        { title: 'Service', field: 'service' },
+        { title: 'Price', field: 'price' },
+      ],
+      data: [],
+    }
+    this.populate = this.populate.bind(this);
+    this.addPrice = this.addPrice.bind(this);
+    this.updatePrice = this.updatePrice.bind(this);
+  }
 
-  return (
-    <MaterialTable
-      title="Price List"
-      options={{ pageSize: 7 }}
-      columns={state.columns}
-      data={state.data}
-      editable={{
-        onRowAdd: newData =>
-          new Promise(resolve => {
-            setTimeout(() => {
-              resolve();
-              setState(prevState => {
-                const data = [...prevState.data];
-                data.push(newData);
-                return { ...prevState, data };
-              });
-            }, 600);
-          }),
-        onRowUpdate: (newData, oldData) =>
-          new Promise(resolve => {
-            setTimeout(() => {
-              resolve();
-              if (oldData) {
-                setState(prevState => {
+  populate = async () => {
+    try {
+      const practiceId = localStorage.getItem('userId');
+      if (practiceId) {
+        let response = await BackendService.getPrices(practiceId);
+        this.setState({ data: response.data.data })
+      } else {
+        window.location.pathname = '/signin';
+      }
+    } catch (error) {
+      console.log("Error", error);
+    }
+  }
+
+  componentWillMount() {
+    this.populate();
+  }
+
+  addPrice = async (newData) => {
+    try {
+      const practiceId = localStorage.getItem('userId');
+      let response = await BackendService.registerPrice({
+        practiceId,
+        service: newData.service,
+        price: newData.price
+      });
+      if (response.data.status) {
+        this.setState(prevState => {
+          const data = [...prevState.data];
+          data.push(newData);
+          return { ...prevState, data };
+        });
+      } else {
+        alert("Something went wrong");
+      }
+    } catch (error) {
+      alert("Something went wrong");
+    }
+  }
+
+  updatePrice = async(newData, oldData) => {
+    try {
+      if (oldData) {
+        console.log("new", newData);
+        const practiceId = localStorage.getItem('userId');
+        let response = await BackendService.updatePrice({
+          practiceId,
+          priceId: newData.priceId,
+          service: newData.service,
+          price: newData.price
+        });
+        console.log("Res", response);
+        if (response.data.status) {
+          this.setState(prevState => {
+            const data = [...prevState.data];
+            data[data.indexOf(oldData)] = newData;
+            return { ...prevState, data };
+          });
+        } else {
+          alert("Something went wrong");
+        }
+      }
+    } catch (error) {
+      alert("Something went wrong");
+    }
+  }
+
+  render() {
+    return (
+      <MaterialTable
+        title="Price List"
+        options={{ pageSize: 7 }}
+        columns={this.state.columns}
+        data={this.state.data}
+        editable={{
+          onRowAdd: (newData) => this.addPrice(newData),
+          onRowUpdate: (newData, oldData) => this.updatePrice(newData, oldData),
+          onRowDelete: oldData =>
+            new Promise(resolve => {
+              setTimeout(() => {
+                resolve();
+                this.setState(prevState => {
                   const data = [...prevState.data];
-                  data[data.indexOf(oldData)] = newData;
+                  data.splice(data.indexOf(oldData), 1);
                   return { ...prevState, data };
                 });
-              }
-            }, 600);
-          }),
-        onRowDelete: oldData =>
-          new Promise(resolve => {
-            setTimeout(() => {
-              resolve();
-              setState(prevState => {
-                const data = [...prevState.data];
-                data.splice(data.indexOf(oldData), 1);
-                return { ...prevState, data };
-              });
-            }, 600);
-          }),
-      }}
-    />
-  );
+              }, 600);
+            }),
+        }}
+      />
+    );
+  }
 }
+
+export default withStyles({}, { withTheme: true })(Prices)
