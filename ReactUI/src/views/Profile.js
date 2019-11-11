@@ -30,6 +30,7 @@ const useStyles = makeStyles(theme => ({
         flexGrow: 1,
         height: '100vh',
         overflow: 'auto',
+        marginTop: theme.spacing(5),
         padding: theme.spacing(10),
     }
 }));
@@ -84,17 +85,21 @@ export default function Profile() {
             <main className={classes.content}>
                 <div className={classes.appBarSpacer} />
                 <Grid container spacing={3}>
-                    <Grid item xs={6}>
-                        <BasicProfile />
+                    <Grid item xs={6} container spacing={3}>
+                        <Grid item xs={12}>
+                            <BasicProfile />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Prices />
+                        </Grid>
                     </Grid>
-                    <Grid item xs={6}>
-                        <Timings />
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Services />
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Prices />
+                    <Grid item xs={6} container spacing={3}>
+                        <Grid item xs={12}>
+                            <Services />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Timings />
+                        </Grid>
                     </Grid>
                 </Grid>
             </main>

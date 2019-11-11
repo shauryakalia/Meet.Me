@@ -1,26 +1,61 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-
-const useStyles = makeStyles(theme => ({
-  root: {
-    padding: theme.spacing(3, 2),
-    borderRadius: 0
-  },
-}));
+import MaterialTable from 'material-table';
 
 export default function Prices() {
-  const classes = useStyles();
+  const [state, setState] = React.useState({
+    columns: [
+      { title: 'Name', field: 'name' },
+      { title: 'Price', field: 'price' },
+    ],
+    data: [
+      { name: 'New patient Dental Check Up', price: '$265' },
+      { name: 'Hygienist appointment', price: '$265' },
+    ],
+  });
 
   return (
-    <Paper className={classes.root}>
-      <Typography variant="h5" component="h3">
-        This is a sheet of paper.
-      </Typography>
-      <Typography component="p">
-        Paper can be used to build surface or other elements for your application.
-      </Typography>
-    </Paper>
+    <MaterialTable
+      title="Price List"
+      options={{ pageSize: 7 }}
+      columns={state.columns}
+      data={state.data}
+      editable={{
+        onRowAdd: newData =>
+          new Promise(resolve => {
+            setTimeout(() => {
+              resolve();
+              setState(prevState => {
+                const data = [...prevState.data];
+                data.push(newData);
+                return { ...prevState, data };
+              });
+            }, 600);
+          }),
+        onRowUpdate: (newData, oldData) =>
+          new Promise(resolve => {
+            setTimeout(() => {
+              resolve();
+              if (oldData) {
+                setState(prevState => {
+                  const data = [...prevState.data];
+                  data[data.indexOf(oldData)] = newData;
+                  return { ...prevState, data };
+                });
+              }
+            }, 600);
+          }),
+        onRowDelete: oldData =>
+          new Promise(resolve => {
+            setTimeout(() => {
+              resolve();
+              setState(prevState => {
+                const data = [...prevState.data];
+                data.splice(data.indexOf(oldData), 1);
+                return { ...prevState, data };
+              });
+            }, 600);
+          }),
+      }}
+    />
   );
 }

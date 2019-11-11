@@ -6,7 +6,6 @@ import {Business, Person, LocalHospital, ContactMail, Phone} from '@material-ui/
 const useStyles = makeStyles(theme => ({
     root: {
         padding: theme.spacing(3, 2),
-        borderRadius: 0
     },
     title: {
         marginBottom: theme.spacing(2)
@@ -25,7 +24,7 @@ export default function BasicProfile() {
 
     return (
         <Paper className={classes.root}>
-            <Typography variant="h6" color="secondary">
+            <Typography variant="h6" >
                 Basic Profile
             </Typography>
             <Divider />
