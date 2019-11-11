@@ -4,22 +4,60 @@ const sequelize = require('sequelize');
 
 /* ********************************* Import Local Modules ********************************* */
 const {
-  db, User
+  db, User, Timing
 } = require('../dbconnection');
 const { encryption } = require('../helpers');
+
+const defaultTiming = [
+  {
+    practiceId:1,
+    day:'monday',
+    from:'08:30',
+    to:'20:00',
+    closed:false
+  },
+  {
+    practiceId:1,
+    day:'tuesday',
+    from:'08:30',
+    to:'20:00',
+    closed:false
+  },{
+    practiceId:1,
+    day:'wednesday',
+    from:'08:30',
+    to:'17:30',
+    closed:false
+  },{
+    practiceId:1,
+    day:'thursday',
+    from:'08:30',
+    to:'20:00',
+    closed:false
+  },{
+    practiceId:1,
+    day:'friday',
+    from:'08:30',
+    to:'17:30',
+    closed:false
+  },{
+    practiceId:1,
+    day:'saturday',
+    from:'09:00',
+    to:'15:00',
+    closed:false
+  },{
+    practiceId:1,
+    day:'sunday',
+    from:'',
+    to:'',
+    closed:true
+  }
+];
 
 /* ********************************* Variable Listing ********************************* */
 const checkPassword = async (data) => {
   const password = data.oldPassword || data.password;
-  // const result = await User.findOne({
-  //   attributes: ['practiceId', 'password'],
-  //   where: {
-  //         practiceEmail:
-  //         {
-  //           $eq: data.practiceEmail,
-  //         }
-  //       }
-  // });
   const query = `SELECT "practiceId","password" FROM "Users" WHERE "practiceEmail"='${data.practiceEmail}'`;
   const res = await db.query(query, { type: sequelize.QueryTypes.SELECT });
   const result = {
@@ -47,15 +85,33 @@ module.exports = {
       practicePhoneNumber: data.practicePhoneNumber
     };
     const existingUser = await User.findOne({ attributes: ['practiceId'], where: { practiceEmail: data.practiceEmail } });
+    
     if(existingUser) {
       throw new Error('User with this email exists');
     }
+    
     const result = await User.build(practiceData).save();
+    
+    if(result.practiceId===1) {
+      defaultTiming.forEach(element => {
+        const timingData = {
+          practiceId: element.practiceId,
+          day: element.day,
+          from: element.from,
+          to: element.to,
+          closed:element.closed
+        }
+      const timing = Timing.build(timingData).save();
+      });
+    }
+    
     if (result) {
-      return { practiceId: result.get('practiceId') };
+      return result;
     }
     throw new Error('Error while registering practice');
   },
+
+
   login: async (data) => {
     const password = await checkPassword(data);
     if (password) {
@@ -63,5 +119,6 @@ module.exports = {
       return result;
     }
     throw new Error('Invalid password');
-  }
+  },
+
 }

@@ -19,7 +19,7 @@ module.exports = {
             if (!registerPracticeResult) {
                 next(Boom.conflict('Error while adding User'));
             }
-            res.data = registerPracticeResult.practiceId;
+            res.data = registerPracticeResult;
             next();
         } catch (err) {
             logger.error(err);
