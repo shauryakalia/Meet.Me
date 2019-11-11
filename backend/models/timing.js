@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
     day: DataTypes.STRING,
     from: DataTypes.STRING,
     to: DataTypes.STRING,
-    open: DataTypes.INTEGER,
+    closed: DataTypes.BOOLEAN,
     practiceId: DataTypes.INTEGER
   }, {});
   Timing.associate = function(models) {

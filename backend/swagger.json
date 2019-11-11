@@ -1482,10 +1482,10 @@
                     "type": "number",
                     "example": "18:30"
                 },
-                "open": {
+                "closed": {
                     "required": true,
-                    "type": "string",
-                    "example": "1"
+                    "type": "bool",
+                    "example": true
                 }
             }
         },
@@ -1620,9 +1620,9 @@
                     "example": 1,
                     "type": "number"
                 },
-                "open": {
-                    "example": 1,
-                    "type": "number"
+                "closed": {
+                    "example": true,
+                    "type": "bool"
                 },
                 "from": {
                     "example": "9:00",

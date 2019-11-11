@@ -50,7 +50,7 @@ const schema = {
       day: JOI.string().required(),
       from: JOI.string().required(),
       to: JOI.string().required(),
-      open: JOI.number().required()
+      closed: JOI.boolean().required()
     }),
     params: JOI.object().keys({
       id: JOI.number().required(),
@@ -122,7 +122,7 @@ const schema = {
     body: JOI.object().keys({
       from: JOI.string(),
       to: JOI.string(),
-      open: JOI.number(),
+      closed: JOI.boolean(),
       timingId: JOI.number().required()
     }),
     params: JOI.object().keys({

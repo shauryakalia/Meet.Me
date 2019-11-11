@@ -43,7 +43,7 @@ module.exports = {
       day: data.day,
       from: data.from,
       to: data.to,
-      open: data.open,
+      closed: data.closed,
       practiceId: data.practiceId
     }
     result = await Timing.build(timingsData).save();
@@ -152,8 +152,8 @@ module.exports = {
   updateTiming: async (data) => {
     let result;
     let query = ``;
-    if (data.open) {
-      query = `UPDATE "Timings" SET "open"='${data.open}' WHERE "practiceId"='${data.practiceId}' AND "timingId"=${data.timingId}`;
+    if (data.closed === true || data.closed === false) {
+      query = `UPDATE "Timings" SET "closed"='${data.closed}' WHERE "practiceId"='${data.practiceId}' AND "timingId"=${data.timingId}`;
     } else {
       if (data.from && data.to) {
         query = `UPDATE "Timings" SET "from"='${data.from}' WHERE "practiceId"='${data.practiceId}' AND "timingId"=${data.timingId}`;

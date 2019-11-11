@@ -17,8 +17,8 @@ module.exports = {
       to: {
         type: Sequelize.STRING
       },
-      open: {
-        type: Sequelize.INTEGER
+      closed: {
+        type: Sequelize.BOOLEAN
       },
       practiceId: {
         type: Sequelize.INTEGER

@@ -115,7 +115,7 @@ module.exports = {
             if (!getPracticeDetailsResult) {
                 next(Boom.conflict('Error while getting practice details'));
             }
-            res.data = getPracticeDetailsResult;
+            res.data = getPracticeDetailsResult[0];
             next();
         } catch (err) {
             logger.error(err);
