@@ -1,51 +1,134 @@
 import React from 'react';
+import { withStyles } from '@material-ui/styles';
 import MaterialTable from 'material-table';
+import BackendService from '../services/backendServices';
 
-export default function Prices() {
-  const [state, setState] = React.useState({
-    columns: [
-      { title: 'Day', field: 'day' },
-      { title: 'Open at', field: 'openAt' },
-      { title: 'Close at', field: 'closeAt' },
-      { title: 'Closed', field: 'closed' },
-    ],
-    data: [
-      { day: 'Monday', openAt: "abc" , closeAt: "abc" , closed: "abc" },
-      { day: 'Tuesday', openAt: "abc" , closeAt: "abc" , closed: "abc"  },
-      { day: 'Wednesday', openAt: "abc" , closeAt: "abc" , closed: "abc"  },
-      { day: 'Thursday', openAt: "abc" , closeAt: "abc" , closed: "abc"  },
-      { day: 'Friday', openAt: "abc" , closeAt: "abc" , closed: "abc"  },
-      { day: 'Saturday', openAt: "abc" , closeAt: "abc" , closed: "abc"  },
-      { day: 'Sunday', openAt: "abc" , closeAt: "abc" , closed: "abc" },
-    ],
-  });
+class Timings extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      columns: [
+        { title: 'Day', field: 'day' },
+        { title: 'Open at', field: 'from' },
+        { title: 'Close at', field: 'to' },
+        { title: 'Closed', field: 'closed' },
+      ],
+      data: [],
+    }
+    this.populate = this.populate.bind(this);
+    this.addTiming = this.addTiming.bind(this);
+    this.updateTiming = this.updateTiming.bind(this);
+    this.deleteTiming = this.deleteTiming.bind(this);
+  }
 
-  return (
-    <MaterialTable
-      title="Opening Hours"
-      options={{ search: false, pageSize: 7 }}
-      components={{
-        Pagination: props => (
-          <div ></div>
-        )
-      }}
-      columns={state.columns}
-      data={state.data}
-      editable={{
-        onRowUpdate: (newData, oldData) =>
-          new Promise(resolve => {
-            setTimeout(() => {
-              resolve();
-              if (oldData) {
-                setState(prevState => {
-                  const data = [...prevState.data];
-                  data[data.indexOf(oldData)] = newData;
-                  return { ...prevState, data };
-                });
-              }
-            }, 600);
-          }),
-      }}
-    />
-  );
+  populate = async () => {
+    try {
+      const practiceId = localStorage.getItem('userId');
+      if (practiceId) {
+        let response = await BackendService.getTimings(practiceId);
+        this.setState({ data: response.data.data })
+      } else {
+        window.location.pathname = '/signin';
+      }
+    } catch (error) {
+      alert('Something went wrong');
+    }
+  }
+
+  componentWillMount() {
+    this.populate();
+  }
+
+  addTiming = async (newData) => {
+    try {
+      const practiceId = localStorage.getItem('userId');
+      let response = await BackendService.registerTiming({
+        practiceId,
+        day: newData.day,
+        from: newData.from,
+        to: newData.to,
+        closed: newData.closed
+      });
+      if (response.data.status) {
+        this.setState(prevState => {
+          const data = [...prevState.data];
+          data.push(newData);
+          return { ...prevState, data };
+        });
+      } else {
+        alert("Something went wrong");
+      }
+    } catch (error) {
+      console.log("Error", error);
+      alert("Something went wrong");
+    }
+  }
+
+  updateTiming = async(newData, oldData) => {
+    try {
+      if (oldData) {
+        const practiceId = localStorage.getItem('userId');
+        let response = await BackendService.updateTiming({
+          practiceId,
+          timingId: newData.timingId,
+          from: newData.from,
+          to: newData.to,
+          closed: newData.closed
+        });
+        if (response.data.status) {
+          this.setState(prevState => {
+            const data = [...prevState.data];
+            data[data.indexOf(oldData)] = newData;
+            return { ...prevState, data };
+          });
+        } else {
+          alert("Something went wrong");
+        }
+      }
+    } catch (error) {
+      console.log("Error", error);
+      alert("Something went wrong");
+    }
+  }
+
+  deleteTiming = async(oldData) => {
+    try {
+      if (oldData) {
+        const practiceId = localStorage.getItem('userId');
+        let response = await BackendService.deleteTiming({
+          practiceId,
+          timingId: oldData.timingId
+        });
+        if (response.data.status) {
+          this.setState(prevState => {
+            const data = [...prevState.data];
+            data.splice(data.indexOf(oldData), 1);
+            return { ...prevState, data };
+          });
+        } else {
+          alert("Something went wrong");
+        }
+      }
+    } catch (error) {
+      alert("Something went wrong");
+    }
+  }
+
+  render() {
+    return (
+      <MaterialTable
+        title="Opening Hours"
+        options={{ pageSize: 7, search: false }}
+        columns={this.state.columns}
+        data={this.state.data}
+        editable={{
+          onRowAdd: newData => this.addTiming(newData),
+          onRowUpdate: (newData, oldData) => this.updateTiming(newData, oldData),
+          onRowDelete: oldData => this.deleteTiming(oldData),
+        }}
+      />
+    );
+  }
 }
+
+export default withStyles({}, { withTheme: true })(Timings)

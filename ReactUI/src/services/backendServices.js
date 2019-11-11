@@ -25,6 +25,13 @@ function login(user) {
   });
 }
 
+function getPracticeDetails(practiceId) {
+  return axios({
+    method: 'GET',
+    url: `${Constant.API_URL}/getPracticeDetails/${practiceId}`,
+  });
+}
+
 function getPrices(practiceId) {
   return axios({
     method: 'GET',
@@ -63,13 +70,141 @@ function updatePrice(data) {
   });
 }
 
+function deletePrice(data) {
+  return axios({
+    data: {
+      priceId: data.priceId
+    },
+    headers: {
+      'x-access-token': getToken(),
+      contentType: 'application/json',
+    },
+    method: 'POST',
+    url: `${Constant.API_URL}/practice/${data.practiceId}/deletePrice`,
+  });
+}
+
+function getServices(practiceId) {
+  return axios({
+    method: 'GET',
+    url: `${Constant.API_URL}/getServices/${practiceId}`,
+  });
+}
+
+function registerService(data) {
+  return axios({
+    data: {
+      serviceName: data.serviceName,
+    },
+    headers: {
+      'x-access-token': getToken(),
+      contentType: 'application/json',
+    },
+    method: 'POST',
+    url: `${Constant.API_URL}/practice/${data.practiceId}/registerServices`,
+  });
+}
+
+function updateService(data) {
+  return axios({
+    data: {
+      serviceId: data.serviceId,
+      serviceName: data.serviceName
+    },
+    headers: {
+      'x-access-token': getToken(),
+      contentType: 'application/json',
+    },
+    method: 'POST',
+    url: `${Constant.API_URL}/practice/${data.practiceId}/updateService`,
+  });
+}
+
+function deleteService(data) {
+  return axios({
+    data: {
+      serviceId: data.serviceId
+    },
+    headers: {
+      'x-access-token': getToken(),
+      contentType: 'application/json',
+    },
+    method: 'POST',
+    url: `${Constant.API_URL}/practice/${data.practiceId}/deleteService`,
+  });
+}
+
+function getTimings(practiceId) {
+  return axios({
+    method: 'GET',
+    url: `${Constant.API_URL}/getTimings/${practiceId}`,
+  });
+}
+
+function registerTiming(data) {
+  return axios({
+    data: {
+      day: data.day,
+      from: data.from,
+      to: data.to,
+      closed: data.closed
+    },
+    headers: {
+      'x-access-token': getToken(),
+      contentType: 'application/json',
+    },
+    method: 'POST',
+    url: `${Constant.API_URL}/practice/${data.practiceId}/registerTimings`,
+  });
+}
+
+function updateTiming(data) {
+  return axios({
+    data: {
+      timingId: data.timingId,
+      from: data.from,
+      to: data.to,
+      closed: data.closed
+    },
+    headers: {
+      'x-access-token': getToken(),
+      contentType: 'application/json',
+    },
+    method: 'POST',
+    url: `${Constant.API_URL}/practice/${data.practiceId}/updateTiming`,
+  });
+}
+
+function deleteTiming(data) {
+  return axios({
+    data: {
+      timingId: data.timingId
+    },
+    headers: {
+      'x-access-token': getToken(),
+      contentType: 'application/json',
+    },
+    method: 'POST',
+    url: `${Constant.API_URL}/practice/${data.practiceId}/deleteTiming`,
+  });
+}
+
 export default {
 
   registerPractice,
   login,
+  getPracticeDetails,
   getPrices,
   registerPrice,
   updatePrice,
-  // getProfile
+  deletePrice,
+  getServices,
+  registerService,
+  updateService,
+  deleteService,
+  getTimings,
+  registerTiming,
+  updateTiming,
+  deleteTiming,
 
 };
