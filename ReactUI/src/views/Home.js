@@ -178,6 +178,10 @@ export default function Home() {
         window.location.pathname = '/signin'
     };
 
+    const openProfile = () => {
+        window.location.pathname = '/profile'
+    };
+
     return (
         <div className={classes.root}>
             <CssBaseline />
@@ -205,7 +209,7 @@ export default function Home() {
                         open={Boolean(anchorEl)}
                         onClose={handleClose}
                     >
-                        <MenuItem onClick={handleClose}>Profile</MenuItem>
+                        <MenuItem onClick={openProfile}>Profile</MenuItem>
                         <MenuItem onClick={logout}>Logout</MenuItem>
                     </Menu>
 

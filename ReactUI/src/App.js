@@ -17,6 +17,11 @@ const Home = Loadable({
   loading: Loading
 });
 
+const Profile = Loadable({
+  loader: () => import('./views/Profile'),
+  loading: Loading
+});
+
 const SignIn = Loadable({
   loader: () => import('./views/SignIn'),
   loading: Loading
@@ -39,6 +44,7 @@ class App extends Component {
               <Route exact path="/signin" component={SignIn} />
               <Route exact path="/signup" component={SignUp} />
               <Route exact path="/home" component={Home} />
+              <Route exact path="/profile" component={Profile} />
               {localStorage.getItem('userId') &&
                 <Route exact path="/" component={Home} />
               }
