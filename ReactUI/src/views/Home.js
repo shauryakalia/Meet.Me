@@ -6,7 +6,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
@@ -20,8 +19,7 @@ import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
-import { Calender, Bookings } from '../components';
-import { mainListItems, secondaryListItems } from '../components/listItems';
+import { Calender, Bookings, ListItems } from '../components';
 
 
 const drawerWidth = 240;
@@ -175,6 +173,7 @@ export default function Home() {
         localStorage.removeItem('token');
         localStorage.removeItem('email');
         localStorage.removeItem('userId');
+        localStorage.removeItem('serviceId');
         window.location.pathname = '/signin'
     };
 
@@ -228,9 +227,7 @@ export default function Home() {
                     </IconButton>
                 </div>
                 <Divider />
-                <List>{mainListItems}</List>
-                <Divider />
-                <List>{secondaryListItems}</List>
+                <ListItems />
             </Drawer>
             <main className={classes.content}>
                 <div className={classes.appBarSpacer} />

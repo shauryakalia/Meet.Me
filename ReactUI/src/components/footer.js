@@ -8,13 +8,13 @@ const useStyles = makeStyles(theme => ({
         textAlign: "center",
     },
     footer: {
-        paddingTop: theme.spacing.unit * 2,
-        paddingBottom: theme.spacing.unit * 2,
+        paddingTop: theme.spacing(2),
+        paddingBottom: theme.spacing(2),
     },
     text: {
         color: theme.palette.common.grey,
-        paddingLeft: theme.spacing.unit * 2,
-        paddingRight: theme.spacing.unit * 2,
+        paddingLeft: theme.spacing(2),
+        paddingRight: theme.spacing(2),
     }
 }));
 

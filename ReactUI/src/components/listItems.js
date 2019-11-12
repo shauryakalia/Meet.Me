@@ -1,70 +1,66 @@
 import React from 'react';
+import { withStyles } from '@material-ui/core/styles';
+import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import PeopleIcon from '@material-ui/icons/People';
-import BarChartIcon from '@material-ui/icons/BarChart';
-import LayersIcon from '@material-ui/icons/Layers';
-import AssignmentIcon from '@material-ui/icons/Assignment';
+import BackendService from '../services/backendServices';
 
-export const mainListItems = (
-  <div>
-    <ListItem button>
-      <ListItemIcon>
-        <DashboardIcon />
-      </ListItemIcon>
-      <ListItemText primary="Dashboard" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <ShoppingCartIcon />
-      </ListItemIcon>
-      <ListItemText primary="Orders" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <PeopleIcon />
-      </ListItemIcon>
-      <ListItemText primary="Customers" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <BarChartIcon />
-      </ListItemIcon>
-      <ListItemText primary="Reports" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <LayersIcon />
-      </ListItemIcon>
-      <ListItemText primary="Integrations" />
-    </ListItem>
-  </div>
-);
+class ListItems extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: [],
+      selectedIndex: 0,
+    }
+    this.getServices = this.getServices.bind(this);
+    this.handleListItemClick = this.handleListItemClick.bind(this);
+  }
 
-export const secondaryListItems = (
-  <div>
-    <ListSubheader inset>Saved reports</ListSubheader>
-    <ListItem button>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Current month" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Last quarter" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Year-end sale" />
-    </ListItem>
-  </div>
-);
+  componentDidMount() {
+    this.getServices();
+  }
+
+  getServices = async () => {
+    try {
+      const practiceId = localStorage.getItem('userId');
+      if (practiceId) {
+        let response = await BackendService.getServices(practiceId);
+        this.setState({ data: response.data.data })
+        localStorage.setItem('serviceId', response.data.data[0].serviceId);
+      } else {
+        window.location.pathname = '/signin';
+      }
+    } catch (error) {
+      alert('Something went wrong');
+    }
+  }
+
+  handleListItemClick = (event, index, serviceId) => {
+    localStorage.setItem('serviceId', serviceId);
+    this.setState({ selectedIndex: index })
+  };
+
+  render() {
+    return (
+      <List>
+        <ListSubheader inset>Services</ListSubheader>
+        {this.state.data.map((item, index) => (
+          <ListItem key={item.serviceId} button
+            selected={this.state.selectedIndex === index}
+            onClick={event => this.handleListItemClick(event, index, item.serviceId)}
+          >
+            <ListItemIcon>
+              <DashboardIcon />
+            </ListItemIcon>
+            <ListItemText primary={item.serviceName} />
+          </ListItem>
+        ))}
+      </List>
+    )
+  }
+}
+
+export default withStyles({}, { withTheme: true })(ListItems)
