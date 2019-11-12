@@ -8,11 +8,11 @@ class BasicProfile extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            email: 'abc@gmail.com',
-            practiceName: 'Abc',
-            name: 'Name',
-            phone: '834827257',
-            address: 'xyz'
+            email: '',
+            practiceName: '',
+            name: '',
+            phone: '',
+            address: ''
         }
         this.getProfile = this.getProfile.bind(this);
     }
@@ -26,8 +26,13 @@ class BasicProfile extends React.Component {
             const practiceId = localStorage.getItem('userId');
             if (practiceId) {
                 let response = await BackendService.getPracticeDetails(practiceId);
-                console.log("Res", response);
-                // this.setState({ data: response.data.data })
+                this.setState({
+                    name: response.data.data.yourName,
+                    practiceName: response.data.data.practiceName,
+                    email: response.data.data.practiceEmail,
+                    address: response.data.data.practiceAddress,
+                    phone: response.data.data.practicePhoneNumber
+                })
             } else {
                 window.location.pathname = '/signin';
             }
@@ -41,7 +46,7 @@ class BasicProfile extends React.Component {
         return (
             <Paper style={{ padding: '15px', paddingLeft: '20px', paddingRight: '20px' }}>
                 <Typography variant="h6" >
-                    Basic Profile
+                    Profile
             </Typography>
                 <Divider />
                 <List component="nav" aria-label="basic-profile">
