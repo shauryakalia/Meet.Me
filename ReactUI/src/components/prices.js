@@ -9,7 +9,7 @@ class Prices extends React.Component {
     this.state = {
       columns: [
         { title: 'Service', field: 'service' },
-        { title: 'Price($)', field: 'price' },
+        { title: 'Price(£)', field: 'price' },
       ],
       data: [],
     }

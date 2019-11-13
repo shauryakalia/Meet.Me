@@ -32,6 +32,17 @@ function getPracticeDetails(practiceId) {
   });
 }
 
+function getBookings(data) {
+  return axios({
+    headers: {
+      'x-access-token': getToken(),
+      contentType: 'application/json',
+    },
+    method: 'GET',
+    url: `${Constant.API_URL}/practice/${data.practiceId}/getBookingHistory/service/${data.serviceId}`,
+  });
+}
+
 function getPrices(practiceId) {
   return axios({
     method: 'GET',
@@ -194,6 +205,7 @@ export default {
   registerPractice,
   login,
   getPracticeDetails,
+  getBookings,
   getPrices,
   registerPrice,
   updatePrice,

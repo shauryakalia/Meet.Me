@@ -2,9 +2,9 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import {
-    Table, FormControl, Select, TableHead, TablePagination,
-    InputLabel, TableBody, TableCell, TableRow
+    Table, TableHead, TablePagination, TableBody, TableCell, TableRow
 } from '@material-ui/core';
+import BackendService from '../services/backendServices';
 
 const columns = [
     { id: 'name', label: 'Name', minWidth: 170 },
@@ -15,28 +15,25 @@ const columns = [
     { id: 'notes', label: 'Additional Notes', minWidth: 100 },
 ];
 
-function createData(name, code, population, size) {
-    const density = population / size;
-    return { name, code, population, size, density };
-}
+let rows = [];
 
-const rows = [
-    createData('India', 'IN', 1324171354, 3287263),
-    createData('China', 'CN', 1403500365, 9596961),
-    createData('Italy', 'IT', 60483973, 301340),
-    createData('United States', 'US', 327167434, 9833520),
-    createData('Canada', 'CA', 37602103, 9984670),
-    createData('Australia', 'AU', 25475400, 7692024),
-    createData('Germany', 'DE', 83019200, 357578),
-    createData('Ireland', 'IE', 4857000, 70273),
-    createData('Mexico', 'MX', 126577691, 1972550),
-    createData('Japan', 'JP', 126317000, 377973),
-    createData('France', 'FR', 67022000, 640679),
-    createData('United Kingdom', 'GB', 67545757, 242495),
-    createData('Russia', 'RU', 146793744, 17098246),
-    createData('Nigeria', 'NG', 200962417, 923768),
-    createData('Brazil', 'BR', 210147125, 8515767),
-];
+async function getBookings() {
+    try {
+        const practiceId = localStorage.getItem('userId');
+        const serviceId = localStorage.getItem('serviceId');
+        if (practiceId && serviceId) {
+            let response = await BackendService.getBookings({
+                practiceId: practiceId,
+                serviceId: serviceId
+            });
+            rows = response.data.data;
+        } else {
+            window.location.pathname = '/signin';
+        }
+    } catch (error) {
+        alert('Something went wrong');
+    }
+}
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -59,22 +56,8 @@ export default function Bookings() {
     const classes = useStyles();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
-    const [filter, setFilter] = React.useState('');
-    // let startDate, endDate;
 
-    const handleChange = event => {
-        setFilter(event.target.value);
-        // if(event.target.value === 'Today'){
-        //     startDate = new Date(new Date().toDateString());
-        //     endDate = new Date(new Date().toDateString());
-        // } else if (event.target.value === 'Tomorrow') {
-        //     startDate = new Date(new Date().toDateString());
-        //     endDate = new Date(new Date().toDateString());
-        // } else {
-        //     startDate = '';
-        //     endDate = '';
-        // }
-    };
+    getBookings();
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -87,26 +70,6 @@ export default function Bookings() {
 
     return (
         <Paper className={classes.root}>
-            <FormControl className={classes.formControl}>
-                <InputLabel htmlFor="age-native-simple">Filter</InputLabel>
-                <Select
-                    native
-                    value={filter}
-                    onChange={handleChange}
-                >
-                    <option value="" />
-                    <option value={'All'}>All</option>
-                    <option value={'Today'}>Today</option>
-                    <option value={'Tomorrow'}>Tomorrow</option>
-                    <option value={'This Week'}>This Week</option>
-                    <option value={'Yesterday'}>Yesterday</option>
-                    <option value={'Last 7 Days'}>Last 7 Days</option>
-                    <option value={'Last 30 Days'}>Last 30 Days</option>
-                    <option value={'This Month'}>This Month</option>
-                    <option value={'Last Month'}>Last Month</option>
-                    <option value={'Custom Days'}>Custom Days</option>
-                </Select>
-            </FormControl>
             <div className={classes.tableWrapper}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
