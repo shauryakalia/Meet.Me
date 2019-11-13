@@ -11,14 +11,14 @@ class Timings extends React.Component {
         { title: 'Day', field: 'day' },
         { title: 'Open at', field: 'from' },
         { title: 'Close at', field: 'to' },
-        { title: 'Closed', field: 'closed' },
+        { title: 'Closed', field: 'closed', type: 'boolean' },
       ],
       data: [],
     }
     this.populate = this.populate.bind(this);
-    this.addTiming = this.addTiming.bind(this);
+    // this.addTiming = this.addTiming.bind(this);
     this.updateTiming = this.updateTiming.bind(this);
-    this.deleteTiming = this.deleteTiming.bind(this);
+    // this.deleteTiming = this.deleteTiming.bind(this);
   }
 
   populate = async () => {
@@ -26,7 +26,9 @@ class Timings extends React.Component {
       const practiceId = localStorage.getItem('userId');
       if (practiceId) {
         let response = await BackendService.getTimings(practiceId);
-        this.setState({ data: response.data.data })
+        console.log("Timings response", response);
+        const sortedDays = await response.data.data.sort((a,b) => a.timingId - b.timingId);
+        this.setState({ data: sortedDays })
       } else {
         window.location.pathname = '/signin';
       }
@@ -39,35 +41,36 @@ class Timings extends React.Component {
     this.populate();
   }
 
-  addTiming = async (newData) => {
-    try {
-      const practiceId = localStorage.getItem('userId');
-      let response = await BackendService.registerTiming({
-        practiceId,
-        day: newData.day,
-        from: newData.from,
-        to: newData.to,
-        closed: newData.closed
-      });
-      if (response.data.status) {
-        this.setState(prevState => {
-          const data = [...prevState.data];
-          data.push(newData);
-          return { ...prevState, data };
-        });
-      } else {
-        alert("Something went wrong");
-      }
-    } catch (error) {
-      console.log("Error", error);
-      alert("Something went wrong");
-    }
-  }
+  // addTiming = async (newData) => {
+  //   try {
+  //     const practiceId = localStorage.getItem('userId');
+  //     let response = await BackendService.registerTiming({
+  //       practiceId,
+  //       day: newData.day,
+  //       from: newData.from,
+  //       to: newData.to,
+  //       closed: newData.closed
+  //     });
+  //     if (response.data.status) {
+  //       this.setState(prevState => {
+  //         const data = [...prevState.data];
+  //         data.push(newData);
+  //         return { ...prevState, data };
+  //       });
+  //     } else {
+  //       alert("Something went wrong");
+  //     }
+  //   } catch (error) {
+  //     console.log("Error", error);
+  //     alert("Something went wrong");
+  //   }
+  // }
 
   updateTiming = async(newData, oldData) => {
     try {
       if (oldData) {
         const practiceId = localStorage.getItem('userId');
+        console.log("Newdata", newData);
         let response = await BackendService.updateTiming({
           practiceId,
           timingId: newData.timingId,
@@ -75,6 +78,7 @@ class Timings extends React.Component {
           to: newData.to,
           closed: newData.closed
         });
+        console.log("Response update time", response);
         if (response.data.status) {
           this.setState(prevState => {
             const data = [...prevState.data];
@@ -91,28 +95,28 @@ class Timings extends React.Component {
     }
   }
 
-  deleteTiming = async(oldData) => {
-    try {
-      if (oldData) {
-        const practiceId = localStorage.getItem('userId');
-        let response = await BackendService.deleteTiming({
-          practiceId,
-          timingId: oldData.timingId
-        });
-        if (response.data.status) {
-          this.setState(prevState => {
-            const data = [...prevState.data];
-            data.splice(data.indexOf(oldData), 1);
-            return { ...prevState, data };
-          });
-        } else {
-          alert("Something went wrong");
-        }
-      }
-    } catch (error) {
-      alert("Something went wrong");
-    }
-  }
+  // deleteTiming = async(oldData) => {
+  //   try {
+  //     if (oldData) {
+  //       const practiceId = localStorage.getItem('userId');
+  //       let response = await BackendService.deleteTiming({
+  //         practiceId,
+  //         timingId: oldData.timingId
+  //       });
+  //       if (response.data.status) {
+  //         this.setState(prevState => {
+  //           const data = [...prevState.data];
+  //           data.splice(data.indexOf(oldData), 1);
+  //           return { ...prevState, data };
+  //         });
+  //       } else {
+  //         alert("Something went wrong");
+  //       }
+  //     }
+  //   } catch (error) {
+  //     alert("Something went wrong");
+  //   }
+  // }
 
   render() {
     return (
@@ -122,9 +126,9 @@ class Timings extends React.Component {
         columns={this.state.columns}
         data={this.state.data}
         editable={{
-          onRowAdd: newData => this.addTiming(newData),
+          // onRowAdd: newData => this.addTiming(newData),
           onRowUpdate: (newData, oldData) => this.updateTiming(newData, oldData),
-          onRowDelete: oldData => this.deleteTiming(oldData),
+          // onRowDelete: oldData => this.deleteTiming(oldData),
         }}
       />
     );

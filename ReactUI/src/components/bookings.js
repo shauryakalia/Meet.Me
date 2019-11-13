@@ -21,12 +21,14 @@ async function getBookings() {
     try {
         const practiceId = localStorage.getItem('userId');
         const serviceId = localStorage.getItem('serviceId');
-        if (practiceId && serviceId) {
-            let response = await BackendService.getBookings({
-                practiceId: practiceId,
-                serviceId: serviceId
-            });
-            rows = response.data.data;
+        if (practiceId) {
+            if (serviceId) {
+                let response = await BackendService.getBookings({
+                    practiceId: practiceId,
+                    serviceId: serviceId
+                });
+                rows = response.data.data;
+            }
         } else {
             window.location.pathname = '/signin';
         }

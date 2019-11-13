@@ -24,6 +24,9 @@ class Services extends React.Component {
       if (practiceId) {
         let response = await BackendService.getServices(practiceId);
         this.setState({ data: response.data.data })
+        if (response.data.data.length > 0) {
+          localStorage.setItem('serviceId', response.data.data[0].serviceId);
+        }
       } else {
         window.location.pathname = '/signin';
       }
@@ -58,7 +61,7 @@ class Services extends React.Component {
     }
   }
 
-  updateService = async(newData, oldData) => {
+  updateService = async (newData, oldData) => {
     try {
       if (oldData) {
         const practiceId = localStorage.getItem('userId');
@@ -83,7 +86,7 @@ class Services extends React.Component {
     }
   }
 
-  deleteService = async(oldData) => {
+  deleteService = async (oldData) => {
     try {
       if (oldData) {
         const practiceId = localStorage.getItem('userId');

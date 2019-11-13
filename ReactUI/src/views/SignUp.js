@@ -97,7 +97,7 @@ export default function SignUp() {
                 });
                 if (response.data.status) {
                     setState({ ...state, open: true, message: 'Signup Successfully!' });
-                    window.location.pathname = '/singin';
+                    window.location.pathname = '/signin';
                 } else {
                     setState({ ...state, open: true, message: 'Invalid Data!' });
                 }

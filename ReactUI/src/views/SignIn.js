@@ -86,7 +86,7 @@ export default function SignIn() {
                 localStorage.setItem('email', response.data.data.email);
                 localStorage.setItem('userId', response.data.data.userId);
                 localStorage.setItem('token', response.data.data.token);
-                window.location.pathname = '/home';
+                window.location.pathname = '/profile';
             } else {
                 setState({ ...state, open: true, message: 'Invalid Data!' });
             }

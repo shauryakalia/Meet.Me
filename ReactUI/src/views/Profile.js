@@ -10,6 +10,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Grid from '@material-ui/core/Grid';
 import { BasicProfile, Timings, Services, Prices } from '../components';
 import UserIcon from '@material-ui/icons/Person';
+import BackendService from '../services/backendServices';
 
 
 const useStyles = makeStyles(theme => ({
@@ -47,14 +48,29 @@ export default function Profile() {
         setAnchorEl(null);
     };
 
-    const home = () => {
-        window.location.pathname = '/home';
+    const home = async () => {
+        try {
+            const practiceId = localStorage.getItem('userId');
+            if (practiceId) {
+                let response = await BackendService.getServices(practiceId);
+                if (response.data.data.length > 0) {
+                    window.location.pathname = '/home';
+                } else {
+                    alert('Register atleast one service');
+                }
+            } else {
+                window.location.pathname = '/signin';
+            }
+        } catch (error) {
+            alert('Something went wrong');
+        }
     }
 
     const logout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('email');
         localStorage.removeItem('userId');
+        localStorage.removeItem('serviceId');
         window.location.pathname = '/signin'
     };
 
