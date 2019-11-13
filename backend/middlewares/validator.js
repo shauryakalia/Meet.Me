@@ -139,8 +139,8 @@ const schema = {
   },
   '/practice/:id/getBookingHistory/service/:serviceId' : {
     query: JOI.object().keys({
-      page: JOI.number().min(1).required(),
-      limit: JOI.number().required(),
+      page: JOI.number().min(1),
+      limit: JOI.number(),
     }),
     body: null,
     params: JOI.object().keys({

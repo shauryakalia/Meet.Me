@@ -10,48 +10,48 @@ const { encryption } = require('../helpers');
 
 const defaultTiming = [
   {
-    practiceId:1,
-    day:'monday',
-    from:'08:30',
-    to:'20:00',
-    closed:false
+    practiceId: 1,
+    day: 'monday',
+    from: '08:30',
+    to: '20:00',
+    closed: false
   },
   {
-    practiceId:1,
-    day:'tuesday',
-    from:'08:30',
-    to:'20:00',
-    closed:false
-  },{
-    practiceId:1,
-    day:'wednesday',
-    from:'08:30',
-    to:'17:30',
-    closed:false
-  },{
-    practiceId:1,
-    day:'thursday',
-    from:'08:30',
-    to:'20:00',
-    closed:false
-  },{
-    practiceId:1,
-    day:'friday',
-    from:'08:30',
-    to:'17:30',
-    closed:false
-  },{
-    practiceId:1,
-    day:'saturday',
-    from:'09:00',
-    to:'15:00',
-    closed:false
-  },{
-    practiceId:1,
-    day:'sunday',
-    from:'',
-    to:'',
-    closed:true
+    practiceId: 1,
+    day: 'tuesday',
+    from: '08:30',
+    to: '20:00',
+    closed: false
+  }, {
+    practiceId: 1,
+    day: 'wednesday',
+    from: '08:30',
+    to: '17:30',
+    closed: false
+  }, {
+    practiceId: 1,
+    day: 'thursday',
+    from: '08:30',
+    to: '20:00',
+    closed: false
+  }, {
+    practiceId: 1,
+    day: 'friday',
+    from: '08:30',
+    to: '17:30',
+    closed: false
+  }, {
+    practiceId: 1,
+    day: 'saturday',
+    from: '09:00',
+    to: '15:00',
+    closed: false
+  }, {
+    practiceId: 1,
+    day: 'sunday',
+    from: '',
+    to: '',
+    closed: true
   }
 ];
 
@@ -85,27 +85,24 @@ module.exports = {
       practicePhoneNumber: data.practicePhoneNumber
     };
     const existingUser = await User.findOne({ attributes: ['practiceId'], where: { practiceEmail: data.practiceEmail } });
-    
-    if(existingUser) {
+
+    if (existingUser) {
       throw new Error('User with this email exists');
     }
-    
+
     const result = await User.build(practiceData).save();
-    
-    if(result.practiceId===1) {
+
+    if (result) {
       defaultTiming.forEach(element => {
         const timingData = {
-          practiceId: element.practiceId,
+          practiceId: result.practiceId,
           day: element.day,
           from: element.from,
           to: element.to,
-          closed:element.closed
+          closed: element.closed
         }
-      const timing = Timing.build(timingData).save();
+        const timing = Timing.build(timingData).save();
       });
-    }
-    
-    if (result) {
       return result;
     }
     throw new Error('Error while registering practice');

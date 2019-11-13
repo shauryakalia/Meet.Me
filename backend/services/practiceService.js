@@ -184,27 +184,38 @@ module.exports = {
     throw new Error('Timing not found'); s
   },
   getBookingHistory: async (data) => {
-    const { page, limit } = data;
-    const offset = limit * (page - 1);
-    const bookingData = await Booking.findAndCountAll({ where: { practiceId: data.id, serviceId: data.serviceId } })
-    const pages = Math.ceil(bookingData.count / limit);
-    const result = await Booking.findAll({
-      limit,
-      offset,
-      raw: true,
-      where: { practiceId: data.id, serviceId: data.serviceId },
-      attributes: ['bookingId', 'firstName', 'email', 'mobileNumber', 'fromTime', 'status']
-    });
-    if (result) {
-      const res = {
-        result,
-        count: bookingData.count,
-        pages,
-        order: [
-          ['bookingId', 'DESC'],
-        ],
-      };
-      return res;
+    if (data.page && data.limit) {
+      const { page, limit } = data;
+      const offset = limit * (page - 1);
+      const bookingData = await Booking.findAndCountAll({ where: { practiceId: data.id, serviceId: data.serviceId } })
+      const pages = Math.ceil(bookingData.count / limit);
+      const result = await Booking.findAll({
+        limit,
+        offset,
+        raw: true,
+        where: { practiceId: data.id, serviceId: data.serviceId },
+        attributes: ['bookingId', 'firstName', 'email', 'mobileNumber', 'fromTime', 'status']
+      });
+      if (result) {
+        const res = {
+          result,
+          count: bookingData.count,
+          pages,
+          order: [
+            ['bookingId', 'DESC'],
+          ],
+        };
+        return res;
+      }
+    } else {
+      const allBookingsResult = await Booking.findAll({
+        where: { practiceId: data.id, serviceId: data.serviceId },
+        attributes: ['bookingId', 'firstName', 'email', 'mobileNumber', 'fromTime', 'status']
+      });
+      if(allBookingsResult) {
+        return allBookingsResult;
+      }
+      throw new Error('Error while getting booking history');
     }
     throw new Error('Error while getting booking history');
   },
