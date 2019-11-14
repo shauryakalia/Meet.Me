@@ -12,39 +12,39 @@ const defaultTiming = [
   {
     practiceId: 1,
     day: 'monday',
-    from: '08:30',
-    to: '20:00',
+    from: '08:30 AM',
+    to: '20:00 PM',
     closed: false
   },
   {
     practiceId: 1,
     day: 'tuesday',
-    from: '08:30',
-    to: '20:00',
+    from: '08:30 AM',
+    to: '20:00 PM',
     closed: false
   }, {
     practiceId: 1,
     day: 'wednesday',
-    from: '08:30',
-    to: '17:30',
+    from: '08:30 AM',
+    to: '17:30 PM',
     closed: false
   }, {
     practiceId: 1,
     day: 'thursday',
-    from: '08:30',
-    to: '20:00',
+    from: '08:30 AM',
+    to: '20:00 PM',
     closed: false
   }, {
     practiceId: 1,
     day: 'friday',
-    from: '08:30',
-    to: '17:30',
+    from: '08:30 AM',
+    to: '17:30 PM',
     closed: false
   }, {
     practiceId: 1,
     day: 'saturday',
-    from: '09:00',
-    to: '15:00',
+    from: '09:00 AM',
+    to: '15:00 PM',
     closed: false
   }, {
     practiceId: 1,
