@@ -1,14 +1,4 @@
 # Meet.Me
-# Description
-Appointment Scheduling Website. 
+Appointment Scheduling Website for Practices. 
 
-Open Sourced for contributions.
-
-# Stack 
-Node.js
-
-Express
-
-React
-
-Postgres
+Register your services and allow people to book appointments related to the services you offer.
