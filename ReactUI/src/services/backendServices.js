@@ -32,6 +32,28 @@ function getPracticeDetails(practiceId) {
   });
 }
 
+function getCalendarSlots(data) {
+  return axios({
+    headers: {
+      'x-access-token': getToken(),
+      contentType: 'application/json',
+    },
+    method: 'GET',
+    url: `${Constant.API_URL}/practice/${data.practiceId}/getCalendarSlots/service/${data.serviceId}`,
+  });
+}
+
+function getCalendarBookings(data) {
+  return axios({
+    headers: {
+      'x-access-token': getToken(),
+      contentType: 'application/json',
+    },
+    method: 'GET',
+    url: `${Constant.API_URL}/practice/${data.practiceId}/getCalendarBookings/service/${data.serviceId}`,
+  });
+}
+
 function getBookings(data) {
   return axios({
     headers: {
@@ -205,6 +227,8 @@ export default {
   registerPractice,
   login,
   getPracticeDetails,
+  getCalendarSlots,
+  getCalendarBookings,
   getBookings,
   getPrices,
   registerPrice,

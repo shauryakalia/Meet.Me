@@ -115,7 +115,7 @@ export default function SignIn() {
             />
             <Grid item xs={false} sm={4} md={7} className={classes.imageDiv} >
                 <Typography component="h1" variant="h4" className={classes.title}>
-                    Test
+                    MeetMe
                 </Typography>
                 <img src={image} alt="medical" className={classes.image} />
 

@@ -80,7 +80,7 @@ export default function Profile() {
             <AppBar >
                 <Toolbar >
                     <Typography component="h1" variant="h6" color="inherit" noWrap onClick={home} className={classes.title}>
-                        Test
+                        MeetMe
                     </Typography>
                     <IconButton color="secondary" aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
                         <UserIcon />

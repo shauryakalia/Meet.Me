@@ -28,7 +28,6 @@ class ListItems extends React.Component {
       const practiceId = localStorage.getItem('userId');
       if (practiceId) {
         let response = await BackendService.getServices(practiceId);
-        console.log("Services", response);
         this.setState({ data: response.data.data })
         localStorage.setItem('serviceId', response.data.data[0].serviceId);
       } else {

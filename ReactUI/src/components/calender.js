@@ -6,9 +6,12 @@ import {
     Scheduler,
     WeekView,
     MonthView,
-    Appointments
+    Appointments,
+    AppointmentTooltip,
+    AppointmentForm
 } from "@devexpress/dx-react-scheduler-material-ui";
 import { withStyles } from '@material-ui/styles';
+import BackendService from '../services/backendServices';
 import { appointments } from "./data";
 
 function TabPanel(props) {
@@ -47,18 +50,70 @@ class Calender extends React.PureComponent {
 
         this.state = {
             data: appointments,
+            currentDate: new Date(),
+            slots: [],
+            bookings: [],
             period: 0
         };
         this.handleChange = this.handleChange.bind(this);
+        this.getCalendarSlots = this.getCalendarSlots.bind(this);
+        this.getCalendarBookings = this.getCalendarBookings.bind(this);
+    }
+
+    componentWillMount() {
+        this.getCalendarSlots();
+        this.getCalendarBookings();
     }
 
     handleChange = (event, newValue) => {
         this.setState({ period: newValue });
     };
 
+    getCalendarSlots = async () => {
+        try {
+            const practiceId = localStorage.getItem('userId');
+            const serviceId = localStorage.getItem('serviceId');
+            if (practiceId) {
+                if (serviceId) {
+                    let response = await BackendService.getCalendarSlots({
+                        practiceId: practiceId,
+                        serviceId: serviceId
+                    });
+                    console.log("Calender slots", response);
+                    this.setState({ slots: response.data.data });
+                }
+            } else {
+                window.location.pathname = '/signin';
+            }
+        } catch (error) {
+            alert('Something went wrong');
+        }
+    }
+
+    getCalendarBookings = async () => {
+        try {
+            const practiceId = localStorage.getItem('userId');
+            const serviceId = localStorage.getItem('serviceId');
+            if (practiceId) {
+                if (serviceId) {
+                    let response = await BackendService.getCalendarBookings({
+                        practiceId: practiceId,
+                        serviceId: serviceId
+                    });
+                    console.log("Calender bookings", response);
+                    this.setState({ bookings: response.data.data });
+                }
+            } else {
+                window.location.pathname = '/signin';
+            }
+        } catch (error) {
+            alert('Something went wrong');
+        }
+    }
+
 
     render() {
-        const { data, period } = this.state;
+        const { data, currentDate, slots, bookings, period } = this.state;
 
         return (
             <Paper square>
@@ -75,16 +130,22 @@ class Calender extends React.PureComponent {
                 <TabPanel value={period} index={0}>
                     <Paper>
                         <Scheduler data={data}>
-                            <ViewState currentDate="2018-06-28" />
+                            <ViewState currentDate={currentDate} />
                             <WeekView startDayHour={9} endDayHour={19} />
                             <Appointments />
+                            <AppointmentTooltip
+                                showCloseButton
+                                showOpenButton
+                            />
+                            <AppointmentForm
+                            />
                         </Scheduler>
                     </Paper>
                 </TabPanel>
                 <TabPanel value={period} index={1}>
                     <Paper>
                         <Scheduler data={data}>
-                            <ViewState currentDate="2018-06-28" />
+                            <ViewState currentDate={currentDate} />
                             <MonthView startDayHour={9} endDayHour={19} />
                             <Appointments />
                         </Scheduler>

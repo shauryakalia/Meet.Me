@@ -7,10 +7,10 @@ import {
 import BackendService from '../services/backendServices';
 
 const columns = [
-    { id: 'name', label: 'Name', minWidth: 170 },
-    { id: 'appointment', label: 'Appointment', minWidth: 100 },
+    { id: 'firstName', label: 'Name', minWidth: 170 },
+    { id: 'fromTime', label: 'Appointment', minWidth: 100 },
     { id: 'status', label: 'Status', minWidth: 100 },
-    { id: 'phone', label: 'Phone', minWidth: 100 },
+    { id: 'mobileNumber', label: 'Phone', minWidth: 100 },
     { id: 'email', label: 'Email', minWidth: 170 },
     { id: 'notes', label: 'Additional Notes', minWidth: 100 },
 ];
@@ -27,6 +27,7 @@ async function getBookings() {
                     practiceId: practiceId,
                     serviceId: serviceId
                 });
+                console.log("Booking history", response.data.data);
                 rows = response.data.data;
             }
         } else {
