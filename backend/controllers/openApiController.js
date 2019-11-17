@@ -129,7 +129,16 @@ module.exports = {
             if (!getSlotsResult) {
                 next(Boom.conflict('Error while getting slots'));
             }
-            res.data = getSlotsResult;
+            let result = [];
+            getSlotsResult.map(slot => {
+                let newSlot = {
+                    slotId : slot.slotId,
+                    startDate : new Date(parseInt(slot.fromTime)),
+                    endDate: new Date(parseInt(slot.fromTime)+1800000),
+                };
+                result.push(newSlot);
+            });
+            res.data = result;
             next();
         } catch (err) {
             logger.error(err);

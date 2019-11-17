@@ -237,7 +237,16 @@ module.exports = {
             if (!getCalendarSlotsResult) {
                 next(Boom.conflict('Error while getting calendar slots'));
             }
-            res.data = getCalendarSlotsResult;
+            let result = [];
+            getCalendarSlotsResult.map(slot => {
+                let newSlot = {
+                    slotId : slot.slotId,
+                    startDate : new Date(parseInt(slot.fromTime)),
+                    endDate: new Date(parseInt(slot.fromTime)+1800000),
+                };
+                result.push(newSlot);
+            });
+            res.data = result;
             next();
         } catch (err) {
             logger.error(err);
@@ -251,7 +260,20 @@ module.exports = {
             if (!getCalendarBookingsResult) {
                 next(Boom.conflict('Error while getting calendar bookings'));
             }
-            res.data = getCalendarBookingsResult;
+            let result = [];
+            getCalendarBookingsResult.map(booking => {
+                let newBooking = {
+                    bookingId : booking.bookingId,
+                    firstName : booking.firstName,
+                    email : booking.email,
+                    mobileNumber : booking.mobileNumber,
+                    additionalNotes : booking.additionalNotes,
+                    startDate : new Date(parseInt(booking.fromTime)),
+                    endDate: new Date(parseInt(booking.fromTime)+1800000),
+                };
+                result.push(newBooking);
+            });
+            res.data = result;
             next();
         } catch (err) {
             logger.error(err);

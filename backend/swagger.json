@@ -1320,7 +1320,7 @@
                 }
             }
         },
-        "/getSlots/:id/service/{serviceId}": {
+        "/getSlots/{id}/service/{serviceId}": {
             "get": {
                 "tags": [
                     "Open API"
@@ -1331,12 +1331,6 @@
                     "application/json"
                 ],
                 "parameters": [
-                    {
-                        "name": "x-access-token",
-                        "in": "header",
-                        "description": "an authorization header",
-                        "required": true
-                    },
                     {
                         "name": "id",
                         "in": "path",
