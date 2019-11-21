@@ -19,7 +19,7 @@ import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
-import { Calender, Bookings, ListItems } from '../components';
+import { Calender, Bookings, ListItems, Scheduler } from '../components';
 
 
 const drawerWidth = 240;
@@ -242,12 +242,16 @@ export default function Home() {
                         >
                             <LinkTab label="Diary" {...a11yProps(0)} />
                             <LinkTab label="Bookings" {...a11yProps(1)} />
+                            <LinkTab label="Calender" {...a11yProps(2)} />
                         </Tabs>
                         <TabPanel value={value} index={0}>
-                            <Calender />
+                            <Scheduler />
                         </TabPanel>
                         <TabPanel value={value} index={1}>
                             <Bookings />
+                        </TabPanel>
+                        <TabPanel value={value} index={2}>
+                            <Calender />
                         </TabPanel>
                     </Paper>
                 </Container>
