@@ -1,8 +1,8 @@
 import React from "react";
 import PropTypes from 'prop-types';
-import { Paper, Grid, Tabs, Tab, Typography, Box, ListItem, ListItemText } from "@material-ui/core";
+import { Paper, Tabs, Tab, Typography, Box } from "@material-ui/core";
 import { withStyles } from '@material-ui/styles';
-import { FixedSizeList } from 'react-window';
+import { WeekView } from '../components';
 import BackendService from '../services/backendServices';
 
 function TabPanel(props) {
@@ -34,21 +34,6 @@ function a11yProps(index) {
         'aria-controls': `simple-tabpanel-${index}`,
     };
 }
-
-function renderRow(props) {
-    const { index, style } = props;
-
-    return (
-        <ListItem button style={style} key={index}>
-            <ListItemText primary={`Item ${index + 1}`} />
-        </ListItem>
-    );
-}
-
-renderRow.propTypes = {
-    index: PropTypes.number.isRequired,
-    style: PropTypes.object.isRequired,
-};
 
 class Scheduler extends React.PureComponent {
     constructor(props) {
@@ -133,13 +118,7 @@ class Scheduler extends React.PureComponent {
                     <Tab label="Month" {...a11yProps(1)} />
                 </Tabs>
                 <TabPanel value={period} index={0}>
-                    <Paper>
-                    <Grid container >
-                        <FixedSizeList height={400} width={360} itemSize={46} itemCount={10}>
-                            {renderRow}
-                        </FixedSizeList>
-                    </Grid>
-                    </Paper>
+                    <WeekView />
                 </TabPanel>
                 <TabPanel value={period} index={1}>
                     <Paper>
