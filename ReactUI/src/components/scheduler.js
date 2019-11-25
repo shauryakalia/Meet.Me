@@ -40,7 +40,6 @@ class Scheduler extends React.PureComponent {
         super(props);
 
         this.state = {
-            currentDate: new Date(),
             slots: [],
             bookings: [],
             period: 0
@@ -69,7 +68,6 @@ class Scheduler extends React.PureComponent {
                         practiceId: practiceId,
                         serviceId: serviceId
                     });
-                    console.log("Calender slots", response);
                     this.setState({ slots: response.data.data });
                 }
             } else {
@@ -90,7 +88,6 @@ class Scheduler extends React.PureComponent {
                         practiceId: practiceId,
                         serviceId: serviceId
                     });
-                    console.log("Calender bookings", response);
                     this.setState({ bookings: response.data.data });
                 }
             } else {
@@ -103,7 +100,7 @@ class Scheduler extends React.PureComponent {
 
 
     render() {
-        const { data, currentDate, slots, bookings, period } = this.state;
+        const { slots, bookings, period } = this.state;
 
         return (
             <Paper square>
@@ -118,7 +115,7 @@ class Scheduler extends React.PureComponent {
                     <Tab label="Month" {...a11yProps(1)} />
                 </Tabs>
                 <TabPanel value={period} index={0}>
-                    <WeekView />
+                    <WeekView slots={slots} bookings={bookings} />
                 </TabPanel>
                 <TabPanel value={period} index={1}>
                     <Paper>

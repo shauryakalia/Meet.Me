@@ -3,11 +3,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import {
     Grid, Paper, Button, Typography
 } from '@material-ui/core';
-import BackendService from '../services/backendServices';
 
-const timingSlots = ['09:00 AM', '09:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM', '12:00 PM',
-    '12:30 PM', '01:00 PM', '01:30 AM', '02:00 PM', '02:30 PM', '03:00 PM', '03:30 PM', '04:00 PM',
-    '04:30 PM', '05:00 PM', '05:30 PM', '06:00 PM', '06:30 PM'];
+
+const timingSlots = ['9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM', '12:00 PM',
+    '12:30 PM', '1:00 PM', '1:30 AM', '2:00 PM', '2:30 PM', '3:00 PM', '3:30 PM', '4:00 PM',
+    '4:30 PM', '5:00 PM', '5:30 PM', '6:00 PM', '6:30 PM'];
 
 const weekDays = [0, 1, 2, 3, 4, 5, 6];
 
@@ -18,6 +18,8 @@ const useStyles = makeStyles(theme => ({
     },
     timeButton: {
         padding: theme.spacing(2),
+        minWidth: '94px',
+        minHeight: '82px',
         borderRadius: 0,
     },
     dateGrid: {
@@ -37,12 +39,34 @@ const useStyles = makeStyles(theme => ({
         minWidth: '111px',
         minHeight: '82px',
         borderRadius: 0,
+    },
+    bookingButton: {
+        backgroundColor: 'blue'
+    },
+    slotButton: {
+        backgroundColor: 'green'
     }
 }));
 
-export default function WeekView() {
+export default function WeekView(props) {
+    const { slots, bookings } = props;
     const classes = useStyles();
     const [currentDate] = React.useState(new Date());
+
+    const checkSlot = (index, time) => {
+        let selectedDate = new Date(currentDate.getTime() + (index * 24 * 60 * 60 * 1000)).getDate();
+        for (let i = 0; i < bookings.length; i++) {
+            let bookingTime = new Date(bookings[i].startDate).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+            if (new Date(bookings[i].startDate).getDate() === selectedDate && bookingTime === time)
+                return 'booking';
+        }
+        for (let i = 0; i < slots.length; i++) {
+            let slotTime = new Date(slots[i].startDate).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+            if (new Date(slots[i].startDate).getDate() === selectedDate && slotTime === time)
+                return 'slot';
+        }
+        return false;
+    }
 
     return (
         <Paper>
@@ -51,62 +75,30 @@ export default function WeekView() {
                     <Button disabled variant="outlined" className={classes.blankButton}></Button>
                 </Grid>
                 {weekDays.map(index => (
-                    <Grid item xs className={classes.dateGrid}>
+                    <Grid key={index} item xs className={classes.dateGrid}>
                         <Typography>{new Date(currentDate.getTime() + (index * 24 * 60 * 60 * 1000)).toDateString().split(" ")[0]}</Typography>
                         <Typography>{new Date(currentDate.getTime() + (index * 24 * 60 * 60 * 1000)).getDate()}</Typography>
                     </Grid>
                 ))}
-                {/* <Grid item xs className={classes.dateGrid}>
-                    <Typography>Sun</Typography>
-                    <Typography>{currentDate.getDate() + 1}</Typography>
-                </Grid> */}
-                {/* <Grid item xs className={classes.dateGrid}>
-                    <Typography>Sun</Typography>
-                    <Typography>{currentDate.getDate() + 2}</Typography>
-                </Grid>
-                <Grid item xs className={classes.dateGrid}>
-                    <Typography>Sun</Typography>
-                    <Typography>{currentDate.getDate() + 3}</Typography>
-                </Grid>
-                <Grid item xs className={classes.dateGrid}>
-                    <Typography>Sun</Typography>
-                    <Typography>{currentDate.getDate() + 1}</Typography>
-                </Grid>
-                <Grid item xs className={classes.dateGrid}>
-                    <Typography>Sun</Typography>
-                    <Typography>24</Typography>
-                </Grid>
-                <Grid item xs className={classes.dateGrid}>
-                    <Typography>Sun</Typography>
-                    <Typography>24</Typography>
-                </Grid> */}
             </Grid>
-            {timingSlots.map(slot => (
-                <Grid container >
+            {timingSlots.map(time => (
+                <Grid container key={time} >
                     <Grid item xs>
-                        <Button disabled variant="outlined" className={classes.timeButton}>{slot}</Button>
+                        <Button disabled variant="outlined" className={classes.timeButton}>{time}</Button>
                     </Grid>
-                    <Grid item xs>
-                        <Button variant="outlined" className={classes.button}></Button>
-                    </Grid>
-                    <Grid item xs>
-                        <Button variant="outlined" className={classes.button}></Button>
-                    </Grid>
-                    <Grid item xs>
-                        <Button variant="outlined" className={classes.button}></Button>
-                    </Grid>
-                    <Grid item xs>
-                        <Button variant="outlined" className={classes.button}></Button>
-                    </Grid>
-                    <Grid item xs>
-                        <Button variant="outlined" className={classes.button}></Button>
-                    </Grid>
-                    <Grid item xs>
-                        <Button variant="outlined" className={classes.button}></Button>
-                    </Grid>
-                    <Grid item xs>
-                        <Button variant="outlined" className={classes.button}></Button>
-                    </Grid>
+                    {weekDays.map(index => (
+                        <Grid key={index} item xs>
+                            {checkSlot(index, time) === 'booking' &&
+                                <Button variant="contained" style={{backgroundColor: 'blue'}} className={classes.button} ></Button>
+                            }
+                            {checkSlot(index, time) === 'slot' &&
+                            <Button variant="contained" style={{backgroundColor: 'green'}} className={classes.button} ></Button>
+                            }
+                            {!checkSlot(index, time) &&
+                            <Button variant="outlined" className={classes.button} ></Button>
+                            }
+                        </Grid>
+                    ))}
                 </Grid>
             ))}
         </Paper>
