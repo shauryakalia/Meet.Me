@@ -222,6 +222,36 @@ function deleteTiming(data) {
   });
 }
 
+function addSlot(data) {
+  return axios({
+    data: {
+      fromTime: data.fromTime,
+      serviceId: data.serviceId
+    },
+    headers: {
+      'x-access-token': getToken(),
+      contentType: 'application/json',
+    },
+    method: 'POST',
+    url: `${Constant.API_URL}/practice/${data.practiceId}/addSlot`,
+  });
+}
+
+function deleteSlot(data) {
+  return axios({
+    data: {
+      fromTime: data.fromTime,
+      slotId: data.slotId
+    },
+    headers: {
+      'x-access-token': getToken(),
+      contentType: 'application/json',
+    },
+    method: 'POST',
+    url: `${Constant.API_URL}/practice/${data.practiceId}/deleteSlot`,
+  });
+}
+
 export default {
 
   registerPractice,
@@ -242,5 +272,6 @@ export default {
   registerTiming,
   updateTiming,
   deleteTiming,
-
+  addSlot,
+  deleteSlot,
 };

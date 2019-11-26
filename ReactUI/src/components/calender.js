@@ -113,7 +113,7 @@ class Calender extends React.PureComponent {
 
 
     render() {
-        const { data, currentDate, slots, bookings, period } = this.state;
+        const { data, currentDate, period } = this.state;
 
         return (
             <Paper square>
