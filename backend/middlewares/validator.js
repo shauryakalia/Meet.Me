@@ -162,6 +162,16 @@ const schema = {
       serviceId: JOI.number().required(),
     }),
   },
+  '/practice/:id/getBooking/service/:serviceId' : {
+    body: null,
+    params: JOI.object().keys({
+      id: JOI.number().required(),
+      serviceId: JOI.number().required(),
+    }),
+    query: JOI.object().keys({
+      fromTime: JOI.number().required(),
+    }),
+  },
   '/booking': {
     body: JOI.object().keys({
       firstName: JOI.string().required(),
@@ -205,6 +215,9 @@ const schema = {
     params: JOI.object().keys({
       id: JOI.number().required(),
       serviceId: JOI.number().required(),
+    }),
+    query: JOI.object().keys({
+      date: JOI.string().required(),
     }),
   },
 };

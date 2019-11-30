@@ -279,5 +279,20 @@ module.exports = {
             logger.error(err);
             next(Boom.conflict('Something went wrong'));
         }
+    },
+    getBooking: async (req, res, next) => {
+        try {
+            logger.info('Get Calendar Bookings Request', req.params);
+            req.params.fromTime = req.query.fromTime;
+            const getBookingResult = await practiceService.getBooking(req.params);
+            if (!getBookingResult) {
+                next(Boom.conflict('Error while getting booking'));
+            }
+            res.data = getBookingResult[0];
+            next();
+        } catch (err) {
+            logger.error(err);
+            next(Boom.conflict('Something went wrong'));
+        }
     }
 }

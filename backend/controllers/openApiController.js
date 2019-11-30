@@ -125,6 +125,7 @@ module.exports = {
     getSlots: async (req, res, next) => {
         try {
             logger.info('Get Slots Request: ', req.params);
+            req.params.date = req.query.date;
             const getSlotsResult = await openApiService.getSlots(req.params);
             if (!getSlotsResult) {
                 next(Boom.conflict('Error while getting slots'));

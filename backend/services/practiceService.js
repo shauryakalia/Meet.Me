@@ -236,5 +236,14 @@ module.exports = {
       return result;
     }
     throw new Error('Error while getting calendar bookings');
+  },
+  getBooking: async (data) => {
+    const query = `SELECT "bookingId", "firstName", "email", "mobileNumber", "additionalNotes", "fromTime" from "Bookings"
+    WHERE "practiceId"=${data.id} AND "serviceId"=${data.serviceId} AND "status"='active' AND "fromTime"=${data.fromTime}`;
+    const result = await db.query(query, { type: Sequelize.QueryTypes.SELECT });
+    if (result) {
+      return result;
+    }
+    throw new Error('Error while getting booking');
   }
 } 

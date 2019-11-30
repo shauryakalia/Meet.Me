@@ -63,8 +63,11 @@ module.exports = {
         throw new Error('Error while getting practice details');
     },
     getSlots: async (data) => {
+        let date = new Date(data.date).setHours(0, 0, 0, 0);
+        const from = new Date(date).getTime();
+        const to = min + 86400000;
         const query = `SELECT "slotId", "fromTime" from "Slots"
-        WHERE "practiceId"=${data.id} AND "serviceId"=${data.serviceId} AND "status"='open' AND "fromTime" BETWEEN ${min} AND ${max}`;
+        WHERE "practiceId"=${data.id} AND "serviceId"=${data.serviceId} AND "status"='open' AND "fromTime" BETWEEN ${from} AND ${to}`;
         const result = await db.query(query, { type: Sequelize.QueryTypes.SELECT });
         if (result) {
             return result;
