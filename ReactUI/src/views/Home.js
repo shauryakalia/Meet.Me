@@ -184,7 +184,7 @@ export default function Home() {
     return (
         <div className={classes.root}>
             <CssBaseline />
-            <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
+            <AppBar color='secondary' position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
                 <Toolbar className={classes.toolbar}>
                     <IconButton
                         edge="start"
@@ -242,7 +242,6 @@ export default function Home() {
                         >
                             <LinkTab label="Diary" {...a11yProps(0)} />
                             <LinkTab label="Bookings" {...a11yProps(1)} />
-                            {/* <LinkTab label="Calender" {...a11yProps(2)} /> */}
                         </Tabs>
                         <TabPanel value={value} index={0}>
                             <Scheduler />
@@ -250,9 +249,6 @@ export default function Home() {
                         <TabPanel value={value} index={1}>
                             <Bookings />
                         </TabPanel>
-                        {/* <TabPanel value={value} index={2}>
-                            <Calender />
-                        </TabPanel> */}
                     </Paper>
                 </Container>
             </main>

@@ -1,16 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import {
     Table, TableBody, TableCell, TableHead, TableRow,
-    Paper, AppBar, Toolbar, Typography, CssBaseline, Grid, Box, Tabs, Tab
+    Paper, AppBar, Toolbar, Typography, CssBaseline, Grid
 } from '@material-ui/core';
+import {PatientBookAppointment} from '../components';
 import BackendService from '../services/backendServices';
 
 
 const StyledTableCell = withStyles(theme => ({
     head: {
-        backgroundColor: theme.palette.common.black,
+        backgroundColor: theme.palette.secondary.main,
         color: theme.palette.common.white,
     },
     body: {
@@ -26,46 +26,7 @@ const StyledTableRow = withStyles(theme => ({
     },
 }))(TableRow);
 
-function TabPanel(props) {
-    const { children, value, index, ...other } = props;
 
-    return (
-        <Typography
-            component="div"
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-        >
-            <Box p={3}>{children}</Box>
-        </Typography>
-    );
-}
-
-TabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.any.isRequired,
-    value: PropTypes.any.isRequired,
-};
-
-function a11yProps(index) {
-    return {
-        id: `simple-tab-${index}`,
-        'aria-controls': `simple-tabpanel-${index}`,
-    };
-}
-
-function LinkTab(props) {
-    return (
-        <Tab
-            onClick={event => {
-                event.preventDefault();
-            }}
-            {...props}
-        />
-    );
-}
 
 class BookAppointment extends React.PureComponent {
     constructor(props) {
@@ -73,23 +34,17 @@ class BookAppointment extends React.PureComponent {
 
         this.state = {
             practiceId: props.match.params.practiceId,
-            value: 0,
-            services: [],
             timings: [],
-            prices: []
+            prices: [],
+            practiceDetails: {},
         };
-        this.handleChange = this.handleChange.bind(this);
-        this.getServices = this.getServices.bind(this);
+        this.getPracticeDetails = this.getPracticeDetails.bind(this);
         this.getPriceList = this.getPriceList.bind(this);
         this.getTimings = this.getTimings.bind(this);
     }
 
-    handleChange = (event, newValue) => {
-        this.setState({ value: newValue });
-    }
-
     componentDidMount() {
-        this.getServices();
+        this.getPracticeDetails();
     }
 
     getTimings = async () => {
@@ -110,7 +65,6 @@ class BookAppointment extends React.PureComponent {
             const practiceId = this.state.practiceId;
             if (practiceId) {
                 let response = await BackendService.getPrices(practiceId);
-                console.log("Prices", response.data.data);
                 this.setState({ prices: response.data.data })
             }
         } catch (error) {
@@ -118,19 +72,14 @@ class BookAppointment extends React.PureComponent {
         }
     }
 
-    getServices = async () => {
+    getPracticeDetails = async () => {
         try {
             const practiceId = this.state.practiceId;
             if (practiceId) {
-                let response = await BackendService.getServices(practiceId);
-                this.setState({ services: response.data.data });
+                let response = await BackendService.getPracticeDetails(practiceId);
+                this.setState({ practiceDetails: response.data.data })
                 this.getPriceList();
                 this.getTimings();
-                if (response.data.data.length === 0) {
-                    alert('No services found!');
-                }
-            } else {
-                alert('Something went wrong');
             }
         } catch (error) {
             alert('Something went wrong');
@@ -141,7 +90,7 @@ class BookAppointment extends React.PureComponent {
         return (
             <div >
                 <CssBaseline />
-                <AppBar position="static">
+                <AppBar color='secondary' position="static">
                     <Toolbar>
                         <Typography variant="h6" >
                             MeetMe
@@ -150,24 +99,16 @@ class BookAppointment extends React.PureComponent {
                 </AppBar>
                 <Grid container style={{ margin: '10px', width: '97%' }} spacing={3}>
                     <Grid item xs={12}>
-                        <Paper square>
-                            <Tabs
-                                value={this.state.value}
-                                indicatorColor="primary"
-                                textColor="primary"
-                                onChange={this.handleChange}
-                                aria-label="tabs"
-                            >
-                                {this.state.services.map((service, index) => (
-                                    <LinkTab key={service.serviceName} label={service.serviceName} {...a11yProps(index)} />
-                                ))}
-                            </Tabs>
-                            {this.state.services.map((service, index) => (
-                                <TabPanel value={this.state.value} index={index}>
-                                    {service.serviceName}
-                                </TabPanel>
-                            ))}
-                        </Paper>
+                        <Typography variant="h6" color='secondary'>
+                            {this.state.practiceDetails.practiceName}
+                        </Typography>
+                        <Typography variant="subtitle1" color='secondary'>
+                            Book an Appointment
+                        </Typography>
+                        <Typography variant="subtitle2" style={{marginBottom: '9px'}} color='primary'>
+                            Select appointment specialty you require
+                        </Typography>
+                       <PatientBookAppointment practiceId={this.state.practiceId} />
                     </Grid>
                     <Grid item xs={6}>
                         <Typography variant="h6" >

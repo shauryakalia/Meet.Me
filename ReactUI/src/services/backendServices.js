@@ -72,6 +72,13 @@ function getPrices(practiceId) {
   });
 }
 
+function getSlots(practiceId, serviceId) {
+  return axios({
+    method: 'GET',
+    url: `${Constant.API_URL}/getSlots/${practiceId}/service/${serviceId}`,
+  });
+}
+
 function registerPrice(data) {
   return axios({
     data: {
@@ -287,6 +294,7 @@ export default {
   getCalendarBookings,
   getBookings,
   getPrices,
+  getSlots,
   registerPrice,
   updatePrice,
   deletePrice,

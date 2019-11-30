@@ -77,7 +77,7 @@ export default function Profile() {
     return (
         <div className={classes.root}>
             <CssBaseline />
-            <AppBar >
+            <AppBar color='secondary'>
                 <Toolbar >
                     <Typography component="h1" variant="h6" color="inherit" noWrap onClick={home} className={classes.title}>
                         MeetMe
