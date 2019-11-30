@@ -55,7 +55,7 @@ class ListItems extends React.Component {
             <ListItemIcon>
               <DashboardIcon />
             </ListItemIcon>
-            <ListItemText primary={item.serviceName} />
+            <ListItemText secondary={item.serviceName} />
           </ListItem>
         ))}
       </List>

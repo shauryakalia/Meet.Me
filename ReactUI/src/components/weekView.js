@@ -1,8 +1,10 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-    Grid, Paper, Button, Typography, Tooltip, Popover
+    Grid, Paper, Button, Typography, Tooltip, Popover, IconButton,
+    Dialog, DialogActions, DialogContent, TextField, DialogTitle
 } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 import BackendService from '../services/backendServices';
 
 
@@ -16,6 +18,16 @@ const weekDays = [0, 1, 2, 3, 4, 5, 6];
 const useStyles = makeStyles(theme => ({
     root: {
         flexGrow: 1
+    },
+    rootModal: {
+        margin: 0,
+        padding: theme.spacing(2),
+    },
+    closeButton: {
+        position: 'absolute',
+        right: theme.spacing(1),
+        top: theme.spacing(1),
+        color: theme.palette.grey[500],
     },
     timeButton: {
         padding: theme.spacing(2),
@@ -52,13 +64,43 @@ export default function WeekView(props) {
     const classes = useStyles();
     const [currentDate] = React.useState(new Date());
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [data, setData] = React.useState({});
+    const [dialogOpen, setDialogOpen] = React.useState(false);
+    const [bookingData, setBookingData] = React.useState({
+        email: undefined,
+        name: undefined,
+        mobile: undefined,
+        notes: undefined,
+    });
+    const [bookedOpen, setBookedOpen] = React.useState(false);
 
-    const handleClick = event => {
+    const handleBookedOpen = () => {
+        setBookedOpen(true);
+    };
+    const handleBookedClosed = () => {
+        setBookedOpen(false);
+    };
+
+    const openBookingDialog = (data) => {
+        setDialogOpen(true);
+    };
+
+    const closeBookingDialog = () => {
+        setDialogOpen(false);
+    };
+
+
+    const handleClick = (event, index, time) => {
+        setData({ index, time });
         setAnchorEl(event.currentTarget);
     };
 
     const handleClose = () => {
         setAnchorEl(null);
+    };
+
+    const textChange = prop => event => {
+        setBookingData({ ...bookingData, [prop]: event.target.value });
     };
 
     const open = Boolean(anchorEl);
@@ -95,40 +137,89 @@ export default function WeekView(props) {
             fromTime: fromTime
         });
         if (response.data.status) {
+            window.location.reload(false);
             alert('Slot added!');
         } else {
             alert("Something went wrong");
         }
     }
 
-    const deleteSlot = async (index, time) => {
-        let selectedDate = new Date(currentDate.getTime() + (index * 24 * 60 * 60 * 1000));
-        let hour = time.split(':')[0];
-        if (time.split(':')[1].split(' ')[1] === 'PM' && hour < 12) {
-            hour = parseInt(hour) + 12;
-        }
-        let minute = time.split(':')[1].split(' ')[0];
-        const fromTime = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate(), hour, minute, 0, 0).getTime();
+    const deleteSlot = async () => {
+        let selectedDate = new Date(currentDate.getTime() + (data.index * 24 * 60 * 60 * 1000));
         for (let i = 0; i < slots.length; i++) {
             let slotTime = new Date(slots[i].startDate).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
-            if (selectedDate.getDate() === new Date(slots[i].startDate).getDate() && slotTime === time) {
-                console.log("Delete", new Date(slots[i].startDate).getDate());
-                console.log("Delete", selectedDate);
-                console.log("Delete", slotTime);
-                console.log("Delete", index);
-                console.log("Delete", fromTime);
-                // const practiceId = localStorage.getItem('userId');
-                // let response = await BackendService.deleteSlot({
-                //     practiceId,
-                //     slotId: slots[i].slotId,
-                //     fromTime: new Date(slots[i].startDate).getTime()
-                // });
-                // if (response.data.status) {
-                //     setAnchorEl(null);
-                //     alert('Slot removed')
-                // } else {
-                //     alert("Something went wrong");
-                // }
+            if (selectedDate.getDate() === new Date(slots[i].startDate).getDate() && slotTime === data.time) {
+                const practiceId = localStorage.getItem('userId');
+                let response = await BackendService.deleteSlot({
+                    practiceId,
+                    slotId: slots[i].slotId,
+                    fromTime: new Date(slots[i].startDate).getTime()
+                });
+                if (response.data.status) {
+                    setAnchorEl(null);
+                    setData({});
+                    window.location.reload(false);
+                    alert('Slot removed')
+                } else {
+                    alert("Something went wrong");
+                }
+            }
+        }
+    }
+
+    const addBooking = async () => {
+        let selectedDate = new Date(currentDate.getTime() + (data.index * 24 * 60 * 60 * 1000));
+        for (let i = 0; i < slots.length; i++) {
+            let slotTime = new Date(slots[i].startDate).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+            if (selectedDate.getDate() === new Date(slots[i].startDate).getDate() && slotTime === data.time) {
+                const practiceId = parseInt(localStorage.getItem('userId'));
+                const serviceId = parseInt(localStorage.getItem('serviceId'));
+                let response = await BackendService.addBooking({
+                    practiceId,
+                    serviceId,
+                    firstName: bookingData.name,
+                    email: bookingData.email,
+                    mobileNumber: bookingData.mobile,
+                    additionalNotes: bookingData.notes !== undefined ? bookingData.notes : 'NA',
+                    slotId: slots[i].slotId,
+                    fromTime: new Date(slots[i].startDate).getTime()
+                });
+                if (response.data.status) {
+                    setAnchorEl(null);
+                    setBookingData({
+                        email: undefined,
+                        name: undefined,
+                        notes: undefined,
+                        mobile: undefined
+                    })
+                    setData({});
+                    window.location.reload(false);
+                    alert('Booking Confirmed')
+                } else {
+                    alert("Something went wrong");
+                }
+            }
+        }
+    }
+
+    const cancelBooking = async () => {
+        let selectedDate = new Date(currentDate.getTime() + (data.index * 24 * 60 * 60 * 1000));
+        for (let i = 0; i < slots.length; i++) {
+            let slotTime = new Date(slots[i].startDate).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+            if (selectedDate.getDate() === new Date(slots[i].startDate).getDate() && slotTime === data.time) {
+                const practiceId = parseInt(localStorage.getItem('userId'));
+                let response = await BackendService.cancelBooking({
+                    practiceId,
+                    slotId: slots[i].slotId,
+                    bookingId: 1
+                });
+                if (response.data.status) {
+                    setBookedOpen(false);
+                    window.location.reload(false);
+                    alert('Booking Cancelled')
+                } else {
+                    alert("Something went wrong");
+                }
             }
         }
     }
@@ -156,7 +247,7 @@ export default function WeekView(props) {
                             {checkSlot(index, time) === 'slot' &&
                                 <div>
                                     <Button variant="outlined" style={{ color: 'blue', borderColor: 'blue' }}
-                                        className={classes.button} onClick={handleClick}>Available</Button>
+                                        className={classes.button} onClick={(e) => handleClick(e, index, time)}>Available</Button>
                                     <Popover
                                         id={id}
                                         open={open}
@@ -175,6 +266,7 @@ export default function WeekView(props) {
                                             variant="outlined"
                                             style={{ color: 'green', borderColor: 'green' }}
                                             className={classes.popoverButton}
+                                            onClick={() => openBookingDialog(data)}
                                         >
                                             Add Booking
                                         </Button>
@@ -187,11 +279,93 @@ export default function WeekView(props) {
                                             Delete Slot
                                         </Button>
                                     </Popover>
+                                    <Dialog open={dialogOpen} onClose={closeBookingDialog} aria-labelledby="form-dialog-title">
+                                        <DialogTitle id="form-dialog-title">Book an Appointment</DialogTitle>
+                                        <DialogContent>
+                                            <TextField
+                                                autoFocus
+                                                margin="dense"
+                                                required
+                                                id="name"
+                                                label="Name"
+                                                type="text"
+                                                value={bookingData.name}
+                                                onChange={textChange('name')}
+                                                fullWidth
+                                            />
+                                            <TextField
+                                                autoFocus
+                                                margin="dense"
+                                                id="email"
+                                                label="Email Address"
+                                                type="email"
+                                                required
+                                                value={bookingData.email}
+                                                onChange={textChange('email')}
+                                                fullWidth
+                                            />
+                                            <TextField
+                                                autoFocus
+                                                margin="dense"
+                                                id="mobile"
+                                                label="Mobile"
+                                                value={bookingData.mobile}
+                                                onChange={textChange('mobile')}
+                                                type="digit"
+                                                required
+                                                fullWidth
+                                            />
+                                            <TextField
+                                                autoFocus
+                                                margin="dense"
+                                                id="notes"
+                                                label="Additional Notes"
+                                                type="text"
+                                                value={bookingData.notes}
+                                                onChange={textChange('notes')}
+                                                fullWidth
+                                            />
+                                        </DialogContent>
+                                        <DialogActions>
+                                            <Button onClick={closeBookingDialog} color="secondary">
+                                                Cancel
+                                            </Button>
+                                            <Button onClick={addBooking} color="secondary"
+                                                disabled={bookingData.email === undefined || bookingData.name === undefined
+                                                    || bookingData.mobile === undefined}>
+                                                Submit
+                                            </Button>
+                                        </DialogActions>
+                                    </Dialog>
                                 </div>
                             }
                             {checkSlot(index, time) === 'booking' &&
-                                <Button variant="outlined" style={{ color: 'green', borderColor: 'green' }}
-                                    className={classes.button}>Booked</Button>
+                                <div>
+                                    <Button variant="outlined" style={{ color: 'green', borderColor: 'green' }}
+                                        className={classes.button} onClick={handleBookedOpen}>Booked</Button>
+                                    <Dialog onClose={handleBookedClosed} aria-labelledby="customized-dialog-title" open={bookedOpen}>
+                                        <DialogTitle disableTypography className={classes.rootModal} >
+                                            <Typography variant="h6">Booking Details</Typography>
+                                            <IconButton aria-label="close" className={classes.closeButton} onClick={handleBookedClosed}>
+                                                <CloseIcon />
+                                            </IconButton>
+                                        </DialogTitle>
+                                        <DialogContent dividers>
+                                            <Typography gutterBottom>
+                                                Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis
+                                                lacus vel augue laoreet rutrum faucibus dolor auctor.
+                                            </Typography>
+                                            <Typography gutterBottom>
+                                                Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel.
+                                            </Typography>
+                                        </DialogContent>
+                                        <DialogActions>
+                                            <Button autoFocus onClick={cancelBooking} color="primary">
+                                                Cancel Booking
+                                      </Button>
+                                        </DialogActions>
+                                    </Dialog>
+                                </div>
                             }
                             {!checkSlot(index, time) &&
                                 // <Button variant="outlined" className={classes.button} 

@@ -252,6 +252,32 @@ function deleteSlot(data) {
   });
 }
 
+function addBooking(data) {
+  return axios({
+    data: data,
+    headers: {
+      contentType: 'application/json',
+    },
+    method: 'POST',
+    url: `${Constant.API_URL}/booking`,
+  });
+}
+
+function cancelBooking(data) {
+  return axios({
+    data: {
+      slotId: data.slotId,
+      bookingId: data.bookingId
+    },
+    headers: {
+      'x-access-token': getToken(),
+      contentType: 'application/json',
+    },
+    method: 'POST',
+    url: `${Constant.API_URL}/practice/${data.practiceId}/cancelBooking`,
+  });
+}
+
 export default {
 
   registerPractice,
@@ -274,4 +300,6 @@ export default {
   deleteTiming,
   addSlot,
   deleteSlot,
+  addBooking,
+  cancelBooking,
 };
