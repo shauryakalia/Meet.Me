@@ -219,12 +219,12 @@ export default function Home() {
                 open={open}
             >
                 <div className={classes.toolbarIcon}>
-                    <IconButton onClick={handleDrawerClose} >
+                    {/* <IconButton onClick={handleDrawerClose} >
                         <ChevronLeftIcon />
-                    </IconButton>
+                    </IconButton> */}
                 </div>
-                <Divider />
-                <ListItems />
+                {/* <Divider /> */}
+                <ListItems color='primary' />
             </Drawer>
             <main className={classes.content}>
                 <div className={classes.appBarSpacer} />
