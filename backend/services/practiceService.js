@@ -229,7 +229,7 @@ module.exports = {
     throw new Error('Error while getting calendar slots');
   },
   getCalendarBookings: async (data) => {
-    const query = `SELECT "bookingId", "slotId", firstName", "email", "mobileNumber", "additionalNotes", "fromTime" from "Bookings"
+    const query = `SELECT "bookingId", "slotId", "firstName", "email", "mobileNumber", "additionalNotes", "fromTime" from "Bookings"
     WHERE "practiceId"=${data.id} AND "serviceId"=${data.serviceId} AND "status"='active' AND "fromTime" BETWEEN ${min} AND ${max}`;
     const result = await db.query(query, { type: Sequelize.QueryTypes.SELECT });
     if (result) {

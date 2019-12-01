@@ -270,8 +270,8 @@ module.exports = {
                     email : booking.email,
                     mobileNumber : booking.mobileNumber,
                     additionalNotes : booking.additionalNotes,
-                    startDate : moment(parseInt(slot.fromTime)).utcOffset(0),
-                    endDate: moment(parseInt(slot.fromTime)+1800000).utcOffset(0),
+                    startDate : moment(parseInt(booking.fromTime)).utcOffset(0),
+                    endDate: moment(parseInt(booking.fromTime)+1800000).utcOffset(0),
                 };
                 result.push(newBooking);
             });
