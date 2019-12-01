@@ -170,10 +170,7 @@ export default function Home() {
     };
 
     const logout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('email');
-        localStorage.removeItem('userId');
-        localStorage.removeItem('serviceId');
+        localStorage.clear();
         window.location.pathname = '/signin'
     };
 
@@ -198,7 +195,7 @@ export default function Home() {
                     <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
                         MeetMe
                     </Typography>
-                    <IconButton color="secondary" aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+                    <IconButton style={{color: 'white'}} aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
                         <UserIcon />
                     </IconButton>
                     <Menu

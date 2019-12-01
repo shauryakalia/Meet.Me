@@ -42,21 +42,41 @@ class Scheduler extends React.PureComponent {
         this.state = {
             slots: [],
             bookings: [],
+            timings: [],
+            // serviceId: localStorage.getItem('serviceId'),
             period: 0
         };
         this.handleChange = this.handleChange.bind(this);
         this.getCalendarSlots = this.getCalendarSlots.bind(this);
         this.getCalendarBookings = this.getCalendarBookings.bind(this);
+        this.getTimings = this.getTimings.bind(this);
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.getCalendarSlots();
         this.getCalendarBookings();
+        this.getTimings();
     }
 
     handleChange = (event, newValue) => {
         this.setState({ period: newValue });
     };
+
+    getTimings = async () => {
+        try {
+            const practiceId = localStorage.getItem('userId');
+            if (practiceId) {
+                let response = await BackendService.getTimings(practiceId);
+                const closedDays = response.data.data.filter(item => {
+                    return item.closed;
+                });
+                console.log("Closed", closedDays);
+                this.setState({ timings: closedDays });
+            }
+        } catch (error) {
+            alert('Something went wrong');
+        }
+    }
 
     getCalendarSlots = async () => {
         try {
@@ -94,13 +114,14 @@ class Scheduler extends React.PureComponent {
                 window.location.pathname = '/signin';
             }
         } catch (error) {
+            console.log("Errro", error);
             alert('Something went wrong');
         }
     }
 
 
     render() {
-        const { slots, bookings, period } = this.state;
+        const { slots, bookings, timings, period } = this.state;
 
         return (
             <Paper square>
@@ -115,7 +136,7 @@ class Scheduler extends React.PureComponent {
                     <Tab label="Month" {...a11yProps(1)} />
                 </Tabs>
                 <TabPanel value={period} index={0}>
-                    <WeekView slots={slots} bookings={bookings} />
+                    <WeekView slots={slots} bookings={bookings} timings={timings}/>
                 </TabPanel>
                 <TabPanel value={period} index={1}>
                     <Paper>

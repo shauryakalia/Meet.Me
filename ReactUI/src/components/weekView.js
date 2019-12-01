@@ -60,7 +60,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function WeekView(props) {
-    const { slots, bookings } = props;
+    const { slots, bookings, timings } = props;
     const classes = useStyles();
     const [currentDate] = React.useState(new Date());
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -73,9 +73,17 @@ export default function WeekView(props) {
         notes: undefined,
     });
     const [bookedOpen, setBookedOpen] = React.useState(false);
+    const [bookingDetails, setBookingDetails] = React.useState({});
 
-    const handleBookedOpen = () => {
-        setBookedOpen(true);
+    const handleBookedOpen = async (index, time) => {
+        let selectedDate = new Date(currentDate.getTime() + (index * 24 * 60 * 60 * 1000));
+        for (let i = 0; i < bookings.length; i++) {
+            let slotTime = new Date(bookings[i].startDate).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+            if (selectedDate.getDate() === new Date(bookings[i].startDate).getDate() && slotTime === time) {
+                setBookingDetails(bookings[i]);
+                setBookedOpen(true);
+            }
+        }
     };
     const handleBookedClosed = () => {
         setBookedOpen(false);
@@ -108,6 +116,12 @@ export default function WeekView(props) {
 
     const checkSlot = (index, time) => {
         let selectedDate = new Date(currentDate.getTime() + (index * 24 * 60 * 60 * 1000)).getDate();
+        const selectedDay = new Date(currentDate.getTime() + (index * 24 * 60 * 60 * 1000)).toDateString().split(" ")[0];
+        for (let i = 0; i < timings.length; i++) {
+            if (selectedDay.toLowerCase() === timings[i].day.slice(0, 3)) {
+                return 'closed';
+            }
+        }
         for (let i = 0; i < bookings.length; i++) {
             let bookingTime = new Date(bookings[i].startDate).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
             if (new Date(bookings[i].startDate).getDate() === selectedDate && bookingTime === time)
@@ -203,24 +217,19 @@ export default function WeekView(props) {
     }
 
     const cancelBooking = async () => {
-        let selectedDate = new Date(currentDate.getTime() + (data.index * 24 * 60 * 60 * 1000));
-        for (let i = 0; i < slots.length; i++) {
-            let slotTime = new Date(slots[i].startDate).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
-            if (selectedDate.getDate() === new Date(slots[i].startDate).getDate() && slotTime === data.time) {
-                const practiceId = parseInt(localStorage.getItem('userId'));
-                let response = await BackendService.cancelBooking({
-                    practiceId,
-                    slotId: slots[i].slotId,
-                    bookingId: 1
-                });
-                if (response.data.status) {
-                    setBookedOpen(false);
-                    window.location.reload(false);
-                    alert('Booking Cancelled')
-                } else {
-                    alert("Something went wrong");
-                }
-            }
+        console.log("Booking", bookingDetails);
+        const practiceId = parseInt(localStorage.getItem('userId'));
+        let response = await BackendService.cancelBooking({
+            practiceId,
+            slotId: bookingDetails.slotId,
+            bookingId: bookingDetails.bookingId
+        });
+        if (response.data.status) {
+            window.location.reload(false);
+            this.handleBookedClosed();
+            alert("Booking Cancelled");
+        } else {
+            alert("Something went wrong");
         }
     }
 
@@ -233,7 +242,7 @@ export default function WeekView(props) {
                 {weekDays.map(index => (
                     <Grid key={index} item xs className={classes.dateGrid}>
                         <Typography>{new Date(currentDate.getTime() + (index * 24 * 60 * 60 * 1000)).toDateString().split(" ")[0]}</Typography>
-                        <Typography>{new Date(currentDate.getTime() + (index * 24 * 60 * 60 * 1000)).getDate()}</Typography>
+                        <Typography>{`${new Date(currentDate.getTime() + (index * 24 * 60 * 60 * 1000)).getDate()} ${new Date(currentDate.getTime() + (index * 24 * 60 * 60 * 1000)).toDateString().split(" ")[1]}`}</Typography>
                     </Grid>
                 ))}
             </Grid>
@@ -342,7 +351,7 @@ export default function WeekView(props) {
                             {checkSlot(index, time) === 'booking' &&
                                 <div>
                                     <Button variant="outlined" style={{ color: 'green', borderColor: 'green' }}
-                                        className={classes.button} onClick={handleBookedOpen}>Booked</Button>
+                                        className={classes.button} onClick={() => handleBookedOpen(index, time)}>Booked</Button>
                                     <Dialog onClose={handleBookedClosed} aria-labelledby="customized-dialog-title" open={bookedOpen}>
                                         <DialogTitle disableTypography className={classes.rootModal} >
                                             <Typography variant="h6">Booking Details</Typography>
@@ -352,20 +361,27 @@ export default function WeekView(props) {
                                         </DialogTitle>
                                         <DialogContent dividers>
                                             <Typography gutterBottom>
-                                                Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis
-                                                lacus vel augue laoreet rutrum faucibus dolor auctor.
+                                                Name: {bookingDetails.firstName}
                                             </Typography>
                                             <Typography gutterBottom>
-                                                Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel.
+                                                Email: {bookingDetails.email}
+                                            </Typography>
+                                            <Typography gutterBottom>
+                                                Mobile: {bookingDetails.mobileNumber}
                                             </Typography>
                                         </DialogContent>
                                         <DialogActions>
-                                            <Button autoFocus onClick={cancelBooking} color="primary">
+                                            <Button autoFocus onClick={() => cancelBooking()} color="primary">
                                                 Cancel Booking
                                       </Button>
                                         </DialogActions>
                                     </Dialog>
                                 </div>
+                            }
+                            {checkSlot(index, time) === 'closed' &&
+                                <Tooltip title="Add Slot" arrow>
+                                    <Button variant="outlined" className={classes.button} disabled={true}>Closed</Button>
+                                </Tooltip>
                             }
                             {!checkSlot(index, time) &&
                                 // <Button variant="outlined" className={classes.button} 

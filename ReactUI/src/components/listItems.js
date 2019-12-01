@@ -13,7 +13,7 @@ class ListItems extends React.Component {
     super(props);
     this.state = {
       data: [],
-      selectedIndex: 0,
+      selectedIndex: localStorage.getItem('serviceIndex') !== undefined ? localStorage.getItem('serviceIndex') : 0,
     }
     this.getServices = this.getServices.bind(this);
     this.handleListItemClick = this.handleListItemClick.bind(this);
@@ -28,19 +28,23 @@ class ListItems extends React.Component {
       const practiceId = localStorage.getItem('userId');
       if (practiceId) {
         let response = await BackendService.getServices(practiceId);
-        this.setState({ data: response.data.data })
-        localStorage.setItem('serviceId', response.data.data[0].serviceId);
+        this.setState({ data: response.data.data });
+        localStorage.setItem('serviceId', response.data.data[this.state.selectedIndex].serviceId);
+        localStorage.setItem('serviceIndex', this.state.selectedIndex);
       } else {
         window.location.pathname = '/signin';
       }
     } catch (error) {
       alert('Something went wrong');
     }
+
   }
 
   handleListItemClick = (event, index, serviceId) => {
     localStorage.setItem('serviceId', serviceId);
-    this.setState({ selectedIndex: index })
+    localStorage.setItem('serviceIndex', index);
+    this.setState({ selectedIndex: index });
+    window.location.reload(false);
   };
 
   render() {
@@ -49,7 +53,7 @@ class ListItems extends React.Component {
         <ListSubheader inset>Services</ListSubheader>
         {this.state.data.map((item, index) => (
           <ListItem key={item.serviceId} button
-            selected={this.state.selectedIndex === index}
+            selected={parseInt(this.state.selectedIndex) === index}
             onClick={event => this.handleListItemClick(event, index, item.serviceId)}
           >
             <ListItemIcon>

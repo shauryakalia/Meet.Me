@@ -145,7 +145,7 @@ class PatientBookAppointment extends React.Component {
     getSlots = async (serviceId) => {
         const data = Promise.all(weekDays.map(async index => {
             const selectedDate = new Date(this.state.currentDate.getTime() + (index * 24 * 60 * 60 * 1000));
-            let formattedDate = selectedDate.getDate() + "-" + (selectedDate.getMonth() + 1) + "-" + selectedDate.getFullYear()
+            let formattedDate = selectedDate.getFullYear() + "-" + (selectedDate.getMonth() + 1) + "-" + selectedDate.getDate();
             try {
                 let response = await BackendService.getSlots({
                     practiceId: this.state.practiceId,
@@ -191,7 +191,7 @@ class PatientBookAppointment extends React.Component {
     }
 
     handleChange = async (event, newValue) => {
-        let slots = await this.getSlots(this.services[newValue].serviceId);
+        let slots = await this.getSlots(this.state.services[newValue].serviceId);
         const closedDays = await this.getTimings();
         this.setState({ value: newValue, slots: slots, closedIndex: closedDays });
     }
@@ -304,13 +304,15 @@ class PatientBookAppointment extends React.Component {
                                                 <Typography variant="subtitle2"
                                                     style={{
                                                         textAlign: 'center',
-                                                        marginTop: '15px'
+                                                        marginTop: '15px',
+                                                        marginBottom: '15px'
                                                     }}>None Available</Typography>
                                             :
                                             <Typography variant="subtitle2"
                                                 style={{
                                                     textAlign: 'center',
-                                                    marginTop: '15px'
+                                                    marginTop: '15px',
+                                                    marginBottom: '15px'
                                                 }}>Closed</Typography>
                                         }
                                     </Grid>

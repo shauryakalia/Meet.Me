@@ -285,6 +285,17 @@ function cancelBooking(data) {
   });
 }
 
+function viewBooking(data) {
+  return axios({
+    headers: {
+      'x-access-token': getToken(),
+      contentType: 'application/json',
+    },
+    method: 'GET',
+    url: `${Constant.API_URL}/practice/${data.practiceId}/getBooking/service/${data.serviceId}?fromTime=${data.fromTime}`,
+  });
+}
+
 export default {
 
   registerPractice,
@@ -310,4 +321,5 @@ export default {
   deleteSlot,
   addBooking,
   cancelBooking,
+  viewBooking,
 };
