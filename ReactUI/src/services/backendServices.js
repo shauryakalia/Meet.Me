@@ -72,10 +72,10 @@ function getPrices(practiceId) {
   });
 }
 
-function getSlots(practiceId, serviceId) {
+function getSlots(data) {
   return axios({
     method: 'GET',
-    url: `${Constant.API_URL}/getSlots/${practiceId}/service/${serviceId}`,
+    url: `${Constant.API_URL}/getSlots/${data.practiceId}/service/${data.serviceId}?date=${data.date}`,
   });
 }
 
