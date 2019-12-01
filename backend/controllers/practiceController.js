@@ -5,6 +5,7 @@ const Path = require('path');
 const _ = require('lodash');
 const sequelize = require('sequelize');
 const mustache = require('mustache');
+const moment = require('moment');
 
 /* ********************************* Import Local Modules ********************************* */
 const { logger } = require('../utils');
@@ -241,8 +242,8 @@ module.exports = {
             getCalendarSlotsResult.map(slot => {
                 let newSlot = {
                     slotId : slot.slotId,
-                    startDate : new Date(parseInt(slot.fromTime)),
-                    endDate: new Date(parseInt(slot.fromTime)+1800000),
+                    startDate : moment(parseInt(slot.fromTime)).utcOffset(0),
+                    endDate: moment(parseInt(slot.fromTime)+1800000).utcOffset(0),
                 };
                 result.push(newSlot);
             });
@@ -268,8 +269,8 @@ module.exports = {
                     email : booking.email,
                     mobileNumber : booking.mobileNumber,
                     additionalNotes : booking.additionalNotes,
-                    startDate : new Date(parseInt(booking.fromTime)),
-                    endDate: new Date(parseInt(booking.fromTime)+1800000),
+                    startDate : moment(parseInt(slot.fromTime)).utcOffset(0),
+                    endDate: moment(parseInt(slot.fromTime)+1800000).utcOffset(0),
                 };
                 result.push(newBooking);
             });
