@@ -114,7 +114,6 @@ class PatientBookAppointment extends React.Component {
                     }
                 }
                 if (j === weekDays.length && i === closedDays.length) {
-                    console.log("Closed", closedIndex);
                     return closedIndex;
                 }
             }

@@ -26,7 +26,6 @@ class Timings extends React.Component {
       const practiceId = localStorage.getItem('userId');
       if (practiceId) {
         let response = await BackendService.getTimings(practiceId);
-        console.log("Timings response", response);
         const sortedDays = await response.data.data.sort((a,b) => a.timingId - b.timingId);
         this.setState({ data: sortedDays })
       } else {
@@ -70,7 +69,6 @@ class Timings extends React.Component {
     try {
       if (oldData) {
         const practiceId = localStorage.getItem('userId');
-        console.log("Newdata", newData);
         let response = await BackendService.updateTiming({
           practiceId,
           timingId: newData.timingId,
@@ -78,7 +76,6 @@ class Timings extends React.Component {
           to: newData.to,
           closed: newData.closed
         });
-        console.log("Response update time", response);
         if (response.data.status) {
           this.setState(prevState => {
             const data = [...prevState.data];

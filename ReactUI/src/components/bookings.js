@@ -27,7 +27,6 @@ async function getBookings() {
                     practiceId: practiceId,
                     serviceId: serviceId
                 });
-                console.log("Booking history", response.data.data);
                 rows = response.data.data;
             }
         } else {

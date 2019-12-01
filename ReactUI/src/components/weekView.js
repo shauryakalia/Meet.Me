@@ -217,7 +217,6 @@ export default function WeekView(props) {
     }
 
     const cancelBooking = async () => {
-        console.log("Booking", bookingDetails);
         const practiceId = parseInt(localStorage.getItem('userId'));
         let response = await BackendService.cancelBooking({
             practiceId,

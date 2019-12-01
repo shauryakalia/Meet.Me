@@ -70,7 +70,6 @@ class Scheduler extends React.PureComponent {
                 const closedDays = response.data.data.filter(item => {
                     return item.closed;
                 });
-                console.log("Closed", closedDays);
                 this.setState({ timings: closedDays });
             }
         } catch (error) {
