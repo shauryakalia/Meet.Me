@@ -82,7 +82,7 @@ export default function Profile() {
                     <Typography component="h1" variant="h6" color="inherit" noWrap onClick={home} className={classes.title}>
                         MeetMe
                     </Typography>
-                    <IconButton color="secondary" aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+                    <IconButton style={{color: 'white'}} aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
                         <UserIcon />
                     </IconButton>
                     <Menu
