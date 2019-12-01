@@ -265,6 +265,7 @@ module.exports = {
             getCalendarBookingsResult.map(booking => {
                 let newBooking = {
                     bookingId : booking.bookingId,
+                    slotId : booking.slotId,
                     firstName : booking.firstName,
                     email : booking.email,
                     mobileNumber : booking.mobileNumber,
