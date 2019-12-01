@@ -4,6 +4,7 @@ const fs = require('fs');
 const Path = require('path');
 const mustache = require('mustache');
 const sequelize = require('sequelize');
+const moment = require('moment');
 
 /* ********************************* Import Local Modules ********************************* */
 const { logger } = require('../utils');
@@ -134,8 +135,8 @@ module.exports = {
             getSlotsResult.map(slot => {
                 let newSlot = {
                     slotId : slot.slotId,
-                    startDate : new Date(parseInt(slot.fromTime)),
-                    endDate: new Date(parseInt(slot.fromTime)+1800000),
+                    startDate : moment(parseInt(slot.fromTime)).utcOffset(0),
+                    endDate: moment(parseInt(slot.fromTime)+1800000).utcOffset(0),
                 };
                 result.push(newSlot);
             });
