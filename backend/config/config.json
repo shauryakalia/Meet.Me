@@ -35,8 +35,6 @@
     "port": 5000,
     "csrfKey": "meetme",
     "secretKey": "meetme123",
-    "email": "contact.app.meetme@gmail.com",
-    "apiKey": "meetme.app",
-    "password": "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"
+    "email": "contact.app.meetme@gmail.com"
   }
 }

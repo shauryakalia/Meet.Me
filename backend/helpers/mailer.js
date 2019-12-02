@@ -6,7 +6,6 @@ const sgMail = require('@sendgrid/mail');
 
 
 /** ********************** Require local modules ************************ */
-const { apiKey, email, password } = config.get('General');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const { logger } = require('../utils');
 

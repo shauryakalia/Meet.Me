@@ -33,7 +33,7 @@ module.exports = {
             logger.info('Add Booking Request: ', req.body);
             const addBookingResult = await openApiService.booking(req.body);
             const service = await Service.findOne({ attributes: ['serviceName'], where: { practiceId: req.body.practiceId, serviceId: req.body.serviceId } });
-            const practice = await User.findOne({ attributes: ['practiceEmail', 'practiceName', 'practiceAddress'], where: { practiceId: req.body.practiceId} });
+            const practice = await User.findOne({ attributes: ['practiceEmail', 'practiceName', 'practiceAddress', 'practicePhoneNumber'], where: { practiceId: req.body.practiceId} });
             if (!addBookingResult) {
                 next(Boom.conflict('Error while booking'));
             } else {
@@ -45,7 +45,8 @@ module.exports = {
                         fromTime: new Date(req.body.fromTime),
                         serviceName : service.serviceName,
                         practiceName : practice.practiceName,
-                        practiceAddress : practice.practiceAddress
+						practiceAddress : practice.practiceAddress,
+						phoneNumber : practice.practicePhoneNumber
                     }),
                 });
                 mailer.sendMail({
