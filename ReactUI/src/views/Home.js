@@ -1,28 +1,29 @@
 import React from 'react';
-import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Drawer from '@material-ui/core/Drawer';
+import Grid from '@material-ui/core/Grid';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Container from '@material-ui/core/Container';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import UserIcon from '@material-ui/icons/Person';
 import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
-import { Bookings, ListItems, Scheduler } from '../components';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import { Bookings, Scheduler, WeekView } from '../components';
+import BackendService from '../services/backendServices';
 
-
-const drawerWidth = 240;
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -65,190 +66,174 @@ function LinkTab(props) {
     );
 }
 
-const useStyles = makeStyles(theme => ({
-    root: {
-        display: 'flex',
-    },
-    toolbar: {
-        paddingRight: 24, // keep right padding when drawer closed
-    },
-    toolbarIcon: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        padding: '0 8px',
-        ...theme.mixins.toolbar,
-    },
-    appBar: {
-        zIndex: theme.zIndex.drawer + 1,
-        transition: theme.transitions.create(['width', 'margin'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
-    },
-    appBarShift: {
-        marginLeft: drawerWidth,
-        width: `calc(100% - ${drawerWidth}px)`,
-        transition: theme.transitions.create(['width', 'margin'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    },
-    menuButton: {
-        marginRight: 36,
-    },
-    menuButtonHidden: {
-        display: 'none',
-    },
-    title: {
-        flexGrow: 1,
-    },
-    drawerPaper: {
-        position: 'relative',
-        whiteSpace: 'nowrap',
-        width: drawerWidth,
-        transition: theme.transitions.create('width', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    },
-    drawerPaperClose: {
-        overflowX: 'hidden',
-        transition: theme.transitions.create('width', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
-        width: theme.spacing(7),
-        [theme.breakpoints.up('sm')]: {
-            width: theme.spacing(9),
-        },
-    },
-    appBarSpacer: theme.mixins.toolbar,
-    content: {
-        flexGrow: 1,
-        height: '100vh',
-        overflow: 'auto',
-    },
-    container: {
-        paddingTop: theme.spacing(4),
-        paddingBottom: theme.spacing(4),
-    },
-    paper: {
-        padding: theme.spacing(2),
-        display: 'flex',
-        overflow: 'auto',
-        flexDirection: 'column',
-    },
-    fixedHeight: {
-        height: 240,
-    },
-}));
+class Home extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: [],
+            open: true,
+            anchorEl: null,
+            value: 0,
+            practiceName: '',
+            serviceId: null,
+            timings: [],
+            selectedIndex: 0,
+        }
+        this.getServices = this.getServices.bind(this);
+        this.getTimings = this.getTimings.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleClick = this.handleClick.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+        this.handleDrawerOpen = this.handleDrawerOpen.bind(this);
+        this.logout = this.logout.bind(this);
+        this.openProfile = this.openProfile.bind(this);
+        this.handleListItemClick = this.handleListItemClick.bind(this);
+    }
 
-export default function Home() {
-    const classes = useStyles();
-    const [open, setOpen] = React.useState(true);
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const [value, setValue] = React.useState(0);
+    componentDidMount() {
+        this.getServices();
+        this.getTimings();
+    }
 
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
+    getServices = async () => {
+        try {
+            const practiceId = localStorage.getItem('userId');
+            if (practiceId) {
+                let response = await BackendService.getServices(practiceId);
+                let res = await BackendService.getPracticeDetails(practiceId);
+                this.setState({ data: response.data.data, serviceId: response.data.data[0].serviceId, practiceName: res.data.data.practiceName });
+            } else {
+                window.location.pathname = '/signin';
+            }
+        } catch (error) {
+            console.log("Error", error);
+            alert('Something went wrong');
+        }
+
+    }
+
+    getTimings = async () => {
+        try {
+            const practiceId = localStorage.getItem('userId');
+            if (practiceId) {
+                let response = await BackendService.getTimings(practiceId);
+                const closedDays = response.data.data.filter(item => {
+                    return item.closed;
+                });
+                this.setState({ timings: closedDays });
+            }
+        } catch (error) {
+            alert('Something went wrong');
+        }
+    }
+
+    handleListItemClick = (event, index, serviceId) => {
+        // this.getCalendarSlots(serviceId);
+        // this.getCalendarBookings(serviceId);
+        this.setState({ selectedIndex: index, serviceId: serviceId });
     };
 
-    const handleClick = event => {
-        setAnchorEl(event.currentTarget);
+    handleChange = (event, newValue) => {
+        this.setState({ value: newValue });
     };
 
-    const handleClose = () => {
-        setAnchorEl(null);
+    handleClick = event => {
+        this.setState({ anchorEl: event.currentTarget });
     };
 
-    const handleDrawerOpen = () => {
-        setOpen(true);
-    };
-    const handleDrawerClose = () => {
-        setOpen(false);
+    handleClose = () => {
+        this.setState({ anchorEl: null });
     };
 
-    const logout = () => {
+    handleDrawerOpen = () => {
+        this.setState({ open: true });
+    };
+    // const handleDrawerClose = () => {
+    //     this.setState({ open: false });
+    // };
+
+    logout = () => {
         localStorage.clear();
         window.location.pathname = '/signin'
     };
 
-    const openProfile = () => {
+    openProfile = () => {
         window.location.pathname = '/profile'
     };
 
-    return (
-        <div className={classes.root}>
-            <CssBaseline />
-            <AppBar color='secondary' position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
-                <Toolbar className={classes.toolbar}>
-                    <IconButton
-                        edge="start"
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-                        MeetMe
-                    </Typography>
-                    <IconButton style={{color: 'white'}} aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
-                        <UserIcon />
-                    </IconButton>
-                    <Menu
-                        id="simple-menu"
-                        anchorEl={anchorEl}
-                        keepMounted
-                        open={Boolean(anchorEl)}
-                        onClose={handleClose}
-                    >
-                        <MenuItem onClick={openProfile}>Profile</MenuItem>
-                        <MenuItem onClick={logout}>Logout</MenuItem>
-                    </Menu>
-
-                </Toolbar>
-            </AppBar>
-            <Drawer
-                variant="permanent"
-                classes={{
-                    paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
-                }}
-                open={open}
-            >
-                <div className={classes.toolbarIcon}>
-                    {/* <IconButton onClick={handleDrawerClose} >
-                        <ChevronLeftIcon />
-                    </IconButton> */}
-                </div>
-                {/* <Divider /> */}
-                <ListItems color='primary' />
-            </Drawer>
-            <main className={classes.content}>
-                <div className={classes.appBarSpacer} />
-                <Container maxWidth="lg" className={classes.container}>
-                    <Paper square>
-                        <Tabs
-                            value={value}
-                            indicatorColor="primary"
-                            textColor="primary"
-                            onChange={handleChange}
-                            aria-label="tabs"
+    render() {
+        return (
+            <div style={{ overflowX: 'hidden', overflowY: 'hidden', minHeight: '100vh' }}>
+                <CssBaseline />
+                <AppBar position='static' color='secondary'>
+                    <Toolbar >
+                        <Typography component="h1" variant="h6" color="inherit" style={{ flexGrow: 1 }} >
+                            MeetMe
+                        </Typography>
+                        <IconButton style={{ color: 'white', marginLeft: '80%' }} aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleClick}>
+                            <Typography component="h3" variant="subtitle1" color="inherit" >
+                                {this.state.practiceName}
+                            </Typography>
+                            <UserIcon />
+                        </IconButton>
+                        <Menu
+                            id="simple-menu"
+                            anchorEl={this.state.anchorEl}
+                            keepMounted
+                            open={Boolean(this.state.anchorEl)}
+                            onClose={this.handleClose}
                         >
-                            <LinkTab label="Diary" {...a11yProps(0)} />
-                            <LinkTab label="Bookings" {...a11yProps(1)} />
-                        </Tabs>
-                        <TabPanel value={value} index={0}>
-                            <Scheduler />
-                        </TabPanel>
-                        <TabPanel value={value} index={1}>
-                            <Bookings />
-                        </TabPanel>
-                    </Paper>
-                </Container>
-            </main>
-        </div>
-    );
+                            <MenuItem onClick={this.openProfile}>Profile</MenuItem>
+                            <MenuItem onClick={this.logout}>Logout</MenuItem>
+                        </Menu>
+                    </Toolbar>
+                </AppBar>
+                <Grid container spacing={1}>
+                    <Grid item xs={3}>
+                        <Paper style={{ height: '100%', minHeight: '100vh' }}>
+                            <List>
+                                <ListSubheader inset>Services</ListSubheader>
+                                {this.state.data.map((item, index) => (
+                                    <ListItem key={item.serviceId} button
+                                        selected={parseInt(this.state.selectedIndex) === index}
+                                        onClick={event => this.handleListItemClick(event, index, item.serviceId)}
+                                    >
+                                        <ListItemIcon>
+                                            <DashboardIcon />
+                                        </ListItemIcon>
+                                        <ListItemText secondary={item.serviceName} />
+                                    </ListItem>
+                                ))}
+                            </List>
+                        </Paper>
+                    </Grid>
+                    <Grid item style={{ marginTop: '20px', minHeight: '100vh' }} xs={9}>
+                        <Container maxWidth="lg" >
+                            <Paper square>
+                                <Tabs
+                                    value={this.state.value}
+                                    indicatorColor="primary"
+                                    textColor="primary"
+                                    onChange={this.handleChange}
+                                    aria-label="tabs"
+                                >
+                                    <LinkTab label="Diary" {...a11yProps(0)} />
+                                    <LinkTab label="Bookings" {...a11yProps(1)} />
+                                </Tabs>
+                                <TabPanel value={this.state.value} index={0}>
+                                    <WeekView serviceId={this.state.serviceId} timings={this.state.timings} />
+                                </TabPanel>
+                                <TabPanel value={this.state.value} index={1}>
+                                    <Bookings serviceId={this.state.serviceId} />
+                                </TabPanel>
+                            </Paper>
+                        </Container>
+                    </Grid>
+                </Grid>
+
+            </div>
+        );
+    }
 }
+
+export default withStyles({}, { withTheme: true })(Home)

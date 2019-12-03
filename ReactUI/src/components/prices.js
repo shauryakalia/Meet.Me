@@ -46,6 +46,7 @@ class Prices extends React.Component {
         price: newData.price
       });
       if (response.data.status) {
+        this.populate();
         this.setState(prevState => {
           const data = [...prevState.data];
           data.push(newData);

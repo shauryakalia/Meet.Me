@@ -8,12 +8,11 @@ import CloseIcon from '@material-ui/icons/Close';
 import BackendService from '../services/backendServices';
 
 
-const timingSlots = ['9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM', '12:00 PM',
-    '12:30 PM', '1:00 PM', '1:30 PM', '2:00 PM', '2:30 PM', '3:00 PM', '3:30 PM', '4:00 PM',
-    '4:30 PM', '5:00 PM', '5:30 PM', '6:00 PM', '6:30 PM'];
+const timingSlots = ['08:00 AM', '08:30 AM', '09:00 AM', '09:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM', '12:00 PM',
+    '12:30 PM', '01:00 PM', '01:30 PM', '02:00 PM', '02:30 PM', '03:00 PM', '03:30 PM', '04:00 PM',
+    '04:30 PM', '05:00 PM', '05:30 PM', '06:00 PM', '06:30 PM', '07:00 PM', '07:30 PM'];
 
 const weekDays = [0, 1, 2, 3, 4, 5, 6];
-
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -30,8 +29,8 @@ const useStyles = makeStyles(theme => ({
         color: theme.palette.grey[500],
     },
     timeButton: {
-        padding: theme.spacing(2),
-        minWidth: '94px',
+        padding: theme.spacing(1),
+        minWidth: '101px',
         minHeight: '82px',
         borderRadius: 0,
     },
@@ -43,13 +42,13 @@ const useStyles = makeStyles(theme => ({
     },
     blankButton: {
         padding: theme.spacing(4),
-        minWidth: '94px',
+        minWidth: '100px',
         minHeight: '74px',
         borderRadius: 0,
     },
     button: {
         padding: theme.spacing(1),
-        minWidth: '111px',
+        minWidth: '107px',
         minHeight: '82px',
         fontSize: 12,
         borderRadius: 0,
@@ -60,20 +59,51 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function WeekView(props) {
-    const { slots, bookings, timings } = props;
+    const { serviceId, timings } = props;
     const classes = useStyles();
+    const [prevService, setPrevService] = React.useState(undefined);
     const [currentDate] = React.useState(new Date());
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [data, setData] = React.useState({});
     const [dialogOpen, setDialogOpen] = React.useState(false);
-    const [bookingData, setBookingData] = React.useState({
-        email: undefined,
-        name: undefined,
-        mobile: undefined,
-        notes: undefined,
-    });
+    const [email, setEmail] = React.useState(undefined);
+    const [mobile, setMobile] = React.useState(undefined);
+    const [name, setName] = React.useState(undefined);
+    const [notes, setNotes] = React.useState(undefined);
     const [bookedOpen, setBookedOpen] = React.useState(false);
     const [bookingDetails, setBookingDetails] = React.useState({});
+    const [slots, setSlots] = React.useState([]);
+    const [bookings, setBookings] = React.useState([]);
+
+    const getCalendarDetails = async () => {
+        try {
+            const practiceId = localStorage.getItem('userId');
+            const service = serviceId;
+            if (practiceId) {
+                if (service) {
+                    let response = await BackendService.getCalendarSlots({
+                        practiceId: practiceId,
+                        serviceId: service
+                    });
+                    let res = await BackendService.getCalendarBookings({
+                        practiceId: practiceId,
+                        serviceId: service
+                    });
+                    setBookings(res.data.data);
+                    setSlots(response.data.data);
+                }
+            } else {
+                window.location.pathname = '/signin';
+            }
+        } catch (error) {
+            alert('Something went wrong');
+        }
+    }
+
+    if (serviceId !== undefined && prevService !== serviceId) {
+        getCalendarDetails();
+        setPrevService(serviceId);
+    }
 
     const handleBookedOpen = async (index, time) => {
         let selectedDate = new Date(currentDate.getTime() + (index * 24 * 60 * 60 * 1000));
@@ -85,11 +115,12 @@ export default function WeekView(props) {
             }
         }
     };
+
     const handleBookedClosed = () => {
         setBookedOpen(false);
     };
 
-    const openBookingDialog = (data) => {
+    const openBookingDialog = () => {
         setDialogOpen(true);
     };
 
@@ -107,10 +138,6 @@ export default function WeekView(props) {
         setAnchorEl(null);
     };
 
-    const textChange = prop => event => {
-        setBookingData({ ...bookingData, [prop]: event.target.value });
-    };
-
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
 
@@ -124,8 +151,9 @@ export default function WeekView(props) {
         }
         for (let i = 0; i < bookings.length; i++) {
             let bookingTime = new Date(bookings[i].startDate).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
-            if (new Date(bookings[i].startDate).getDate() === selectedDate && bookingTime === time)
-                return 'booking';
+            if (new Date(bookings[i].startDate).getDate() === selectedDate && bookingTime === time) {
+                return { status: 'booking', index: i };
+            }
         }
         for (let i = 0; i < slots.length; i++) {
             let slotTime = new Date(slots[i].startDate).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
@@ -136,25 +164,29 @@ export default function WeekView(props) {
     }
 
     const addSlot = async (index, time) => {
-        let selectedDate = new Date(currentDate.getTime() + (index * 24 * 60 * 60 * 1000));
-        let hour = time.split(':')[0];
-        if (time.split(':')[1].split(' ')[1] === 'PM' && hour < 12) {
-            hour = parseInt(hour) + 12;
-        }
-        let minute = time.split(':')[1].split(' ')[0];
-        const fromTime = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate(), hour, minute, 0, 0).getTime();
-        const practiceId = localStorage.getItem('userId');
-        const serviceId = localStorage.getItem('serviceId');
-        let response = await BackendService.addSlot({
-            practiceId,
-            serviceId,
-            fromTime: fromTime
-        });
-        if (response.data.status) {
-            window.location.reload(false);
-            alert('Slot added!');
-        } else {
-            alert("Something went wrong");
+        try {
+            let selectedDate = new Date(currentDate.getTime() + (index * 24 * 60 * 60 * 1000));
+            let hour = time.split(':')[0];
+            if (time.split(':')[1].split(' ')[1] === 'PM' && hour < 12) {
+                hour = parseInt(hour) + 12;
+            }
+            let minute = time.split(':')[1].split(' ')[0];
+            const fromTime = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate(), hour, minute, 0, 0).getTime();
+            const practiceId = localStorage.getItem('userId');
+            const service = parseInt(serviceId);
+            let response = await BackendService.addSlot({
+                practiceId,
+                serviceId: service,
+                fromTime: fromTime
+            });
+            if (response.data.status) {
+                getCalendarDetails();
+                alert('Slot added!');
+            } else {
+                alert("Something went wrong");
+            }
+        } catch (error) {
+            console.log("Error", error);
         }
     }
 
@@ -172,7 +204,7 @@ export default function WeekView(props) {
                 if (response.data.status) {
                     setAnchorEl(null);
                     setData({});
-                    window.location.reload(false);
+                    getCalendarDetails();
                     alert('Slot removed')
                 } else {
                     alert("Something went wrong");
@@ -187,27 +219,25 @@ export default function WeekView(props) {
             let slotTime = new Date(slots[i].startDate).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
             if (selectedDate.getDate() === new Date(slots[i].startDate).getDate() && slotTime === data.time) {
                 const practiceId = parseInt(localStorage.getItem('userId'));
-                const serviceId = parseInt(localStorage.getItem('serviceId'));
+                const service = parseInt(serviceId);
                 let response = await BackendService.addBooking({
                     practiceId,
-                    serviceId,
-                    firstName: bookingData.name,
-                    email: bookingData.email,
-                    mobileNumber: bookingData.mobile,
-                    additionalNotes: bookingData.notes !== undefined ? bookingData.notes : 'NA',
+                    serviceId: service,
+                    firstName: name,
+                    email: email,
+                    mobileNumber: mobile,
+                    additionalNotes: notes !== undefined ? notes : 'NA',
                     slotId: slots[i].slotId,
                     fromTime: new Date(slots[i].startDate).getTime()
                 });
                 if (response.data.status) {
                     setAnchorEl(null);
-                    setBookingData({
-                        email: undefined,
-                        name: undefined,
-                        notes: undefined,
-                        mobile: undefined
-                    })
+                    setEmail(undefined);
+                    setName(undefined);
+                    setMobile(undefined);
+                    setNotes(undefined);
                     setData({});
-                    window.location.reload(false);
+                    getCalendarDetails();
                     alert('Booking Confirmed')
                 } else {
                     alert("Something went wrong");
@@ -224,8 +254,8 @@ export default function WeekView(props) {
             bookingId: bookingDetails.bookingId
         });
         if (response.data.status) {
-            window.location.reload(false);
-            this.handleBookedClosed();
+            handleBookedClosed();
+            getCalendarDetails();
             alert("Booking Cancelled");
         } else {
             alert("Something went wrong");
@@ -274,7 +304,7 @@ export default function WeekView(props) {
                                             variant="outlined"
                                             style={{ color: 'green', borderColor: 'green' }}
                                             className={classes.popoverButton}
-                                            onClick={() => openBookingDialog(data)}
+                                            onClick={() => openBookingDialog()}
                                         >
                                             Add Booking
                                         </Button>
@@ -297,8 +327,8 @@ export default function WeekView(props) {
                                                 id="name"
                                                 label="Name"
                                                 type="text"
-                                                value={bookingData.name}
-                                                onChange={textChange('name')}
+                                                value={name}
+                                                onChange={(e) => setName(e.target.value)}
                                                 fullWidth
                                             />
                                             <TextField
@@ -308,8 +338,8 @@ export default function WeekView(props) {
                                                 label="Email Address"
                                                 type="email"
                                                 required
-                                                value={bookingData.email}
-                                                onChange={textChange('email')}
+                                                value={email}
+                                                onChange={(e) => setEmail(e.target.value)}
                                                 fullWidth
                                             />
                                             <TextField
@@ -317,8 +347,8 @@ export default function WeekView(props) {
                                                 margin="dense"
                                                 id="mobile"
                                                 label="Mobile"
-                                                value={bookingData.mobile}
-                                                onChange={textChange('mobile')}
+                                                value={mobile}
+                                                onChange={(e) => setMobile(e.target.value)}
                                                 type="digit"
                                                 required
                                                 fullWidth
@@ -329,8 +359,8 @@ export default function WeekView(props) {
                                                 id="notes"
                                                 label="Additional Notes"
                                                 type="text"
-                                                value={bookingData.notes}
-                                                onChange={textChange('notes')}
+                                                value={notes}
+                                                onChange={(e) => setNotes(e.target.value)}
                                                 fullWidth
                                             />
                                         </DialogContent>
@@ -339,18 +369,18 @@ export default function WeekView(props) {
                                                 Cancel
                                             </Button>
                                             <Button onClick={addBooking} color="secondary"
-                                                disabled={bookingData.email === undefined || bookingData.name === undefined
-                                                    || bookingData.mobile === undefined}>
+                                                disabled={email === undefined || name === undefined
+                                                    || mobile === undefined}>
                                                 Submit
                                             </Button>
                                         </DialogActions>
                                     </Dialog>
                                 </div>
                             }
-                            {checkSlot(index, time) === 'booking' &&
+                            {checkSlot(index, time).status === 'booking' &&
                                 <div>
                                     <Button variant="outlined" style={{ color: 'green', borderColor: 'green' }}
-                                        className={classes.button} onClick={() => handleBookedOpen(index, time)}>Booked</Button>
+                                        className={classes.button} onClick={() => handleBookedOpen(index, time)}>{bookings[checkSlot(index, time).index].firstName.split(" ")[0].length < 10 ? bookings[checkSlot(index, time).index].firstName.split(" ")[0] : bookings[checkSlot(index, time).index].firstName.split(" ")[0].slice(0, 10) + '...'}</Button>
                                     <Dialog onClose={handleBookedClosed} aria-labelledby="customized-dialog-title" open={bookedOpen}>
                                         <DialogTitle disableTypography className={classes.rootModal} >
                                             <Typography variant="h6">Booking Details</Typography>
@@ -378,13 +408,9 @@ export default function WeekView(props) {
                                 </div>
                             }
                             {checkSlot(index, time) === 'closed' &&
-                                <Tooltip title="Add Slot" arrow>
-                                    <Button variant="outlined" className={classes.button} disabled={true}>Closed</Button>
-                                </Tooltip>
+                                <Button variant="outlined" className={classes.button} disabled={true}>Closed</Button>
                             }
                             {!checkSlot(index, time) &&
-                                // <Button variant="outlined" className={classes.button} 
-                                // onMouseEnter={onMouseOver(index)} onMouseLeave={onMouseOut}>{hoverIndex === index ? 'Add Slot': ''}</Button>
                                 <Tooltip title="Add Slot" arrow>
                                     <Button variant="outlined" className={classes.button} onClick={() => addSlot(index, time)}></Button>
                                 </Tooltip>

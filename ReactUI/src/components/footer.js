@@ -32,28 +32,7 @@ export default function Footer() {
                 className={classes.footer}
             >
                 <Typography variant="caption" className={classes.text}>
-                    Help
-                </Typography>
-                <Typography variant="caption" className={classes.text}>
-                    Status
-                </Typography>
-                <Typography variant="caption" className={classes.text}>
-                    Writers
-                </Typography>
-                <Typography variant="caption" className={classes.text}>
-                    Blog
-                </Typography>
-                <Typography variant="caption" className={classes.text}>
-                    Careers
-                </Typography>
-                <Typography variant="caption" className={classes.text}>
-                    Privacy
-                </Typography>
-                <Typography variant="caption" className={classes.text}>
-                    Terms
-                </Typography>
-                <Typography variant="caption" className={classes.text}>
-                    About
+                    Copyright@2019, All rights reserved
                 </Typography>
             </Grid>
         </div>

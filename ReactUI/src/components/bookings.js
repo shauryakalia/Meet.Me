@@ -7,20 +7,20 @@ import {
 import BackendService from '../services/backendServices';
 
 const columns = [
-    { id: 'firstName', label: 'Name', minWidth: 170 },
-    { id: 'fromTime', label: 'Appointment', minWidth: 100 },
-    { id: 'status', label: 'Status', minWidth: 100 },
-    { id: 'mobileNumber', label: 'Phone', minWidth: 100 },
+    { id: 'firstName', label: 'Name', minWidth: 120 },
+    { id: 'fromTime', label: 'Appointment', minWidth: 90 },
+    { id: 'status', label: 'Status', minWidth: 80 },
+    { id: 'mobileNumber', label: 'Phone', minWidth: 90 },
     { id: 'email', label: 'Email', minWidth: 170 },
-    { id: 'notes', label: 'Additional Notes', minWidth: 100 },
+    { id: 'notes', label: 'Additional Notes', minWidth: 90 },
 ];
 
 let rows = [];
 
-async function getBookings() {
+async function getBookings(id) {
     try {
         const practiceId = localStorage.getItem('userId');
-        const serviceId = localStorage.getItem('serviceId');
+        const serviceId = id;
         if (practiceId) {
             if (serviceId) {
                 let response = await BackendService.getBookings({
@@ -54,12 +54,13 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function Bookings() {
+export default function Bookings(props) {
+    const {serviceId} = props;
     const classes = useStyles();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
-    getBookings();
+    getBookings(serviceId);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
