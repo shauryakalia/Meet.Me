@@ -21,7 +21,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import { Bookings, Scheduler, WeekView } from '../components';
+import { Bookings, WeekView } from '../components';
 import BackendService from '../services/backendServices';
 
 
@@ -117,10 +117,11 @@ class Home extends React.Component {
             const practiceId = localStorage.getItem('userId');
             if (practiceId) {
                 let response = await BackendService.getTimings(practiceId);
-                const closedDays = response.data.data.filter(item => {
-                    return item.closed;
-                });
-                this.setState({ timings: closedDays });
+                // const closedDays = response.data.data.filter(item => {
+                //     return item.closed;
+                // });
+                // this.setState({ timings: closedDays });
+                this.setState({ timings: response.data.data });
             }
         } catch (error) {
             alert('Something went wrong');
@@ -170,7 +171,7 @@ class Home extends React.Component {
                         <Typography component="h1" variant="h6" color="inherit" style={{ flexGrow: 1 }} >
                             MeetMe
                         </Typography>
-                        <IconButton style={{ color: 'white', marginLeft: '80%' }} aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleClick}>
+                        <IconButton style={{ color: 'white', right: 0 }} aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleClick}>
                             <Typography component="h3" variant="subtitle1" color="inherit" >
                                 {this.state.practiceName}
                             </Typography>

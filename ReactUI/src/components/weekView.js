@@ -28,30 +28,24 @@ const useStyles = makeStyles(theme => ({
         top: theme.spacing(1),
         color: theme.palette.grey[500],
     },
-    timeButton: {
-        padding: theme.spacing(1),
-        minWidth: '101px',
-        minHeight: '82px',
-        borderRadius: 0,
+    staticGrid: {
+        border: '1px solid',
+        borderColor: theme.palette.primary.light,
+        color: theme.palette.secondary.main,
+        paddingTop: '15px',
+        textAlign: 'center',
     },
-    dateGrid: {
+    grid: {
         border: '1px solid',
         borderColor: theme.palette.primary.light,
         color: theme.palette.primary.dark,
-        padding: theme.spacing(1)
-    },
-    blankButton: {
-        padding: theme.spacing(4),
-        minWidth: '100px',
-        minHeight: '74px',
-        borderRadius: 0,
+        height: '80px',
     },
     button: {
-        padding: theme.spacing(1),
-        minWidth: '107px',
-        minHeight: '82px',
         fontSize: 12,
-        borderRadius: 0,
+        width: '100%',
+        height: '80px',
+        border: 'none',
     },
     popoverButton: {
         margin: theme.spacing(1),
@@ -62,7 +56,7 @@ export default function WeekView(props) {
     const { serviceId, timings } = props;
     const classes = useStyles();
     const [prevService, setPrevService] = React.useState(undefined);
-    const [currentDate] = React.useState(new Date());
+    const [currentDate, setCurrentDate] = React.useState(new Date());
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [data, setData] = React.useState({});
     const [dialogOpen, setDialogOpen] = React.useState(false);
@@ -146,7 +140,23 @@ export default function WeekView(props) {
         const selectedDay = new Date(currentDate.getTime() + (index * 24 * 60 * 60 * 1000)).toDateString().split(" ")[0];
         for (let i = 0; i < timings.length; i++) {
             if (selectedDay.toLowerCase() === timings[i].day.slice(0, 3)) {
-                return 'closed';
+                const selectedTime = time.split(" ");
+                if (timings[i].closed) {
+                    return 'closed';
+                } else if (selectedTime[1] === 'AM') {
+                    const timeIndex = (timings[i].from.split(" ")[0]).split(":");
+                    if (selectedTime[0].split(':')[0] < timeIndex[0] ||
+                        (selectedTime[0].split(':')[0] === timeIndex[0] && selectedTime[0].split(':')[1] < timeIndex[1]))
+                        return 'closed';
+                } else if (selectedTime[1] === 'PM') {
+                    const timeIndex = (timings[i].to.split(" ")[0]).split(":");
+                    const hourFormat = parseInt(timeIndex[0]) - 12;
+                    if (parseInt(selectedTime[0].split(':')[0]) !== 12) {
+                        if (selectedTime[0].split(':')[0] > hourFormat ||
+                            (selectedTime[0].split(':')[0] === hourFormat && selectedTime[0].split(':')[1] > timeIndex[1]))
+                            return 'closed';
+                    } 
+                }
             }
         }
         for (let i = 0; i < bookings.length; i++) {
@@ -187,6 +197,7 @@ export default function WeekView(props) {
             }
         } catch (error) {
             console.log("Error", error);
+            alert(error);
         }
     }
 
@@ -264,12 +275,13 @@ export default function WeekView(props) {
 
     return (
         <Paper>
+            <Typography>Selected Date</Typography>
             <Grid container >
-                <Grid item xs>
-                    <Button disabled variant="outlined" className={classes.blankButton}></Button>
+                <Grid item xs className={classes.grid}>
+                    {/* <Button disabled variant="outlined" className={classes.blankButton}></Button> */}
                 </Grid>
                 {weekDays.map(index => (
-                    <Grid key={index} item xs className={classes.dateGrid}>
+                    <Grid key={index} item xs className={classes.staticGrid}>
                         <Typography>{new Date(currentDate.getTime() + (index * 24 * 60 * 60 * 1000)).toDateString().split(" ")[0]}</Typography>
                         <Typography>{`${new Date(currentDate.getTime() + (index * 24 * 60 * 60 * 1000)).getDate()} ${new Date(currentDate.getTime() + (index * 24 * 60 * 60 * 1000)).toDateString().split(" ")[1]}`}</Typography>
                     </Grid>
@@ -277,15 +289,15 @@ export default function WeekView(props) {
             </Grid>
             {timingSlots.map(time => (
                 <Grid container key={time} >
-                    <Grid item xs>
-                        <Button disabled variant="outlined" className={classes.timeButton}>{time}</Button>
+                    <Grid item xs className={classes.staticGrid}>
+                        <Typography>{time}</Typography>
                     </Grid>
                     {weekDays.map(index => (
-                        <Grid key={index} item xs>
+                        <Grid key={index} item xs className={classes.grid}>
                             {checkSlot(index, time) === 'slot' &&
                                 <div>
-                                    <Button variant="outlined" style={{ color: 'blue', borderColor: 'blue' }}
-                                        className={classes.button} onClick={(e) => handleClick(e, index, time)}>Available</Button>
+                                    <Button variant="outlined" style={{ color: 'blue' }} className={classes.button}
+                                        onClick={(e) => handleClick(e, index, time)}>Available</Button>
                                     <Popover
                                         id={id}
                                         open={open}
@@ -379,8 +391,8 @@ export default function WeekView(props) {
                             }
                             {checkSlot(index, time).status === 'booking' &&
                                 <div>
-                                    <Button variant="outlined" style={{ color: 'green', borderColor: 'green' }}
-                                        className={classes.button} onClick={() => handleBookedOpen(index, time)}>{bookings[checkSlot(index, time).index].firstName.split(" ")[0].length < 10 ? bookings[checkSlot(index, time).index].firstName.split(" ")[0] : bookings[checkSlot(index, time).index].firstName.split(" ")[0].slice(0, 10) + '...'}</Button>
+                                    <Button variant="outlined" style={{ color: 'green' }} className={classes.button}
+                                        onClick={() => handleBookedOpen(index, time)}>{bookings[checkSlot(index, time).index].firstName.split(" ")[0].length < 10 ? bookings[checkSlot(index, time).index].firstName.split(" ")[0] : bookings[checkSlot(index, time).index].firstName.split(" ")[0].slice(0, 10) + '...'}</Button>
                                     <Dialog onClose={handleBookedClosed} aria-labelledby="customized-dialog-title" open={bookedOpen}>
                                         <DialogTitle disableTypography className={classes.rootModal} >
                                             <Typography variant="h6">Booking Details</Typography>
@@ -408,11 +420,11 @@ export default function WeekView(props) {
                                 </div>
                             }
                             {checkSlot(index, time) === 'closed' &&
-                                <Button variant="outlined" className={classes.button} disabled={true}>Closed</Button>
+                                <Button disabled={true} className={classes.button}>Closed</Button>
                             }
                             {!checkSlot(index, time) &&
                                 <Tooltip title="Add Slot" arrow>
-                                    <Button variant="outlined" className={classes.button} onClick={() => addSlot(index, time)}></Button>
+                                    <Button className={classes.button} onClick={() => addSlot(index, time)}></Button>
                                 </Tooltip>
                             }
                         </Grid>
