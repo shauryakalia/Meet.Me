@@ -4,6 +4,11 @@ import {
     Grid, Paper, Button, Typography, Tooltip, Popover, IconButton,
     Dialog, DialogActions, DialogContent, TextField, DialogTitle
 } from '@material-ui/core';
+import DateFnsUtils from '@date-io/date-fns';
+import {
+    MuiPickersUtilsProvider,
+    KeyboardDatePicker,
+} from '@material-ui/pickers';
 import CloseIcon from '@material-ui/icons/Close';
 import BackendService from '../services/backendServices';
 
@@ -53,23 +58,27 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function WeekView(props) {
-    const { serviceId, timings } = props;
+    const { serviceId, timings, slot, booking } = props;
     const classes = useStyles();
-    const [prevService, setPrevService] = React.useState(undefined);
     const [currentDate, setCurrentDate] = React.useState(new Date());
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [data, setData] = React.useState({});
     const [dialogOpen, setDialogOpen] = React.useState(false);
-    const [email, setEmail] = React.useState(undefined);
-    const [mobile, setMobile] = React.useState(undefined);
-    const [name, setName] = React.useState(undefined);
-    const [notes, setNotes] = React.useState(undefined);
+    const [email, setEmail] = React.useState('');
+    const [mobile, setMobile] = React.useState('');
+    const [name, setName] = React.useState('');
+    const [notes, setNotes] = React.useState('');
     const [bookedOpen, setBookedOpen] = React.useState(false);
     const [bookingDetails, setBookingDetails] = React.useState({});
     const [slots, setSlots] = React.useState([]);
     const [bookings, setBookings] = React.useState([]);
 
-    const getCalendarDetails = async () => {
+    React.useEffect(() => {
+        setSlots(slot);
+        setBookings(booking);
+    }, [props]);
+
+    const getCalenderDetails = async () => {
         try {
             const practiceId = localStorage.getItem('userId');
             const service = serviceId;
@@ -94,11 +103,6 @@ export default function WeekView(props) {
         }
     }
 
-    if (serviceId !== undefined && prevService !== serviceId) {
-        getCalendarDetails();
-        setPrevService(serviceId);
-    }
-
     const handleBookedOpen = async (index, time) => {
         let selectedDate = new Date(currentDate.getTime() + (index * 24 * 60 * 60 * 1000));
         for (let i = 0; i < bookings.length; i++) {
@@ -108,6 +112,10 @@ export default function WeekView(props) {
                 setBookedOpen(true);
             }
         }
+    };
+
+    const handleDateChange = date => {
+        setCurrentDate(date);
     };
 
     const handleBookedClosed = () => {
@@ -155,7 +163,7 @@ export default function WeekView(props) {
                         if (selectedTime[0].split(':')[0] > hourFormat ||
                             (selectedTime[0].split(':')[0] === hourFormat && selectedTime[0].split(':')[1] > timeIndex[1]))
                             return 'closed';
-                    } 
+                    }
                 }
             }
         }
@@ -189,8 +197,9 @@ export default function WeekView(props) {
                 serviceId: service,
                 fromTime: fromTime
             });
+            console.log("Add slot response", response);
             if (response.data.status) {
-                getCalendarDetails();
+                getCalenderDetails()
                 alert('Slot added!');
             } else {
                 alert("Something went wrong");
@@ -215,7 +224,7 @@ export default function WeekView(props) {
                 if (response.data.status) {
                     setAnchorEl(null);
                     setData({});
-                    getCalendarDetails();
+                    getCalenderDetails()
                     alert('Slot removed')
                 } else {
                     alert("Something went wrong");
@@ -231,27 +240,31 @@ export default function WeekView(props) {
             if (selectedDate.getDate() === new Date(slots[i].startDate).getDate() && slotTime === data.time) {
                 const practiceId = parseInt(localStorage.getItem('userId'));
                 const service = parseInt(serviceId);
-                let response = await BackendService.addBooking({
-                    practiceId,
-                    serviceId: service,
-                    firstName: name,
-                    email: email,
-                    mobileNumber: mobile,
-                    additionalNotes: notes !== undefined ? notes : 'NA',
-                    slotId: slots[i].slotId,
-                    fromTime: new Date(slots[i].startDate).getTime()
-                });
-                if (response.data.status) {
-                    setAnchorEl(null);
-                    setEmail(undefined);
-                    setName(undefined);
-                    setMobile(undefined);
-                    setNotes(undefined);
-                    setData({});
-                    getCalendarDetails();
-                    alert('Booking Confirmed')
-                } else {
-                    alert("Something went wrong");
+                try {
+                    let response = await BackendService.addBooking({
+                        practiceId,
+                        serviceId: service,
+                        firstName: name,
+                        email: email,
+                        mobileNumber: mobile,
+                        additionalNotes: notes.length !== 0 ? notes : 'NA',
+                        slotId: parseInt(slots[i].slotId),
+                        fromTime: new Date(slots[i].startDate).getTime()
+                    });
+                    if (response.data.status) {
+                        setAnchorEl(null);
+                        setEmail('');
+                        setName('');
+                        setMobile('');
+                        setNotes('');
+                        setData({});
+                        getCalenderDetails()
+                        alert('Booking Confirmed')
+                    } else {
+                        alert("Something went wrong");
+                    }
+                } catch (error) {
+                    console.log("Errr", error);
                 }
             }
         }
@@ -266,7 +279,7 @@ export default function WeekView(props) {
         });
         if (response.data.status) {
             handleBookedClosed();
-            getCalendarDetails();
+            getCalenderDetails()
             alert("Booking Cancelled");
         } else {
             alert("Something went wrong");
@@ -275,7 +288,23 @@ export default function WeekView(props) {
 
     return (
         <Paper>
-            <Typography>Selected Date</Typography>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <Grid container style={{ marginLeft: '20px' }}>
+                    <KeyboardDatePicker
+                        disableToolbar
+                        variant="inline"
+                        format="MM/dd/yyyy"
+                        margin="normal"
+                        id="select-date"
+                        label="Select Date"
+                        value={currentDate}
+                        onChange={handleDateChange}
+                        KeyboardButtonProps={{
+                            'aria-label': 'change date',
+                        }}
+                    />
+                </Grid>
+            </MuiPickersUtilsProvider>
             <Grid container >
                 <Grid item xs className={classes.grid}>
                     {/* <Button disabled variant="outlined" className={classes.blankButton}></Button> */}
@@ -381,8 +410,8 @@ export default function WeekView(props) {
                                                 Cancel
                                             </Button>
                                             <Button onClick={addBooking} color="secondary"
-                                                disabled={email === undefined || name === undefined
-                                                    || mobile === undefined}>
+                                                disabled={email.length === 0 || name.length === 0
+                                                    || mobile.length === 0}>
                                                 Submit
                                             </Button>
                                         </DialogActions>

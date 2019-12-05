@@ -55,11 +55,11 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function Bookings(props) {
-    const {serviceId} = props;
+    const { serviceId } = props;
     const classes = useStyles();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
+    
     getBookings(serviceId);
 
     const handleChangePage = (event, newPage) => {

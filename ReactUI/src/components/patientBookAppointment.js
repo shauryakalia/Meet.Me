@@ -4,6 +4,11 @@ import {
     Grid, Paper, Typography, Box, Tab, Tabs, Button,
     Dialog, DialogActions, DialogContent, TextField, DialogTitle
 } from '@material-ui/core';
+import DateFnsUtils from '@date-io/date-fns';
+import {
+    MuiPickersUtilsProvider,
+    KeyboardDatePicker,
+} from '@material-ui/pickers';
 import BackendService from '../services/backendServices';
 
 const weekDays = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -72,6 +77,7 @@ class PatientBookAppointment extends React.Component {
         this.getTimings = this.getTimings.bind(this);
         this.addBooking = this.addBooking.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.handleDateChange = this.handleDateChange.bind(this);
         this.openBookingDialog = this.openBookingDialog.bind(this);
         this.closeBookingDialog = this.closeBookingDialog.bind(this);
         this.textChange = this.textChange.bind(this);
@@ -80,6 +86,12 @@ class PatientBookAppointment extends React.Component {
     componentDidMount = () => {
         this.getServices();
     }
+
+    handleDateChange = async date => {
+        let slots = await this.getSlots(this.state.services[this.state.value].serviceId);
+        const closedDays = await this.getTimings(date);
+        this.setState({ currentDate: date, slots: slots, closedIndex: closedDays });
+    };
 
     openBookingDialog = () => {
         this.setState({ openDialog: true });
@@ -95,7 +107,7 @@ class PatientBookAppointment extends React.Component {
         this.setState({ bookingData: booking });
     };
 
-    getTimings = async () => {
+    getTimings = async (date) => {
         try {
             const practiceId = this.state.practiceId;
             if (practiceId) {
@@ -107,7 +119,7 @@ class PatientBookAppointment extends React.Component {
                 let i, j;
                 for (i = 0; i < closedDays.length; i++) {
                     for (j = 0; j < weekDays.length; j++) {
-                        const selectedDay = new Date(this.state.currentDate.getTime() + (weekDays[j] * 24 * 60 * 60 * 1000)).toDateString().split(" ")[0];
+                        const selectedDay = new Date(date.getTime() + (weekDays[j] * 24 * 60 * 60 * 1000)).toDateString().split(" ")[0];
                         if (selectedDay.toLowerCase() === closedDays[i].day.slice(0, 3)) {
                             closedIndex[j] = weekDays[j];
                         }
@@ -130,8 +142,10 @@ class PatientBookAppointment extends React.Component {
                 if (response.data.data.length === 0) {
                     alert('No services found!');
                 }
+                console.log("serviceID", response.data.data[0].serviceId);
                 let slots = await this.getSlots(response.data.data[0].serviceId);
-                const closedDays = await this.getTimings();
+                const closedDays = await this.getTimings(this.state.currentDate);
+                console.log("Slots", slots);
                 this.setState({ services: response.data.data, slots: slots, closedIndex: closedDays });
             } else {
                 alert('Something went wrong');
@@ -151,6 +165,7 @@ class PatientBookAppointment extends React.Component {
                     serviceId,
                     date: formattedDate,
                 });
+                console.log("SLots", response);
                 return response.data.data;
             } catch (error) {
                 console.log("Error", error);
@@ -191,7 +206,7 @@ class PatientBookAppointment extends React.Component {
 
     handleChange = async (event, newValue) => {
         let slots = await this.getSlots(this.state.services[newValue].serviceId);
-        const closedDays = await this.getTimings();
+        const closedDays = await this.getTimings(this.state.currentDate);
         this.setState({ value: newValue, slots: slots, closedIndex: closedDays });
     }
 
@@ -211,6 +226,23 @@ class PatientBookAppointment extends React.Component {
                         <LinkTab key={service.serviceName} label={service.serviceName} {...a11yProps(index)} />
                     ))}
                 </Tabs>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <Grid container style={{ marginLeft: '20px' }}>
+                            <KeyboardDatePicker
+                                disableToolbar
+                                variant="inline"
+                                format="MM/dd/yyyy"
+                                margin="normal"
+                                id="select-date"
+                                label="Select Date"
+                                value={this.state.currentDate}
+                                onChange={this.handleDateChange}
+                                KeyboardButtonProps={{
+                                    'aria-label': 'change date',
+                                }}
+                            />
+                        </Grid>
+                    </MuiPickersUtilsProvider>  
                 {this.state.services.map((service, index) => (
                     <TabPanel key={service.serviceId} value={this.state.value} index={index}>
                         <Paper>

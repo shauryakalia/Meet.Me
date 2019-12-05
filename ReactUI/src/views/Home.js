@@ -77,9 +77,12 @@ class Home extends React.Component {
             practiceName: '',
             serviceId: null,
             timings: [],
+            slots: [],
+            bookings: [],
             selectedIndex: 0,
         }
         this.getServices = this.getServices.bind(this);
+        this.getCalendarDetails = this.getCalendarDetails.bind(this);
         this.getTimings = this.getTimings.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleClick = this.handleClick.bind(this);
@@ -90,9 +93,35 @@ class Home extends React.Component {
         this.handleListItemClick = this.handleListItemClick.bind(this);
     }
 
-    componentDidMount() {
-        this.getServices();
-        this.getTimings();
+    componentDidMount = async () => {
+        await this.getServices();
+        await this.getTimings();
+    }
+
+    getCalendarDetails = async (service) => {
+        try {
+            const practiceId = localStorage.getItem('userId');
+            if (practiceId) {
+                if (service) {
+                    let response = await BackendService.getCalendarSlots({
+                        practiceId: practiceId,
+                        serviceId: service
+                    });
+                    let res = await BackendService.getCalendarBookings({
+                        practiceId: practiceId,
+                        serviceId: service
+                    });
+                    return {
+                        slots: response.data.data,
+                        bookings: res.data.data
+                    }
+                }
+            } else {
+                window.location.pathname = '/signin';
+            }
+        } catch (error) {
+            alert('Something went wrong');
+        }
     }
 
     getServices = async () => {
@@ -101,7 +130,8 @@ class Home extends React.Component {
             if (practiceId) {
                 let response = await BackendService.getServices(practiceId);
                 let res = await BackendService.getPracticeDetails(practiceId);
-                this.setState({ data: response.data.data, serviceId: response.data.data[0].serviceId, practiceName: res.data.data.practiceName });
+                const { slots, bookings } = await this.getCalendarDetails(response.data.data[0].serviceId);
+                this.setState({ data: response.data.data, slots: slots, bookings: bookings, serviceId: response.data.data[0].serviceId, practiceName: res.data.data.practiceName });
             } else {
                 window.location.pathname = '/signin';
             }
@@ -128,10 +158,9 @@ class Home extends React.Component {
         }
     }
 
-    handleListItemClick = (event, index, serviceId) => {
-        // this.getCalendarSlots(serviceId);
-        // this.getCalendarBookings(serviceId);
-        this.setState({ selectedIndex: index, serviceId: serviceId });
+    handleListItemClick = async (event, index, serviceId) => {
+        const { slots, bookings } = await this.getCalendarDetails(serviceId);
+        this.setState({ selectedIndex: index, serviceId: serviceId, slots: slots, bookings: bookings });
     };
 
     handleChange = (event, newValue) => {
@@ -222,7 +251,8 @@ class Home extends React.Component {
                                     <LinkTab label="Bookings" {...a11yProps(1)} />
                                 </Tabs>
                                 <TabPanel value={this.state.value} index={0}>
-                                    <WeekView serviceId={this.state.serviceId} timings={this.state.timings} />
+                                    <WeekView serviceId={this.state.serviceId} timings={this.state.timings}
+                                        slot={this.state.slots} booking={this.state.bookings} />
                                 </TabPanel>
                                 <TabPanel value={this.state.value} index={1}>
                                     <Bookings serviceId={this.state.serviceId} />
