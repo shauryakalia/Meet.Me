@@ -242,8 +242,10 @@ module.exports = {
             getCalendarSlotsResult.map(slot => {
                 let newSlot = {
                     slotId : slot.slotId,
-                    startDate : moment(parseInt(slot.fromTime)).utcOffset(0),
-                    endDate: moment(parseInt(slot.fromTime)+1800000).utcOffset(0),
+                    // startDate : moment(parseInt(slot.fromTime)).utcOffset(0),
+                    // endDate: moment(parseInt(slot.fromTime)+1800000).utcOffset(0),
+                    startDate : new Date(parseInt(slot.fromTime)),
+                    endDate : new Date((parseInt(slot.fromTime)+1800000)),
                 };
                 result.push(newSlot);
             });
@@ -270,8 +272,10 @@ module.exports = {
                     email : booking.email,
                     mobileNumber : booking.mobileNumber,
                     additionalNotes : booking.additionalNotes,
-                    startDate : moment(parseInt(booking.fromTime)).utcOffset(0),
-                    endDate: moment(parseInt(booking.fromTime)+1800000).utcOffset(0),
+                    // startDate : moment(parseInt(booking.fromTime)).utcOffset(0),
+                    // endDate: moment(parseInt(booking.fromTime)+1800000).utcOffset(0),
+                    startDate : new Date(parseInt(booking.fromTime)),
+                    endDate : new Date((parseInt(booking.fromTime)+1800000)),
                 };
                 result.push(newBooking);
             });
