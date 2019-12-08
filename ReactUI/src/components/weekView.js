@@ -1,8 +1,8 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-    Grid, Paper, Button, Typography, Tooltip, Popover, IconButton,
-    Dialog, DialogActions, DialogContent, TextField, DialogTitle
+    Grid, Paper, Button, Typography, Tooltip, Popover, IconButton, CssBaseline,
+    Dialog, DialogActions, DialogContent, TextField, DialogTitle, Snackbar
 } from '@material-ui/core';
 import DateFnsUtils from '@date-io/date-fns';
 import {
@@ -72,6 +72,18 @@ export default function WeekView(props) {
     const [bookingDetails, setBookingDetails] = React.useState({});
     const [slots, setSlots] = React.useState([]);
     const [bookings, setBookings] = React.useState([]);
+    const [state, setState] = React.useState({
+        snackOpen: false,
+        message: '',
+        vertical: 'top',
+        horizontal: 'right',
+    });
+
+    const { vertical, horizontal, snackOpen, message } = state;
+
+    const handleSnackClose = () => {
+        setState({ ...state, snackOpen: false });
+    };
 
     React.useEffect(() => {
         setSlots(slot);
@@ -99,7 +111,7 @@ export default function WeekView(props) {
                 window.location.pathname = '/signin';
             }
         } catch (error) {
-            alert('Something went wrong');
+            setState({ ...state, snackOpen: true, message: 'Something went wrong!' });
         }
     }
 
@@ -169,14 +181,17 @@ export default function WeekView(props) {
         }
         for (let i = 0; i < bookings.length; i++) {
             let bookingTime = new Date(bookings[i].startDate).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+            bookingTime = bookingTime.length === 7 ? '0' + bookingTime : bookingTime;
             if (new Date(bookings[i].startDate).getDate() === selectedDate && bookingTime === time) {
                 return { status: 'booking', index: i };
             }
         }
         for (let i = 0; i < slots.length; i++) {
             let slotTime = new Date(slots[i].startDate).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
-            if (new Date(slots[i].startDate).getDate() === selectedDate && slotTime === time)
+            slotTime = slotTime.length === 7 ? '0' + slotTime : slotTime;
+            if (new Date(slots[i].startDate).getDate() === selectedDate && slotTime === time) { 
                 return 'slot';
+            }
         }
         return false;
     }
@@ -197,16 +212,14 @@ export default function WeekView(props) {
                 serviceId: service,
                 fromTime: fromTime
             });
-            console.log("Add slot response", response);
             if (response.data.status) {
                 getCalenderDetails()
-                alert('Slot added!');
+                setState({ ...state, snackOpen: true, message: 'Slot added!' });
             } else {
-                alert("Something went wrong");
+                setState({ ...state, snackOpen: true, message: 'Something went wrong!' });
             }
         } catch (error) {
-            console.log("Error", error);
-            alert(error);
+            setState({ ...state, snackOpen: true, message: 'Something went wrong!' });
         }
     }
 
@@ -225,9 +238,9 @@ export default function WeekView(props) {
                     setAnchorEl(null);
                     setData({});
                     getCalenderDetails()
-                    alert('Slot removed')
+                    setState({ ...state, snackOpen: true, message: 'Slot removed!' });
                 } else {
-                    alert("Something went wrong");
+                    setState({ ...state, snackOpen: true, message: 'Something went wrong!' });
                 }
             }
         }
@@ -237,6 +250,7 @@ export default function WeekView(props) {
         let selectedDate = new Date(currentDate.getTime() + (data.index * 24 * 60 * 60 * 1000));
         for (let i = 0; i < slots.length; i++) {
             let slotTime = new Date(slots[i].startDate).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+            slotTime = slotTime.length === 7 ? '0' + slotTime : slotTime;
             if (selectedDate.getDate() === new Date(slots[i].startDate).getDate() && slotTime === data.time) {
                 const practiceId = parseInt(localStorage.getItem('userId'));
                 const service = parseInt(serviceId);
@@ -258,13 +272,14 @@ export default function WeekView(props) {
                         setMobile('');
                         setNotes('');
                         setData({});
-                        getCalenderDetails()
-                        alert('Booking Confirmed')
+                        getCalenderDetails();
+                        closeBookingDialog();
+                        setState({ ...state, snackOpen: true, message: 'Booking confirmed!' });
                     } else {
-                        alert("Something went wrong");
+                        setState({ ...state, snackOpen: true, message: 'Something went wrong!' });
                     }
                 } catch (error) {
-                    console.log("Errr", error);
+                    setState({ ...state, snackOpen: true, message: 'Something went wrong!' });
                 }
             }
         }
@@ -280,14 +295,25 @@ export default function WeekView(props) {
         if (response.data.status) {
             handleBookedClosed();
             getCalenderDetails()
-            alert("Booking Cancelled");
+            setState({ ...state, snackOpen: true, message: 'Booking cancelled!' });
         } else {
-            alert("Something went wrong");
+            setState({ ...state, snackOpen: true, message: 'Something went wrong!' });
         }
     }
 
     return (
         <Paper>
+            <CssBaseline />
+            <Snackbar
+                anchorOrigin={{ vertical, horizontal }}
+                key={`${vertical},${horizontal}`}
+                open={snackOpen}
+                onClose={handleSnackClose}
+                ContentProps={{
+                    'aria-describedby': 'message-id',
+                }}
+                message={<span id="message-id">{message}</span>}
+            />
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <Grid container style={{ marginLeft: '20px' }}>
                     <KeyboardDatePicker

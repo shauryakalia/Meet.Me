@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
+import Snackbar from '@material-ui/core/Snackbar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
@@ -39,6 +40,18 @@ const useStyles = makeStyles(theme => ({
 export default function Profile() {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [state, setState] = React.useState({
+        open: false,
+        message: '',
+        vertical: 'top',
+        horizontal: 'right',
+    });
+
+    const { vertical, horizontal, open, message } = state;
+
+    const handleSnackClose = () => {
+        setState({ ...state, open: false });
+    };
 
     const handleClick = event => {
         setAnchorEl(event.currentTarget);
@@ -56,13 +69,13 @@ export default function Profile() {
                 if (response.data.data.length > 0) {
                     window.location.pathname = '/home';
                 } else {
-                    alert('Register atleast one service');
+                    setState({ ...state, open: true, message: 'Register atleast one service!' });
                 }
             } else {
                 window.location.pathname = '/signin';
             }
         } catch (error) {
-            alert('Something went wrong');
+            setState({ ...state, open: true, message: 'Something went wrong!' });
         }
     }
 
@@ -98,6 +111,16 @@ export default function Profile() {
 
                 </Toolbar>
             </AppBar>
+            <Snackbar
+                anchorOrigin={{ vertical, horizontal }}
+                key={`${vertical},${horizontal}`}
+                open={open}
+                onClose={handleSnackClose}
+                ContentProps={{
+                    'aria-describedby': 'message-id',
+                }}
+                message={<span id="message-id">{message}</span>}
+            />
             <main className={classes.content}>
                 <div className={classes.appBarSpacer} />
                 <Grid container spacing={3}>

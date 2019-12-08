@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-    Grid, Paper, Typography, Box, Tab, Tabs, Button,
+    Grid, Paper, Typography, Box, Tab, Tabs, Button, Snackbar, CssBaseline,
     Dialog, DialogActions, DialogContent, TextField, DialogTitle
 } from '@material-ui/core';
 import DateFnsUtils from '@date-io/date-fns';
@@ -65,6 +65,10 @@ class PatientBookAppointment extends React.Component {
             slots: [],
             closedIndex: [],
             openDialog: false,
+            snackOpen: false,
+            message: '',
+            vertical: 'top',
+            horizontal: 'right',
             bookingData: {
                 email: undefined,
                 name: undefined,
@@ -80,12 +84,17 @@ class PatientBookAppointment extends React.Component {
         this.handleDateChange = this.handleDateChange.bind(this);
         this.openBookingDialog = this.openBookingDialog.bind(this);
         this.closeBookingDialog = this.closeBookingDialog.bind(this);
+        this.handleSnackClose = this.handleSnackClose.bind(this);
         this.textChange = this.textChange.bind(this);
     }
 
     componentDidMount = () => {
         this.getServices();
     }
+
+    handleSnackClose = () => {
+        this.setState({ ...this.state, snackOpen: false });
+    };
 
     handleDateChange = async date => {
         let slots = await this.getSlots(this.state.services[this.state.value].serviceId);
@@ -130,7 +139,7 @@ class PatientBookAppointment extends React.Component {
                 }
             }
         } catch (error) {
-            alert('Something went wrong');
+            this.setState({ ...this.state, snackOpen: true, message: 'Something went wrong!' });
         }
     }
 
@@ -140,7 +149,7 @@ class PatientBookAppointment extends React.Component {
             if (practiceId) {
                 let response = await BackendService.getServices(practiceId);
                 if (response.data.data.length === 0) {
-                    alert('No services found!');
+                    this.setState({ ...this.state, snackOpen: true, message: 'No services found!' });
                 }
                 console.log("serviceID", response.data.data[0].serviceId);
                 let slots = await this.getSlots(response.data.data[0].serviceId);
@@ -148,10 +157,10 @@ class PatientBookAppointment extends React.Component {
                 console.log("Slots", slots);
                 this.setState({ services: response.data.data, slots: slots, closedIndex: closedDays });
             } else {
-                alert('Something went wrong');
+                this.setState({ ...this.state, snackOpen: true, message: 'Something went wrong!' });
             }
         } catch (error) {
-            alert('Something went wrong');
+            this.setState({ ...this.state, snackOpen: true, message: 'Something went wrong!' });
         }
     }
 
@@ -197,10 +206,10 @@ class PatientBookAppointment extends React.Component {
                     mobile: undefined
                 }
             })
-            alert('Booking Confirmed')
+            this.setState({ ...this.state, snackOpen: true, message: 'Booking Confirmed!' });
             this.forceUpdate();
         } else {
-            alert("Something went wrong");
+            this.setState({ ...this.state, snackOpen: true, message: 'Something went wrong!' });
         }
     }
 
@@ -211,9 +220,21 @@ class PatientBookAppointment extends React.Component {
     }
 
     render() {
+        const { vertical, horizontal, snackOpen, message } = this.state;
 
         return (
             <Paper square>
+                <CssBaseline />
+                <Snackbar
+                    anchorOrigin={{ vertical, horizontal }}
+                    key={`${vertical},${horizontal}`}
+                    open={snackOpen}
+                    onClose={this.handleSnackClose}
+                    ContentProps={{
+                        'aria-describedby': 'message-id',
+                    }}
+                    message={<span id="message-id">{message}</span>}
+                />
                 <Tabs
                     value={this.state.value}
                     key={this.state.value}
@@ -227,22 +248,22 @@ class PatientBookAppointment extends React.Component {
                     ))}
                 </Tabs>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <Grid container style={{ marginLeft: '20px' }}>
-                            <KeyboardDatePicker
-                                disableToolbar
-                                variant="inline"
-                                format="MM/dd/yyyy"
-                                margin="normal"
-                                id="select-date"
-                                label="Select Date"
-                                value={this.state.currentDate}
-                                onChange={this.handleDateChange}
-                                KeyboardButtonProps={{
-                                    'aria-label': 'change date',
-                                }}
-                            />
-                        </Grid>
-                    </MuiPickersUtilsProvider>  
+                    <Grid container style={{ marginLeft: '20px' }}>
+                        <KeyboardDatePicker
+                            disableToolbar
+                            variant="inline"
+                            format="MM/dd/yyyy"
+                            margin="normal"
+                            id="select-date"
+                            label="Select Date"
+                            value={this.state.currentDate}
+                            onChange={this.handleDateChange}
+                            KeyboardButtonProps={{
+                                'aria-label': 'change date',
+                            }}
+                        />
+                    </Grid>
+                </MuiPickersUtilsProvider>
                 {this.state.services.map((service, index) => (
                     <TabPanel key={service.serviceId} value={this.state.value} index={index}>
                         <Paper>
