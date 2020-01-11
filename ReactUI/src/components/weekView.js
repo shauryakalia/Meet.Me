@@ -189,7 +189,7 @@ export default function WeekView(props) {
         for (let i = 0; i < slots.length; i++) {
             let slotTime = new Date(slots[i].startDate).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
             slotTime = slotTime.length === 7 ? '0' + slotTime : slotTime;
-            if (new Date(slots[i].startDate).getDate() === selectedDate && slotTime === time) { 
+            if (new Date(slots[i].startDate).getDate() === selectedDate && slotTime === time) {
                 return 'slot';
             }
         }
@@ -227,6 +227,9 @@ export default function WeekView(props) {
         let selectedDate = new Date(currentDate.getTime() + (data.index * 24 * 60 * 60 * 1000));
         for (let i = 0; i < slots.length; i++) {
             let slotTime = new Date(slots[i].startDate).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+            if (slotTime.length === 7) {
+                slotTime = '0' + slotTime;
+            }
             if (selectedDate.getDate() === new Date(slots[i].startDate).getDate() && slotTime === data.time) {
                 const practiceId = localStorage.getItem('userId');
                 let response = await BackendService.deleteSlot({
