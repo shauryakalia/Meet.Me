@@ -11,7 +11,6 @@ import {
 } from '@material-ui/pickers';
 import BackendService from '../services/backendServices';
 
-const weekDays = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -58,6 +57,7 @@ class PatientBookAppointment extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            weekDays: [],
             services: [],
             practiceId: props.practiceId,
             value: 0,
@@ -89,6 +89,13 @@ class PatientBookAppointment extends React.Component {
     }
 
     componentDidMount = () => {
+        if (window.innerWidth < 500){
+            this.setState({weekDays: [0,1,2]})
+        } else if (window.innerWidth >= 500 && window.innerWidth <= 900){
+            this.setState({weekDays: [0,1,2,3,4]})
+        } else {
+            this.setState({weekDays: [0,1,2,3,4,5,6,7,8,9]});
+        }
         this.getServices();
     }
 
@@ -127,14 +134,14 @@ class PatientBookAppointment extends React.Component {
                 let closedIndex = [];
                 let i, j;
                 for (i = 0; i < closedDays.length; i++) {
-                    for (j = 0; j < weekDays.length; j++) {
-                        const selectedDay = new Date(date.getTime() + (weekDays[j] * 24 * 60 * 60 * 1000)).toDateString().split(" ")[0];
+                    for (j = 0; j < this.state.weekDays.length; j++) {
+                        const selectedDay = new Date(date.getTime() + (this.state.weekDays[j] * 24 * 60 * 60 * 1000)).toDateString().split(" ")[0];
                         if (selectedDay.toLowerCase() === closedDays[i].day.slice(0, 3)) {
-                            closedIndex[j] = weekDays[j];
+                            closedIndex[j] = this.state.weekDays[j];
                         }
                     }
                 }
-                if (j === weekDays.length && i === closedDays.length) {
+                if (j === this.state.weekDays.length && i === closedDays.length) {
                     return closedIndex;
                 }
             }
@@ -165,7 +172,7 @@ class PatientBookAppointment extends React.Component {
     }
 
     getSlots = async (serviceId) => {
-        const data = Promise.all(weekDays.map(async index => {
+        const data = Promise.all(this.state.weekDays.map(async index => {
             const selectedDate = new Date(this.state.currentDate.getTime() + (index * 24 * 60 * 60 * 1000));
             let formattedDate = selectedDate.getFullYear() + "-" + (selectedDate.getMonth() + 1) + "-" + selectedDate.getDate();
             try {
@@ -268,7 +275,7 @@ class PatientBookAppointment extends React.Component {
                     <TabPanel key={service.serviceId} value={this.state.value} index={index}>
                         <Paper>
                             <Grid container >
-                                {weekDays.map(index => (
+                                {this.state.weekDays.map(index => (
                                     <Grid key={index} item xs >
                                         <Paper style={{
                                             border: '1px solid',

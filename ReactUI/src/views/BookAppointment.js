@@ -33,6 +33,7 @@ class BookAppointment extends React.PureComponent {
         super(props);
 
         this.state = {
+            width: window.innerWidth,
             practiceId: props.match.params.practiceId,
             timings: [],
             prices: [],
@@ -44,6 +45,7 @@ class BookAppointment extends React.PureComponent {
     }
 
     componentDidMount() {
+        console.log("Device width", this.state.width);
         this.getPracticeDetails();
     }
 
@@ -110,7 +112,7 @@ class BookAppointment extends React.PureComponent {
                         </Typography>
                        <PatientBookAppointment practiceId={this.state.practiceId} />
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={this.state.width < 900 ? 12 : 6}>
                         <Typography variant="h6" >
                             Price List
                     </Typography>
@@ -147,7 +149,7 @@ class BookAppointment extends React.PureComponent {
                             </Table>
                         </Paper>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={this.state.width < 900 ? 12 : 6}>
                         <Typography variant="h6" >
                             Opening Hours
                     </Typography>
