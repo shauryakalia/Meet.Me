@@ -245,6 +245,8 @@ class PatientBookAppointment extends React.Component {
                 <Tabs
                     value={this.state.value}
                     key={this.state.value}
+                    variant="scrollable"
+                    scrollButtons="auto"
                     indicatorColor="primary"
                     textColor="primary"
                     onChange={this.handleChange}
