@@ -89,12 +89,12 @@ class PatientBookAppointment extends React.Component {
     }
 
     componentDidMount = () => {
-        if (window.innerWidth < 500){
-            this.setState({weekDays: [0,1,2]})
-        } else if (window.innerWidth >= 500 && window.innerWidth <= 900){
-            this.setState({weekDays: [0,1,2,3,4]})
+        if (window.innerWidth < 500) {
+            this.setState({ weekDays: [0, 1, 2] })
+        } else if (window.innerWidth >= 500 && window.innerWidth <= 900) {
+            this.setState({ weekDays: [0, 1, 2, 3, 4] })
         } else {
-            this.setState({weekDays: [0,1,2,3,4,5,6,7,8,9]});
+            this.setState({ weekDays: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] });
         }
         this.getServices();
     }
@@ -106,6 +106,7 @@ class PatientBookAppointment extends React.Component {
     handleDateChange = async date => {
         let slots = await this.getSlots(this.state.services[this.state.value].serviceId);
         const closedDays = await this.getTimings(date);
+        console.log("Closed Days", closedDays);
         this.setState({ currentDate: date, slots: slots, closedIndex: closedDays });
     };
 
@@ -290,77 +291,84 @@ class PatientBookAppointment extends React.Component {
                                             <Typography>{`${new Date(this.state.currentDate.getTime() + (index * 24 * 60 * 60 * 1000)).toDateString().split(" ")[0]}`}</Typography>
                                             <Typography>{`${new Date(this.state.currentDate.getTime() + (index * 24 * 60 * 60 * 1000)).getDate()} ${new Date(this.state.currentDate.getTime() + (index * 24 * 60 * 60 * 1000)).toDateString().split(" ")[1]}`}</Typography>
                                         </Paper>
-                                        {this.state.closedIndex.length !== 0 && this.state.closedIndex[index] !== index ?
-                                            this.state.slots[index].length !== 0 ? this.state.slots[index].map(slot => (
-                                                <div>
-                                                    <Button key={slot.slotId} variant="contained" color='primary'
-                                                        onClick={this.openBookingDialog}
-                                                        style={{
-                                                            borderRadius: 0, border: '1px solid darkGrey',
-                                                            margin: '5px', marginLeft: '15px', boxShadow: 'none'
-                                                        }}>
-                                                        {new Date(slot.startDate).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
-                                                    </Button>
-                                                    <Dialog open={this.state.openDialog} onClose={this.closeBookingDialog} aria-labelledby="form-dialog-title">
-                                                        <DialogTitle id="form-dialog-title">Book an Appointment</DialogTitle>
-                                                        <DialogContent>
-                                                            <TextField
-                                                                autoFocus
-                                                                margin="dense"
-                                                                required
-                                                                id="name"
-                                                                label="Name"
-                                                                type="text"
-                                                                value={this.state.bookingData.name}
-                                                                onChange={this.textChange('name')}
-                                                                fullWidth
-                                                            />
-                                                            <TextField
-                                                                autoFocus
-                                                                margin="dense"
-                                                                id="email"
-                                                                label="Email Address"
-                                                                type="email"
-                                                                required
-                                                                value={this.state.bookingData.email}
-                                                                onChange={this.textChange('email')}
-                                                                fullWidth
-                                                            />
-                                                            <TextField
-                                                                autoFocus
-                                                                margin="dense"
-                                                                id="mobile"
-                                                                label="Mobile"
-                                                                value={this.state.bookingData.mobile}
-                                                                onChange={this.textChange('mobile')}
-                                                                type="digit"
-                                                                required
-                                                                fullWidth
-                                                            />
-                                                            <TextField
-                                                                autoFocus
-                                                                margin="dense"
-                                                                id="notes"
-                                                                label="Additional Notes"
-                                                                type="text"
-                                                                value={this.state.bookingData.notes}
-                                                                onChange={this.textChange('notes')}
-                                                                fullWidth
-                                                            />
-                                                        </DialogContent>
-                                                        <DialogActions>
-                                                            <Button onClick={this.closeBookingDialog} color="secondary">
-                                                                Cancel
+                                        {this.state.slots[index].length !== 0 ? this.state.slots[index].map(slot => (
+                                            <div>
+                                                <Button key={slot.slotId} variant="contained" color='primary'
+                                                    onClick={this.openBookingDialog}
+                                                    style={{
+                                                        borderRadius: 0, border: '1px solid darkGrey',
+                                                        margin: '5px', marginLeft: '15px', boxShadow: 'none'
+                                                    }}>
+                                                    {new Date(slot.startDate).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
+                                                </Button>
+                                                <Dialog open={this.state.openDialog} onClose={this.closeBookingDialog} aria-labelledby="form-dialog-title">
+                                                    <DialogTitle id="form-dialog-title">Book an Appointment</DialogTitle>
+                                                    <DialogContent>
+                                                        <TextField
+                                                            autoFocus
+                                                            margin="dense"
+                                                            required
+                                                            id="name"
+                                                            label="Name"
+                                                            type="text"
+                                                            value={this.state.bookingData.name}
+                                                            onChange={this.textChange('name')}
+                                                            fullWidth
+                                                        />
+                                                        <TextField
+                                                            autoFocus
+                                                            margin="dense"
+                                                            id="email"
+                                                            label="Email Address"
+                                                            type="email"
+                                                            required
+                                                            value={this.state.bookingData.email}
+                                                            onChange={this.textChange('email')}
+                                                            fullWidth
+                                                        />
+                                                        <TextField
+                                                            autoFocus
+                                                            margin="dense"
+                                                            id="mobile"
+                                                            label="Mobile"
+                                                            value={this.state.bookingData.mobile}
+                                                            onChange={this.textChange('mobile')}
+                                                            type="digit"
+                                                            required
+                                                            fullWidth
+                                                        />
+                                                        <TextField
+                                                            autoFocus
+                                                            margin="dense"
+                                                            id="notes"
+                                                            label="Additional Notes"
+                                                            type="text"
+                                                            value={this.state.bookingData.notes}
+                                                            onChange={this.textChange('notes')}
+                                                            fullWidth
+                                                        />
+                                                    </DialogContent>
+                                                    <DialogActions>
+                                                        <Button onClick={this.closeBookingDialog} color="secondary">
+                                                            Cancel
                                                             </Button>
-                                                            <Button onClick={() => this.addBooking(service, slot)} color="secondary"
-                                                                disabled={this.state.bookingData.email === undefined || this.state.bookingData.name === undefined
-                                                                    || this.state.bookingData.mobile === undefined}>
-                                                                Submit
+                                                        <Button onClick={() => this.addBooking(service, slot)} color="secondary"
+                                                            disabled={this.state.bookingData.email === undefined || this.state.bookingData.name === undefined
+                                                                || this.state.bookingData.mobile === undefined}>
+                                                            Submit
                                                     </Button>
-                                                        </DialogActions>
-                                                    </Dialog>
-                                                </div>
-                                            ))
+                                                    </DialogActions>
+                                                </Dialog>
+                                            </div>
+                                        ))
+                                            :
+                                            this.state.closedIndex.length !== 0 && this.state.closedIndex[index] === index ?
+                                                <Typography variant="subtitle2"
+                                                    style={{
+                                                        textAlign: 'center',
+                                                        marginTop: '15px',
+                                                        marginBottom: '15px'
+                                                    }}>Closed</Typography>
                                                 :
                                                 <Typography variant="subtitle2"
                                                     style={{
@@ -368,13 +376,6 @@ class PatientBookAppointment extends React.Component {
                                                         marginTop: '15px',
                                                         marginBottom: '15px'
                                                     }}>None Available</Typography>
-                                            :
-                                            <Typography variant="subtitle2"
-                                                style={{
-                                                    textAlign: 'center',
-                                                    marginTop: '15px',
-                                                    marginBottom: '15px'
-                                                }}>Closed</Typography>
                                         }
                                     </Grid>
                                 ))}
