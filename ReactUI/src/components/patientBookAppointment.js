@@ -96,7 +96,12 @@ class PatientBookAppointment extends React.Component {
         } else {
             this.setState({ weekDays: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] });
         }
-        this.getServices();
+        this.interval = setInterval(() => this.getServices(), 20000);
+    }
+
+    componentWillUnmount() {
+        console.log("Unmount")
+        clearInterval(this.interval);
     }
 
     handleSnackClose = () => {
@@ -162,7 +167,6 @@ class PatientBookAppointment extends React.Component {
                 console.log("serviceID", response.data.data[0].serviceId);
                 let slots = await this.getSlots(response.data.data[0].serviceId);
                 const closedDays = await this.getTimings(this.state.currentDate);
-                console.log("Slots", slots);
                 this.setState({ services: response.data.data, slots: slots, closedIndex: closedDays });
             } else {
                 this.setState({ ...this.state, snackOpen: true, message: 'Something went wrong!' });
