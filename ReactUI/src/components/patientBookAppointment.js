@@ -96,11 +96,12 @@ class PatientBookAppointment extends React.Component {
         } else {
             this.setState({ weekDays: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] });
         }
+        this.getServices();
         this.interval = setInterval(() => this.getServices(), 20000);
     }
 
     componentWillUnmount() {
-        console.log("Unmount")
+        console.log("Unmount");
         clearInterval(this.interval);
     }
 
@@ -186,7 +187,6 @@ class PatientBookAppointment extends React.Component {
                     serviceId,
                     date: formattedDate,
                 });
-                console.log("SLots", response);
                 return response.data.data;
             } catch (error) {
                 console.log("Error", error);
@@ -295,7 +295,7 @@ class PatientBookAppointment extends React.Component {
                                             <Typography>{`${new Date(this.state.currentDate.getTime() + (index * 24 * 60 * 60 * 1000)).toDateString().split(" ")[0]}`}</Typography>
                                             <Typography>{`${new Date(this.state.currentDate.getTime() + (index * 24 * 60 * 60 * 1000)).getDate()} ${new Date(this.state.currentDate.getTime() + (index * 24 * 60 * 60 * 1000)).toDateString().split(" ")[1]}`}</Typography>
                                         </Paper>
-                                        {this.state.slots[index].length !== 0 ? this.state.slots[index].map(slot => (
+                                        {(this.state.slots[index].length === undefined && this.state.slots[index].length !== 0) ? this.state.slots[index].map(slot => (
                                             <div>
                                                 <Button key={slot.slotId} variant="contained" color='primary'
                                                     onClick={this.openBookingDialog}
