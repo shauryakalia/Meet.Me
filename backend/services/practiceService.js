@@ -153,9 +153,10 @@ module.exports = {
     let result;
     let query = ``;
     let query2;
+    let res;
     if (data.closed === true || data.closed === false) {
       query = `UPDATE "Timings" SET "closed"='${data.closed}' WHERE "practiceId"='${data.practiceId}' AND "timingId"=${data.timingId}`;
-      let res = await db.query(query, { type: Sequelize.QueryTypes.UPDATE });
+      res = await db.query(query, { type: Sequelize.QueryTypes.UPDATE });
     } 
     if (res && !data.closed) {
       if (data.from && data.to) {
