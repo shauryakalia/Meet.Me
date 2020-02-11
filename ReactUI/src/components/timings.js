@@ -27,6 +27,7 @@ class Timings extends React.Component {
       if (practiceId) {
         let response = await BackendService.getTimings(practiceId);
         const sortedDays = await response.data.data.sort((a,b) => a.timingId - b.timingId);
+        console.log("Time get response", sortedDays);
         this.setState({ data: sortedDays })
       } else {
         window.location.pathname = '/signin';
@@ -76,6 +77,14 @@ class Timings extends React.Component {
           to: newData.to,
           closed: newData.closed
         });
+        console.log("Time update req", {
+          practiceId,
+          timingId: newData.timingId,
+          from: newData.from,
+          to: newData.to,
+          closed: newData.closed
+        });
+        console.log("Time update res", response);
         if (response.data.status) {
           this.setState(prevState => {
             const data = [...prevState.data];

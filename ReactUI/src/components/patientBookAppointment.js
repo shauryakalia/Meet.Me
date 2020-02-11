@@ -168,6 +168,7 @@ class PatientBookAppointment extends React.Component {
                 console.log("serviceID", response.data.data[0].serviceId);
                 let slots = await this.getSlots(response.data.data[0].serviceId);
                 const closedDays = await this.getTimings(this.state.currentDate);
+                console.log("Slots", slots);
                 this.setState({ services: response.data.data, slots: slots, closedIndex: closedDays });
             } else {
                 this.setState({ ...this.state, snackOpen: true, message: 'Something went wrong!' });
@@ -187,6 +188,7 @@ class PatientBookAppointment extends React.Component {
                     serviceId,
                     date: formattedDate,
                 });
+                console.log("Slots API res", response);
                 return response.data.data;
             } catch (error) {
                 console.log("Error", error);
@@ -295,7 +297,7 @@ class PatientBookAppointment extends React.Component {
                                             <Typography>{`${new Date(this.state.currentDate.getTime() + (index * 24 * 60 * 60 * 1000)).toDateString().split(" ")[0]}`}</Typography>
                                             <Typography>{`${new Date(this.state.currentDate.getTime() + (index * 24 * 60 * 60 * 1000)).getDate()} ${new Date(this.state.currentDate.getTime() + (index * 24 * 60 * 60 * 1000)).toDateString().split(" ")[1]}`}</Typography>
                                         </Paper>
-                                        {(this.state.slots[index].length === undefined && this.state.slots[index].length !== 0) ? this.state.slots[index].map(slot => (
+                                        {(this.state.slots[index] !== undefined && this.state.slots[index].length !== 0) ? this.state.slots[index].map(slot => (
                                             <div>
                                                 <Button key={slot.slotId} variant="contained" color='primary'
                                                     onClick={this.openBookingDialog}
