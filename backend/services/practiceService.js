@@ -152,12 +152,15 @@ module.exports = {
   updateTiming: async (data) => {
     let result;
     let query = ``;
+    let query2;
     if (data.closed === true || data.closed === false) {
       query = `UPDATE "Timings" SET "closed"='${data.closed}' WHERE "practiceId"='${data.practiceId}' AND "timingId"=${data.timingId}`;
+      let res = await db.query(query, { type: Sequelize.QueryTypes.UPDATE });
     } 
-    if (!data.closed) {
+    if (res && !data.closed) {
       if (data.from && data.to) {
         query = `UPDATE "Timings" SET "from"='${data.from}' WHERE "practiceId"='${data.practiceId}' AND "timingId"=${data.timingId}`;
+        query2 = `UPDATE "Timings" SET "to"='${data.to}' WHERE "practiceId"='${data.practiceId}' AND "timingId"=${data.timingId}`;
       }
       else if (data.from && !data.to) {
         query = `UPDATE "Timings" SET "to"='${data.to}' WHERE "practiceId"='${data.practiceId}' AND "timingId"=${data.timingId}`;
@@ -167,6 +170,9 @@ module.exports = {
       }
     }
     result = await db.query(query, { type: Sequelize.QueryTypes.UPDATE });
+    if(query2) {
+      await db.query(query2, { type: Sequelize.QueryTypes.UPDATE });
+    }
     if (result) {
       return result;
     }
