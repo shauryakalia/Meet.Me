@@ -154,7 +154,8 @@ module.exports = {
     let query = ``;
     if (data.closed === true || data.closed === false) {
       query = `UPDATE "Timings" SET "closed"='${data.closed}' WHERE "practiceId"='${data.practiceId}' AND "timingId"=${data.timingId}`;
-    } else {
+    } 
+    if (!data.closed) {
       if (data.from && data.to) {
         query = `UPDATE "Timings" SET "from"='${data.from}' WHERE "practiceId"='${data.practiceId}' AND "timingId"=${data.timingId}`;
       }
