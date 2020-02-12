@@ -63,6 +63,7 @@ class PatientBookAppointment extends React.Component {
             value: 0,
             currentDate: new Date(),
             slots: [],
+            selectedSlot: {},
             closedIndex: [],
             openDialog: false,
             snackOpen: false,
@@ -97,7 +98,7 @@ class PatientBookAppointment extends React.Component {
             this.setState({ weekDays: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] });
         }
         this.getServices();
-        this.interval = setInterval(() => this.getServices(), 20000);
+        this.interval = setInterval(() => this.handleDateChange(this.state.currentDate), 20000);
     }
 
     componentWillUnmount() {
@@ -116,8 +117,8 @@ class PatientBookAppointment extends React.Component {
         this.setState({ currentDate: date, slots: slots, closedIndex: closedDays });
     };
 
-    openBookingDialog = () => {
-        this.setState({ openDialog: true });
+    openBookingDialog = (slot) => {
+        this.setState({ selectedSlot: slot, openDialog: true });
     };
 
     closeBookingDialog = () => {
@@ -197,32 +198,38 @@ class PatientBookAppointment extends React.Component {
         return data;
     }
 
-    addBooking = async (service, slot) => {
+    addBooking = async () => {
         const practiceId = this.state.practiceId;
-        const serviceId = service.serviceId;
-        let response = await BackendService.addBooking({
-            practiceId,
-            serviceId,
-            firstName: this.state.bookingData.name,
-            email: this.state.bookingData.email,
-            mobileNumber: this.state.bookingData.mobile,
-            additionalNotes: this.state.bookingData.notes !== undefined ? this.state.bookingData.notes : 'NA',
-            slotId: slot.slotId,
-            fromTime: new Date(slot.startDate).getTime()
-        });
-        if (response.data.status) {
-            this.closeBookingDialog();
-            this.setState({
-                bookingData: {
-                    email: undefined,
-                    name: undefined,
-                    notes: undefined,
-                    mobile: undefined
-                }
-            })
-            this.setState({ ...this.state, snackOpen: true, message: 'Booking Confirmed!' });
-            this.forceUpdate();
-        } else {
+        const serviceId = this.state.services[this.state.value].serviceId;
+        console.log("Service Id ************", this.state.selectedSlot);
+        if (this.state.selectedSlot) {
+            let response = await BackendService.addBooking({
+                practiceId,
+                serviceId,
+                firstName: this.state.bookingData.name,
+                email: this.state.bookingData.email,
+                mobileNumber: this.state.bookingData.mobile,
+                additionalNotes: this.state.bookingData.notes !== undefined ? this.state.bookingData.notes : 'NA',
+                slotId: this.state.selectedSlot.slotId,
+                fromTime: new Date(this.state.selectedSlot.startDate).getTime()
+            });
+            if (response.data.status) {
+                this.closeBookingDialog();
+                this.setState({
+                    bookingData: {
+                        email: undefined,
+                        name: undefined,
+                        notes: undefined,
+                        mobile: undefined
+                    }
+                })
+                this.setState({ ...this.state, snackOpen: true, message: 'Booking Confirmed!' });
+                this.forceUpdate();
+            } else {
+                this.setState({ ...this.state, snackOpen: true, message: 'Something went wrong!' });
+            }
+        }
+        else {
             this.setState({ ...this.state, snackOpen: true, message: 'Something went wrong!' });
         }
     }
@@ -300,7 +307,7 @@ class PatientBookAppointment extends React.Component {
                                         {(this.state.slots[index] !== undefined && this.state.slots[index].length !== 0) ? this.state.slots[index].map(slot => (
                                             <div>
                                                 <Button key={slot.slotId} variant="contained" color='primary'
-                                                    onClick={this.openBookingDialog}
+                                                    onClick={() => this.openBookingDialog(slot)}
                                                     style={{
                                                         borderRadius: 0, border: '1px solid darkGrey',
                                                         margin: '5px', marginLeft: '15px', boxShadow: 'none'
@@ -358,7 +365,7 @@ class PatientBookAppointment extends React.Component {
                                                         <Button onClick={this.closeBookingDialog} color="secondary">
                                                             Cancel
                                                             </Button>
-                                                        <Button onClick={() => this.addBooking(service, slot)} color="secondary"
+                                                        <Button onClick={() => this.addBooking()} color="secondary"
                                                             disabled={this.state.bookingData.email === undefined || this.state.bookingData.name === undefined
                                                                 || this.state.bookingData.mobile === undefined}>
                                                             Submit
