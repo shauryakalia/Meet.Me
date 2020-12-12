@@ -190,7 +190,9 @@ class PatientBookAppointment extends React.Component {
                     date: formattedDate,
                 });
                 console.log("Slots API res", response);
-                return response.data.data;
+                let data = response.data.data;
+                data = await data.sort((a,b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
+                return data;
             } catch (error) {
                 console.log("Error", error);
             }
