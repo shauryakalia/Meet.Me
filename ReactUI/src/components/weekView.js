@@ -191,7 +191,7 @@ export default function WeekView(props) {
         for (let i = 0; i < slots.length; i++) {
             let slotTime = new Date(slots[i].startDate).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
             slotTime = slotTime.length === 7 ? '0' + slotTime : slotTime;
-            if (new Date(slots[i].startDate).getDate() === selectedDate && new Date(bookings[i].startDate).getMonth() === selectedMonth && new Date(bookings[i].startDate).getFullYear() === selectedYear && slotTime === time) {
+            if (new Date(slots[i].startDate).getDate() === selectedDate && new Date(slots[i].startDate).getMonth() === selectedMonth && new Date(slots[i].startDate).getFullYear() === selectedYear && slotTime === time) {
                 return 'slot';
             }
         }
