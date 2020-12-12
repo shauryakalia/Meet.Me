@@ -157,6 +157,8 @@ export default function WeekView(props) {
 
     const checkSlot = (index, time) => {
         let selectedDate = new Date(currentDate.getTime() + (index * 24 * 60 * 60 * 1000)).getDate();
+        let selectedMonth = new Date(currentDate.getTime() + (index * 24 * 60 * 60 * 1000)).getMonth();
+        let selectedYear = new Date(currentDate.getTime() + (index * 24 * 60 * 60 * 1000)).getFullYear();
         const selectedDay = new Date(currentDate.getTime() + (index * 24 * 60 * 60 * 1000)).toDateString().split(" ")[0];
         for (let i = 0; i < timings.length; i++) {
             if (selectedDay.toLowerCase() === timings[i].day.slice(0, 3)) {
@@ -182,14 +184,14 @@ export default function WeekView(props) {
         for (let i = 0; i < bookings.length; i++) {
             let bookingTime = new Date(bookings[i].startDate).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
             bookingTime = bookingTime.length === 7 ? '0' + bookingTime : bookingTime;
-            if (new Date(bookings[i].startDate).getDate() === selectedDate && bookingTime === time) {
+            if (new Date(bookings[i].startDate).getDate() === selectedDate && new Date(bookings[i].startDate).getMonth() === selectedMonth && new Date(bookings[i].startDate).getFullYear() === selectedYear && bookingTime === time) {
                 return { status: 'booking', index: i };
             }
         }
         for (let i = 0; i < slots.length; i++) {
             let slotTime = new Date(slots[i].startDate).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
             slotTime = slotTime.length === 7 ? '0' + slotTime : slotTime;
-            if (new Date(slots[i].startDate).getDate() === selectedDate && slotTime === time) {
+            if (new Date(slots[i].startDate).getDate() === selectedDate && new Date(bookings[i].startDate).getMonth() === selectedMonth && new Date(bookings[i].startDate).getFullYear() === selectedYear && slotTime === time) {
                 return 'slot';
             }
         }
