@@ -314,7 +314,7 @@ class PatientBookAppointment extends React.Component {
                                                         borderRadius: 0, border: '1px solid darkGrey',
                                                         margin: '5px', marginLeft: '15px', boxShadow: 'none'
                                                     }}>
-                                                    {new Date(slot.startDate).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
+                                                    {new Date(slot.startDate).toLocaleString('en-US', { timeZone: "UTC", hour: 'numeric', minute: 'numeric', hour12: true })}
                                                 </Button>
                                                 <Dialog open={this.state.openDialog} onClose={this.closeBookingDialog} aria-labelledby="form-dialog-title">
                                                     <DialogTitle id="form-dialog-title">Book an Appointment</DialogTitle>
