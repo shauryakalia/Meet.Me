@@ -1,6 +1,7 @@
 
 /* ********************************* Import Node Modules ********************************* */
 const Sequelize = require('sequelize');
+const Moment = require('moment');
 
 /* ********************************* Import Local Modules ********************************* */
 const {
@@ -54,6 +55,7 @@ module.exports = {
   },
   addSlot: async (data) => {
     let result;
+    data.fromTime = moment(data.fromTime).utc().getTime();
     const query = `SELECT "slotId" FROM "Slots" WHERE "practiceId"='${data.practiceId}' AND "serviceId"='${data.serviceId}' AND "fromTime"='${data.fromTime}'`;
     const res = await db.query(query, { type: Sequelize.QueryTypes.SELECT });
     if (!res[0]) {
