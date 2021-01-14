@@ -1,5 +1,4 @@
 import React from 'react';
-import moment from 'moment';
 import { makeStyles } from '@material-ui/core/styles';
 import {
     Grid, Paper, Button, Typography, Tooltip, Popover, IconButton, CssBaseline,
@@ -207,7 +206,7 @@ export default function WeekView(props) {
                 hour = parseInt(hour) + 12;
             }
             let minute = time.split(':')[1].split(' ')[0];
-            let fromTime = moment.utc(new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate(), hour, minute, 0, 0)).unix();
+            let fromTime = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate(), hour, minute, 0, 0).getTime();
             const practiceId = localStorage.getItem('userId');
             const service = parseInt(serviceId);
             let response = await BackendService.addSlot({
