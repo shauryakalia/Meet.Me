@@ -59,7 +59,7 @@ const schema = {
   '/practice/:id/addSlot': {
     body: JOI.object().keys({
       serviceId: JOI.number().required(),
-      fromTime: JOI.number().required()
+      fromTime: JOI.string().required()
     }),
     params: JOI.object().keys({
       id: JOI.number().required(),
