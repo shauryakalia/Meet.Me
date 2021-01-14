@@ -206,7 +206,7 @@ export default function WeekView(props) {
                 hour = parseInt(hour) + 12;
             }
             let minute = time.split(':')[1].split(' ')[0];
-            let fromTime = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate(), hour, minute, 0, 0).getTime();
+            let fromTime = `${selectedDate.getFullYear()}-${selectedDate.getMonth()}-${selectedDate.getDate()}T${hour}:${minute}:00Z`;
             const practiceId = localStorage.getItem('userId');
             const service = parseInt(serviceId);
             let response = await BackendService.addSlot({
