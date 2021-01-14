@@ -229,7 +229,7 @@ module.exports = {
   },
   getCalendarSlots: async (data) => {
     const query = `SELECT "slotId", "fromTime" from "Slots"
-    WHERE "practiceId"=${data.id} AND "serviceId"=${data.serviceId} AND "status"='open' AND "fromTime" BETWEEN ${min} AND ${max}`;
+    WHERE "practiceId"=${data.id} AND "serviceId"=${data.serviceId} AND "status"='open'`;
     const result = await db.query(query, { type: Sequelize.QueryTypes.SELECT });
     if (result) {
       return result;
