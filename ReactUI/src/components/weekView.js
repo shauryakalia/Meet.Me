@@ -207,7 +207,7 @@ export default function WeekView(props) {
             }
             let minute = time.split(':')[1].split(' ')[0];
             let monthCheck = selectedDate.getMonth() + 1;
-            let fromTime = `${selectedDate.getFullYear()}-${monthCheck < 10 ? '0'+ monthCheck : monthCheck }-${selectedDate.getDate()}T${hour}:${minute}:00.000Z`
+            let fromTime = `${selectedDate.getFullYear()}-${monthCheck < 10 ? '0'+ monthCheck : monthCheck }-${selectedDate.getDate() < 10 ? '0' + selectedDate.getDate() : selectedDate.getDate()}T${hour}:${minute}:00.000Z`
             const practiceId = localStorage.getItem('userId');
             const service = parseInt(serviceId);
             let response = await BackendService.addSlot({
