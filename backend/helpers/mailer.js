@@ -1,23 +1,28 @@
-
 /** ********************** Require node modules ************************ */
-const nodemailer = require('nodemailer');
+const { MailerSend, EmailParams, Sender, Recipient } = require('mailersend');
 const config = require('config');
-const sgMail = require('@sendgrid/mail');
-
 
 /** ********************** Require local modules ************************ */
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const { logger } = require('../utils');
+
+// Initialize MailerSend with API key
+const mailerSend = new MailerSend({
+  apiKey: process.env.MAILERSEND_API_KEY,
+});
 
 async function sendMail(details) {
   try {
-    const msg = {
-      to: details.email,
-      from: 'contact.app.meetme@gmail.com',
-      subject: details.subject,
-      html: details.template
-    }
-    sgMail.send(msg);
+    const sentFrom = new Sender('contact.app.meetme@gmail.com', 'Meet.Me App');
+    const recipients = [new Recipient(details.email, 'User')];
+
+    const emailParams = new EmailParams()
+      .setFrom(sentFrom)
+      .setTo(recipients)
+      .setSubject(details.subject)
+      .setHtml(details.template);
+
+    const response = await mailerSend.email.send(emailParams);
+    return response;
   } catch (error) {
     logger.error('Send mail failed: ', error);
     return error;

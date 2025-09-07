@@ -33,9 +33,9 @@ Go to backend folder and populate database seeds:
 `npm run run-seeds`
 
 ## Mailer env setup
-`echo "export SENDGRID_API_KEY='{{ KEY }}'" > sendgrid.env`
-`echo "sendgrid.env" >> .gitignore`
-`source ./sendgrid.env`
+`echo "export MAILERSEND_API_KEY='{{ KEY }}'" > mailersend.env`
+`echo "mailersend.env" >> .gitignore`
+`source ./mailersend.env`
 
 
 ## Start Server

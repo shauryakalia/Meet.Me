@@ -1,4 +1,4 @@
-const HOST_URL = 'http://18.134.14.91:5000/';
+const HOST_URL = 'http://13.40.167.188:5000/';
 
 const API_URL = HOST_URL + 'api';
 
