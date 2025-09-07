@@ -34,9 +34,11 @@ module.exports = {
         try {
             logger.info('Login Request: ', req.body);
             const loginResult = await userService.login(req.body);
-            if (loginResult) {
+            logger.info('loginresult', loginResult);
+		if (loginResult) {
                 const token = await authentication.createToken(loginResult);
-                const responseData = {
+                logger.info('token', token);
+			const responseData = {
                     token,
                     email: loginResult.practiceEmail,
                     userId: loginResult.practiceId,
@@ -44,11 +46,11 @@ module.exports = {
                 res.data = responseData;
                 next();
             } else {
-                next(Boom.notFound('User does not exist'));
+                next(Boom.notFound('FATA 1 User does not exist'));
             }
         } catch (err) {
             logger.error(err);
-            next(Boom.conflict('Something went wrong'));
+            next(Boom.conflict('FATA 2 Something went wrong'));
         }
     }
 }

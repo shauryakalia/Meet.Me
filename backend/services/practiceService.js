@@ -55,7 +55,8 @@ module.exports = {
   },
   addSlot: async (data) => {
     let result;
-    data.fromTime = Moment.utc(data.fromTime).unix();
+    data.fromTime = Moment.utc(new Date(data.fromTime)).unix()*1000;
+	  console.log(data.fromTime);
     const query = `SELECT "slotId" FROM "Slots" WHERE "practiceId"='${data.practiceId}' AND "serviceId"='${data.serviceId}' AND "fromTime"='${data.fromTime}'`;
     const res = await db.query(query, { type: Sequelize.QueryTypes.SELECT });
     if (!res[0]) {

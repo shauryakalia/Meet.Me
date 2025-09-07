@@ -6,7 +6,7 @@
         "description": "Swagger UI for Meet.Me",
         "termsOfService": "http://swagger.io/terms/"
     },
-    "host": "18.134.14.91:5000",
+    "host": "13.40.167.188:5000",
     "basePath": "/api",
     "tags": [
         {
